@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Image,
   TouchableOpacity,
   Platform,
@@ -18,9 +17,6 @@ import { MainScreens } from "..";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat } from "expo-av/build/Audio";
 import { AudioType, useAiPredictionMutation } from "@/Services/ai";
-import * as RNFS from "react-native-fs";
-import * as FileSystem from 'expo-file-system';
-import axios from "axios";
 
 export interface ILessonProps {
   // data: LessonCard;
@@ -182,14 +178,6 @@ export const Lesson = (props: ILessonProps) => {
       Platform.OS === "android" ? uri : uri.replace("file://", "");
     const uriParts = uri.split(".");
     const fileType = uriParts[uriParts.length - 1];
-    // if (fileUri) {
-    //   RNFS.readFile(fileUri).then((file) => {
-    //     const formData = new FormData();
-    //     formData.append("transcript", flashCards[id].content);
-    //     formData.append("audio", file);
-    //     uploadRecord(formData);
-    //   })
-    // }
     const formData = new FormData();
     formData.append("transcript", flashCards[id].content);
     formData.append("audio", {
@@ -197,7 +185,6 @@ export const Lesson = (props: ILessonProps) => {
       name: `record.${fileType}`,
       type: `audio/${fileType}`,
     } as any);
-    // formData.append("audio", file);
     uploadRecord(formData);
     console.log(formData);
     console.log(data as AudioType);
