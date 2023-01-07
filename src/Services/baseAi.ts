@@ -6,7 +6,7 @@ import {
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 
-const baseQuery = fetchBaseQuery({ baseUrl: Config.API_URL });
+const baseQuery = fetchBaseQuery({ baseUrl: Config.API_AI_URL });
 
 const baseQueryWithInterceptor = async (
   args: string | FetchArgs,
@@ -20,7 +20,7 @@ const baseQueryWithInterceptor = async (
   return result;
 };
 
-export const API = createApi({
+export const API_AI = createApi({
   baseQuery: baseQueryWithInterceptor,
   endpoints: () => ({}),
 });

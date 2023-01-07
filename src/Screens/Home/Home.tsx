@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,192 +10,229 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { HStack, Spinner, Heading } from "native-base";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Lessons, LessonCard, LessonCardUser } from "@/Services";
+import { Profile, ListLessonInfo, LessonInfo, ListCategory, ListProgress, Category, Progress } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalLCard, SmallLCard } from "@/Components";
 import { RootScreens } from "..";
 
 export interface IHomeProps {
-  // recommendLessons: Lessons | undefined;
-  // allLessons: Lessons | undefined;
+  isLoading: boolean;
+  profile: Profile | undefined;
+  allCategories: ListCategory | undefined;
+  recommendLessons: ListLessonInfo | undefined;
+  allLessons: ListLessonInfo | undefined;
+  allProgresses: ListProgress | undefined;
   onNavigate: (string: RootScreens) => void;
 }
 
+export interface LessonInfoUser {
+  id: number;
+  name: string;
+  visible: boolean;
+  category: Category | undefined;
+  progress: Progress | undefined;
+}
+
 export const Home = (props: IHomeProps) => {
-  // const { recommendLessons, allLessons, onNavigate } = props;
-  const { onNavigate } = props;
-  const dataTemp = [
-    {
-      id: 1,
-      name: "Get to know",
-      visible: true,
-      category: {
-        id: 0,
-        name: "Greeting",
-        image: require("../../../assets/smile.png"),
-      },
-      progress: 100,
-    },
-    {
-      id: 2,
-      name: "Vehicles",
-      visible: true,
-      category: {
-        id: 1,
-        name: "category 2",
-        image: require("../../../assets/smile.png"),
-      },
-      progress: 75,
-    },
-    {
-      id: 3,
-      name: "Animals",
-      visible: true,
-      category: {
-        id: 3,
-        name: "category 3",
-        image: require("../../../assets/smile.png"),
-      },
-      progress: 0,
-    },
-  ];
+  // const dataTemp = [
+  //   {
+  //     id: 1,
+  //     name: "Get to know",
+  //     visible: true,
+  //     category: {
+  //       id: 0,
+  //       name: "Greeting",
+  //       image: require("../../../assets/smile.png"),
+  //     },
+  //     progress: 100,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Vehicles",
+  //     visible: true,
+  //     category: {
+  //       id: 1,
+  //       name: "category 2",
+  //       image: require("../../../assets/smile.png"),
+  //     },
+  //     progress: 75,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Animals",
+  //     visible: true,
+  //     category: {
+  //       id: 3,
+  //       name: "category 3",
+  //       image: require("../../../assets/smile.png"),
+  //     },
+  //     progress: 0,
+  //   },
+  // ];
 
-  // const [lessons, setLessons] = useState(allLessons ? allLessons.lessons : []);
+  const { isLoading, profile, allCategories, recommendLessons, allLessons, allProgresses, onNavigate } = props;
 
-  const [lessons, setLessons] = useState(dataTemp);
+  const [currentAccount, setCurrentAccount] = useState(profile?.account);
+  const [recommendLessonsUser, setRecommendLessonsUser] = useState<LessonInfoUser[]>([]);
+  const [allLessonsUser, setAllLessonsUser] = useState<LessonInfoUser[]>([]);
+
+  const updateLessons = (lessons: LessonInfo[] | undefined) => {
+    if (lessons) {
+      const tempLessons: LessonInfoUser[] = [];
+      for (let i = 0; i < lessons.length; i++) {
+        tempLessons.push({
+          id: lessons[i].id,
+          name: lessons[i].name,
+          visible: lessons[i].visible,
+          category: allCategories?.categories[lessons[i].category - 1],
+          progress: allProgresses?.progresses.find(progress => progress.lesson === lessons[i].id),
+        });
+      }
+      return tempLessons;
+    } else {
+      return [];
+    }
+  }
+
+  useEffect(() => {
+    setCurrentAccount(profile?.account);
+    setRecommendLessonsUser(updateLessons(recommendLessons?.lessons));
+    setAllLessonsUser(updateLessons(allLessons?.lessons));
+  }, [profile?.account, recommendLessons?.lessons, allLessons?.lessons, allCategories?.categories, allProgresses?.progresses])
 
   const [loadMore, setLoadMore] = useState(false);
-  const [currentId, setCurrentId] = useState(3);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-        <View style={styles.header}>
-          <View style={styles.textHeaderContainer}>
-            <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
-              Good afternoon, Toai
-            </Heading>
-            <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
-              Choose a lesson!
-            </Heading>
-          </View>
-          <View style={styles.logoHeaderContainer}>
-            <Image
-              style={styles.logo}
-              source={require("../../../assets/logo.png")}
-            />
-          </View>
-        </View>
-        <View style={styles.body}>
-          <View>
-            <View>
-              <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                Recommend for you
+      {isLoading ? (
+        <HStack space={2} justifyContent="center">
+          <Spinner accessibilityLabel="Loading posts" />
+          <Heading color="primary.500" fontSize="md">
+            Loading
+          </Heading>
+        </HStack>
+      ) : (
+        <>
+          <View style={styles.header}>
+            <View style={styles.textHeaderContainer}>
+              <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
+                Hi, {currentAccount?.name}
+              </Heading>
+              <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
+                Choose a lesson!
               </Heading>
             </View>
-            <View>
-              <FlatList
-                // data={recommendLessons?.lessons}
-                data={lessons.slice(1, 3)}
-                keyExtractor={(item: LessonCardUser) => String(item.id)}
-                renderItem={({ item }) => (
-                  <SmallLCard
-                    data={item}
-                    onPress={() => onNavigate(RootScreens.LESSON)}
-                  />
-                )}
-                horizontal={true}
+            <View style={styles.logoHeaderContainer}>
+              <Image
+                style={styles.logo}
+                source={require("../../../assets/logo.png")}
               />
             </View>
           </View>
-          <View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+          <View style={styles.body}>
+            <View>
               <View>
                 <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                  All lessons
+                  Recommend for you
                 </Heading>
               </View>
-              <TouchableOpacity style={{ flexDirection: "row" }}>
-                <Text
-                  style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}
-                >
-                  More
-                </Text>
-                <Ionicons
-                  name="chevron-forward"
-                  size={IconSize.SMALL}
-                  color={Colors.TEXT}
+              <View>
+                <FlatList
+                  data={recommendLessonsUser}
+                  keyExtractor={(item: LessonInfoUser) => String(item.id)}
+                  renderItem={({ item }) => (
+                    <SmallLCard
+                      id={item.id}
+                      name={item.name}
+                      visible={item.visible}
+                      category={item.category}
+                      progress={item.progress}
+                      onPress={() => onNavigate(RootScreens.LESSON)}
+                    />
+                  )}
+                  horizontal={true}
                 />
-              </TouchableOpacity>
+              </View>
             </View>
             <View>
-              <FlatList
-                data={lessons}
-                keyExtractor={(item: LessonCardUser) => String(item.id)}
-                renderItem={({ item }) => (
-                  <NormalLCard
-                    data={item}
-                    onPress={() => onNavigate(RootScreens.LESSON)}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View>
+                  <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                    All lessons
+                  </Heading>
+                </View>
+                <TouchableOpacity style={{ flexDirection: "row" }}>
+                  <Text
+                    style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}
+                  >
+                    More
+                  </Text>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={IconSize.SMALL}
+                    color={Colors.TEXT}
                   />
-                )}
-                ListFooterComponent={() => {
-                  return loadMore ? (
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 5,
-                      }}
-                    >
-                      <Text
+                </TouchableOpacity>
+              </View>
+              <View>
+                <FlatList
+                  data={allLessonsUser}
+                  keyExtractor={(item: LessonInfoUser) => String(item.id)}
+                  renderItem={({ item }) => (
+                    <NormalLCard
+                      id={item.id}
+                      name={item.name}
+                      visible={item.visible}
+                      category={item.category}
+                      progress={item.progress}
+                      onPress={() => onNavigate(RootScreens.LESSON)}
+                    />
+                  )}
+                  ListFooterComponent={() => {
+                    return loadMore ? (
+                      <View
                         style={{
-                          fontSize: FontSize.SMALL,
-                          color: Colors.PRIMARY,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 5,
                         }}
                       >
-                        Load More
-                      </Text>
-                      <Spinner
-                        accessibilityLabel="Loading posts"
-                        color={Colors.PRIMARY}
-                        size={IconSize.REGULAR}
-                      />
-                    </View>
-                  ) : null;
-                }}
-                onEndReached={() => {
-                  setLoadMore(true);
-                  setTimeout(() => {
-                    setLessons(
-                      lessons.concat([
-                        {
-                          id: currentId+1,
-                          name: "Animals",
-                          visible: true,
-                          category: {
-                            id: 3,
-                            name: "category 3",
-                            image: require("../../../assets/smile.png"),
-                          },
-                          progress: 0,
-                        },
-                      ])
-                    );
-                    setLoadMore(false);
-                    setCurrentId(currentId + 3);
-                  }, 1000);
-                }}
-                onEndReachedThreshold={0.1}
-              />
+                        <Text
+                          style={{
+                            fontSize: FontSize.SMALL,
+                            color: Colors.PRIMARY,
+                          }}
+                        >
+                          Load More
+                        </Text>
+                        <Spinner
+                          accessibilityLabel="Loading posts"
+                          color={Colors.PRIMARY}
+                          size={IconSize.REGULAR}
+                        />
+                      </View>
+                    ) : null;
+                  }}
+                  onEndReached={() => {
+                    setLoadMore(true);
+                    setTimeout(() => {
+                      setLoadMore(false);
+                    }, 1000);
+                  }}
+                  onEndReachedThreshold={0.1}
+                />
+              </View>
             </View>
           </View>
-        </View>
+        </>
+      )}
     </View>
   );
 };

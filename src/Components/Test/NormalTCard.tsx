@@ -1,42 +1,46 @@
 import React from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity, Button } from "react-native";
 import { Colors, FontSize } from "@/Theme";
-import { TestCard } from "@/Services";
 import { Heading } from "native-base";
+import { ITestProps } from "./SmallTCard";
+import { Config } from "@/Config";
 
-export const NormalTCard = (props: TestCard) => {
-    const { id, thumbnail, title, category, score } = props
+export const NormalTCard = (props: ITestProps) => {
+    const { id, name, visible, category, progress, onPress } = props
 
-    let containerColor: string = Colors.SUCCESS
-    let buttonTitle: string = "Review"
-    let buttonColor: string = Colors.BUTTON_REVIEW
+    let containerColor: string = Colors.NEW
+    let buttonTitle: string = "Start"
+    let buttonColor: string = Colors.BUTTON_START
 
-    if (score === "0") {
-        containerColor = Colors.NEW
-        buttonTitle = "Start"
-        buttonColor = Colors.BUTTON_START
+    if (progress && progress.progress.score !== 0) {
+        containerColor = Colors.SUCCESS
+        buttonTitle = "Review"
+        buttonColor = Colors.BUTTON_REVIEW
     }
 
+    const defaultImage: number = require("../../../assets/smile.png");
+
     return (
-        <View
+        <TouchableOpacity
             style={[styles.container, {backgroundColor: containerColor}]}
+            onPress={onPress}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={thumbnail}></Image>
+                <Image style={styles.thumbnail} source={category?.image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0, -1) + category?.image}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
-                    <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>{title}</Heading>
-                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{score}</Text>
+                    <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>{name}</Heading>
+                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{progress ? progress.progress.score : 0}</Text>
                 </View>
                 <View style={styles.categoryContainer}>
-                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category}</Text>
+                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category?.name}</Text>
                     <TouchableOpacity style={[styles.button, {backgroundColor: buttonColor}]}>
                         <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{buttonTitle}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

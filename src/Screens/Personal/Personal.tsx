@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,219 +8,220 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { Spinner, Heading } from "native-base";
+import { Spinner, Heading, HStack } from "native-base";
 import { NormalACard } from "@/Components";
-import { User, AchievementCard } from "@/Services";
+import { Profile, ListAchievement, Achievement } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { MainScreens } from "..";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface IPersonalProps {
-  // data: User | undefined;
-  // isLoading: boolean;
+  profile: Profile | undefined;
+  listAchievement: ListAchievement | undefined;
+  isLoading: boolean;
   onNavigate: (string: MainScreens) => void;
 }
 
 export const Personal = (props: IPersonalProps) => {
-  const { onNavigate } = props;
-  const dataTemp = [
-    {
-      id: "1",
-      thumbnail: require("../../../assets/smile.png"),
-      title: "Get 7 day series",
-    },
-    {
-      id: "2",
-      thumbnail: require("../../../assets/smile.png"),
-      title: "Get full points for 5 tests",
-    },
-    {
-      id: "3",
-      thumbnail: require("../../../assets/smile.png"),
-      title: "Achievement 3",
-    },
-  ];
+  
+  // const dataTemp = [
+  //   {
+  //     id: "1",
+  //     thumbnail: require("../../../assets/smile.png"),
+  //     title: "Get 7 day series",
+  //   },
+  //   {
+  //     id: "2",
+  //     thumbnail: require("../../../assets/smile.png"),
+  //     title: "Get full points for 5 tests",
+  //   },
+  //   {
+  //     id: "3",
+  //     thumbnail: require("../../../assets/smile.png"),
+  //     title: "Achievement 3",
+  //   },
+  // ];
 
+  const { profile, listAchievement, isLoading, onNavigate } = props;
+
+  const [currentAccount, setCurrentAccount] = useState(profile?.account)
+  const [currentAchievements, setCurrentAchievements] = useState(listAchievement?.achievements);
   const [loadMore, setLoadMore] = useState(false);
-  const [currentData, setCurrentData] = useState(dataTemp);
-  const [currentId, setCurrentId] = useState(3);
+
+  useEffect(() => {
+    setCurrentAccount(profile?.account);
+    setCurrentAchievements(listAchievement?.achievements);
+  }, [profile?.account, listAchievement?.achievements]);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backContainer}
-          onPress={() => onNavigate(MainScreens.HOME)}
-        >
-          <Ionicons
-            name="chevron-back"
-            size={IconSize.HUGE}
-            color={Colors.TEXT}
-          />
-        </TouchableOpacity>
-        <View style={styles.textHeaderContainer}>
-          <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
-            Personal
+      {isLoading ? (
+        <HStack space={2} justifyContent="center">
+          <Spinner accessibilityLabel="Loading posts" />
+          <Heading color="primary.500" fontSize="md">
+            Loading
           </Heading>
-        </View>
-        <View style={styles.logoHeaderContainer}>
-          <Image
-            style={styles.logo}
-            source={require("../../../assets/logo.png")}
-          />
-        </View>
-      </View>
-      <View style={styles.body}>
-        <View style={{ flex: 1 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View>
-              <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                Profile
-              </Heading>
-            </View>
-            <TouchableOpacity style={{ flexDirection: "row" }}>
+        </HStack>
+      ) : (
+        <>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backContainer}
+              onPress={() => onNavigate(MainScreens.HOME)}
+            >
               <Ionicons
-                name="chevron-down"
-                size={IconSize.SMALL}
+                name="chevron-back"
+                size={IconSize.HUGE}
                 color={Colors.TEXT}
               />
             </TouchableOpacity>
-          </View>
-          <View>
-            <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-              Name: Toai Tran
-            </Text>
-            <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-              Age: 21
-            </Text>
-          </View>
-        </View>
-        <View style={{ flex: 3, overflow: "hidden" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View>
-              <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                Achievements
+            <View style={styles.textHeaderContainer}>
+              <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
+                Personal
               </Heading>
             </View>
-            <TouchableOpacity style={{ flexDirection: "row" }}>
-              <Ionicons
-                name="chevron-down"
-                size={IconSize.SMALL}
-                color={Colors.TEXT}
+            <View style={styles.logoHeaderContainer}>
+              <Image
+                style={styles.logo}
+                source={require("../../../assets/logo.png")}
               />
-            </TouchableOpacity>
+            </View>
           </View>
-          <View>
-            <FlatList
-              data={currentData}
-              keyExtractor={(item: AchievementCard) => item.id}
-              renderItem={({ item }) => (
-                <NormalACard
-                  id={item.id}
-                  thumbnail={item.thumbnail}
-                  title={item.title}
-                />
-              )}
-              ListFooterComponent={() => {
-                return loadMore ? (
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 5,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: FontSize.SMALL,
-                        color: Colors.PRIMARY,
-                      }}
-                    >
-                      Load More
-                    </Text>
-                    <Spinner
-                      accessibilityLabel="Loading posts"
-                      color={Colors.PRIMARY}
-                      size={IconSize.REGULAR}
+          <View style={styles.body}>
+            <View style={{ flex: 1 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View>
+                  <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                    Profile
+                  </Heading>
+                </View>
+                <TouchableOpacity style={{ flexDirection: "row" }}>
+                  <Ionicons
+                    name="chevron-down"
+                    size={IconSize.SMALL}
+                    color={Colors.TEXT}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                  Name: {currentAccount?.name}
+                </Text>
+                <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                  Birthday: {currentAccount?.birthday}
+                </Text>
+              </View>
+            </View>
+            <View style={{ flex: 3, overflow: "hidden" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View>
+                  <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                    Achievements
+                  </Heading>
+                </View>
+                <TouchableOpacity style={{ flexDirection: "row" }}>
+                  <Ionicons
+                    name="chevron-down"
+                    size={IconSize.SMALL}
+                    color={Colors.TEXT}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <FlatList
+                  data={currentAchievements}
+                  keyExtractor={(item: Achievement) => String(item.id)}
+                  renderItem={({ item }) => (
+                    <NormalACard
+                      id={item.id}
+                      name={item.name}
+                      image={item.image}
+                      date={item.date}
                     />
-                  </View>
-                ) : null;
-              }}
-              onEndReached={() => {
-                setLoadMore(true);
-                setTimeout(() => {
-                  setCurrentData(
-                    currentData.concat([
-                      {
-                        id: String(currentId + 1),
-                        thumbnail: require("../../../assets/smile.png"),
-                        title: "Achievement " + String(currentId + 1),
-                      },
-                      {
-                        id: String(currentId + 2),
-                        thumbnail: require("../../../assets/smile.png"),
-                        title: "Achievement " + String(currentId + 2),
-                      },
-                      {
-                        id: String(currentId + 3),
-                        thumbnail: require("../../../assets/smile.png"),
-                        title: "Achievement " + String(currentId + 3),
-                      },
-                    ])
-                  );
-                  setLoadMore(false);
-                  setCurrentId(currentId + 3);
-                }, 1000);
-              }}
-              onEndReachedThreshold={0.1}
-            />
-          </View>
-        </View>
-        <View style={{ flex: 1 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 10,
-            }}
-          >
-            <View>
-              <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                Setting
-              </Heading>
+                  )}
+                  ListFooterComponent={() => {
+                    return loadMore ? (
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 5,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: FontSize.SMALL,
+                            color: Colors.PRIMARY,
+                          }}
+                        >
+                          Load More
+                        </Text>
+                        <Spinner
+                          accessibilityLabel="Loading posts"
+                          color={Colors.PRIMARY}
+                          size={IconSize.REGULAR}
+                        />
+                      </View>
+                    ) : null;
+                  }}
+                  onEndReached={() => {
+                    setLoadMore(true);
+                    setTimeout(() => {
+                      setCurrentAchievements(listAchievement?.achievements.concat([]));
+                      setLoadMore(false);
+                    }, 1000);
+                  }}
+                  onEndReachedThreshold={0.1}
+                />
+              </View>
             </View>
-            <TouchableOpacity style={{ flexDirection: "row" }}>
-              <Ionicons
-                name="chevron-down"
-                size={IconSize.SMALL}
-                color={Colors.TEXT}
-              />
-            </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: 10,
+                }}
+              >
+                <View>
+                  <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                    Setting
+                  </Heading>
+                </View>
+                <TouchableOpacity style={{ flexDirection: "row" }}>
+                  <Ionicons
+                    name="chevron-down"
+                    size={IconSize.SMALL}
+                    color={Colors.TEXT}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                  Language: English
+                </Text>
+                <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                  Theme: SkyBlue
+                </Text>
+              </View>
+            </View>
           </View>
-          <View>
-            <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-              Language: English
-            </Text>
-            <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-              Theme: SkyBlue
-            </Text>
-          </View>
-        </View>
-      </View>
+        </>
+      )}
     </View>
   );
 };

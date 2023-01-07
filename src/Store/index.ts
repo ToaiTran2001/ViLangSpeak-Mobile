@@ -1,4 +1,4 @@
-import { API } from "@/Services/base";
+import { API_AI, API_APP } from "@/Services";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
@@ -15,7 +15,7 @@ import {
 import { homeReducers, themeReducers } from "./reducers";
 
 const reducers = combineReducers({
-  api: API.reducer,
+  api: API_APP.reducer,
   theme: themeReducers,
   home: homeReducers,
 });
@@ -35,7 +35,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(API.middleware);
+    }).concat(API_APP.middleware);
 
     // if (__DEV__ && !process.env.JEST_WORKER_ID) {
     //   const createDebugger = require("redux-flipper").default;

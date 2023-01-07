@@ -4,8 +4,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { CompositeScreenProps } from '@react-navigation/native';
 import { MainBottomBarParamList } from "@/Navigation/Main";
 import { MainScreens, RootScreens } from "..";
-import { useLazyGetUserQuery } from "@/Services";
 import { RootStackParamList } from "@/Navigation";
+import { useLazyGetLessonQuery } from "@/Services";
 
 type LessonScreenNavigatorProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, RootScreens.LESSON>,
@@ -13,19 +13,18 @@ type LessonScreenNavigatorProps = CompositeScreenProps<
 >;
 
 export const LessonContainer = ({ navigation }: LessonScreenNavigatorProps) => {
-  // const [userId, setUserId] = useState("9");
+  const [lessonId, setLessonId] = useState("1");
 
-  // const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] =
-  //   useLazyGetUserQuery();
+  // lesson = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const lesson = useLazyGetLessonQuery();
 
-  // useEffect(() => {
-  //   fetchOne(userId);
-  // }, [fetchOne, userId]);
+  useEffect(() => {
+    lesson[0](lessonId);
+  }, [lesson[0], lessonId]);
 
   const onNavigate = (screen: MainScreens) => {
     navigation.navigate(screen);
   };
 
-  return <Lesson onNavigate={onNavigate} />
-  // return <Lesson data={data} onNavigate={onNavigate} />;
+  return <Lesson isLoading={lesson[1].isLoading} lesson={lesson[1].data?.data.lesson} onNavigate={onNavigate} />;
 };

@@ -1,9 +1,9 @@
-import { Personal } from "./Personal";
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MainBottomBarParamList } from "@/Navigation/Main";
+import { useLazyGetUserProfileQuery, useLazyGetUserAchievementsQuery } from "@/Services";
 import { MainScreens } from "..";
-import { useLazyGetUserQuery } from "@/Services";
+import { Personal } from "./Personal";
 
 type PersonalScreenNavigatorProps = NativeStackScreenProps<
   MainBottomBarParamList,
@@ -11,18 +11,26 @@ type PersonalScreenNavigatorProps = NativeStackScreenProps<
 >;
 
 export const PersonalContainer = ({ navigation }: PersonalScreenNavigatorProps) => {
-    // const [userId, setUserId] = useState("9");
+  const [userId, setUserId] = useState("1");
 
-    // const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] =
-    //     useLazyGetUserQuery();
+  // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const profile = useLazyGetUserProfileQuery();
 
-    // useEffect(() => {
-    //     fetchOne(userId);
-    // }, [fetchOne, userId]);
+  const profileData = profile[1].data?.data;
 
-    const onNavigate = (screen: MainScreens) => {
-        navigation.navigate(screen);
-    };
+  // achievements: [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const listAchievement = useLazyGetUserAchievementsQuery();
 
-    return <Personal onNavigate={onNavigate} />;
+  const isLoading = profile[1].isLoading || listAchievement[1].isLoading;
+
+  useEffect(() => {
+    profile[0](userId);
+    listAchievement[0](userId);
+  }, [profile[0], listAchievement[0], userId]);
+
+  const onNavigate = (screen: MainScreens) => {
+      navigation.navigate(screen);
+  };
+
+  return <Personal isLoading={isLoading} profile={profile[1].data?.data} listAchievement={listAchievement[1].data?.data} onNavigate={onNavigate} />;
 };

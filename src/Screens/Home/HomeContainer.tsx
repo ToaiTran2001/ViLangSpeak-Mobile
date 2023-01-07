@@ -3,9 +3,8 @@ import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { CompositeScreenProps } from '@react-navigation/native';
 import { MainBottomBarParamList } from "@/Navigation/Main";
-import { Lessons } from "@/Services";
 import { MainScreens, RootScreens } from "..";
-import { useLazyGetRmdLessonsQuery, useLazyGetAllLessonsQuery } from "@/Services";
+import { useLazyGetRmdLessonsQuery, useLazyGetAllLessonsQuery, useLazyGetAllProgressesQuery, useLazyGetUserProfileQuery, useLazyGetAllCategoriesQuery } from "@/Services";
 import { RootStackParamList } from "@/Navigation";
 
 type HomeScreenNavigatorProps = CompositeScreenProps<
@@ -14,23 +13,36 @@ type HomeScreenNavigatorProps = CompositeScreenProps<
 >;
 
 export const HomeContainer = ({ navigation }: HomeScreenNavigatorProps) => {
-  // const [userId, setUserId] = useState("9");
+  const [userId, setUserId] = useState("1");
 
-  // const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] =
-  //   useLazyGetAllLessonsQuery();
+  // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const profile = useLazyGetUserProfileQuery();
 
-  // useEffect(() => {
-  //   fetchOne(userId);
-  // }, [fetchOne, userId]);
+  // allCategories = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const allCategories = useLazyGetAllCategoriesQuery();
 
-  const recommendLessonsData: Lessons | undefined = useLazyGetRmdLessonsQuery()[1].data;
+  // recommendLessons = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const recommendLessons = useLazyGetRmdLessonsQuery();
 
-  const allLessonsData: Lessons | undefined = useLazyGetAllLessonsQuery()[1].data;
+  // allLessons = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const allLessons = useLazyGetAllLessonsQuery();
+
+  // allProgresses = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const allProgresses = useLazyGetAllProgressesQuery();
+
+  const isLoading = profile[1].isLoading || allCategories[1].isLoading || recommendLessons[1].isLoading || allLessons[1].isLoading || allProgresses[1].isLoading;
+
+  useEffect(() => {
+    profile[0](userId);
+    allCategories[0](userId)
+    recommendLessons[0](userId);
+    allLessons[0](userId);
+    allProgresses[0](userId);
+  }, [profile[0], allCategories[0], recommendLessons[0], allLessons[0], allProgresses[0], userId]);
 
   const onNavigate = (screen: RootScreens) => {
     navigation.navigate(screen);
   };
 
-  return <Home onNavigate={onNavigate} />
-  // return <Home recommendLessons={recommendLessonsData} allLessons={allLessonsData} onNavigate={onNavigate} />;
+  return <Home isLoading={isLoading} profile={profile[1].data?.data} allCategories={allCategories[1].data?.data} recommendLessons={recommendLessons[1].data?.data} allLessons={allLessons[1].data?.data} allProgresses={allProgresses[1].data?.data} onNavigate={onNavigate} />;
 };

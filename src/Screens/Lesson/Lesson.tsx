@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,42 +9,32 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Audio } from 'expo-av';
-import { Heading } from "native-base";
-import { LessonCard, Item } from "@/Services";
+import { Heading, HStack, Spinner } from "native-base";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { FCard } from "@/Components";
 import { MainScreens } from "..";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat } from "expo-av/build/Audio";
 import { AudioType, useAiPredictionMutation } from "@/Services/ai";
+import { LessonDetail } from "@/Services";
+import { Config } from "@/Config";
 
 export interface ILessonProps {
-  // data: LessonCard;
+  isLoading: boolean;
+  lesson: LessonDetail | undefined;
   onNavigate: (string: MainScreens) => void;
 }
 
 const recallButton: boolean = false;
 
-// const renderCounter  = useRef(0);
-// renderCounter.current = renderCounter.current + 1;
-
-export const Counter = ({title = "", color = ""}) => {
-  
-  return (
-    <Text 
-      style={{ fontSize: FontSize.REGULAR, color: color }}
-    >{title}{" "}
-    </Text>
-  );
-};
-
 export const Lesson = (props: ILessonProps) => {
-  // const { data, onNavigate } = props;
-  const { onNavigate } = props;
+  const { isLoading, lesson, onNavigate } = props;
 
   const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
-  const [uriSend, setUriSend] = useState<string | null>(null);
+  const [uri, setUri] = useState<string>("");
+
+  const [score, setScore] = useState<number[]>([1, 2]);
 
   const recordingSettings = {
     isMeteringEnabled: true,
@@ -72,6 +62,68 @@ export const Lesson = (props: ILessonProps) => {
       bitsPerSecond: 128000,
     },
   };
+
+  // const flashCards = [
+  //   {
+  //     id: 0,
+  //     type: "w",
+  //     audio_url: require("../../../assets/happy_new_year.mp3"),
+  //     content: "tôi",
+  //     translation: "I, me",
+  //     items: [
+  //       {
+  //           type: "h", // header, possible values: ["h", "p", "i", "v"]
+  //           order: 0, // appear at first
+  //           content: "Examples:",
+  //       },
+  //       {
+  //           type: "p", // paragraph
+  //           order: 1, // appear as second, after above header
+  //           content: "*Tôi* là một bác sĩ.\n*I* am a doctor.\n\nNgười phụ trách là *tôi*.\nThe person in charge is *me*.",
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     id: 1,
+  //     type: "w",
+  //     audio_url: require("../../../assets/happy_new_year.mp3"),
+  //     content: "bạn",
+  //     translation: "you, friend",
+  //     items: [
+  //       {
+  //           type: "h", // header, possible values: ["h", "p", "i", "v"]
+  //           order: 0, // appear at first
+  //           content: "Examples:",
+  //       },
+  //       {
+  //           type: "p", // paragraph
+  //           order: 1, // appear as second, after above header
+  //           content: "*Bạn* là ai?\nWho are *you*?\n\nAnh ấy là *bạn* của tôi.\nHe is my *friend*.",
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     id: 2,
+  //     type: "s", // sentence
+  //     audio_url: require("../../../assets/happy_new_year.mp3"),
+  //     content: "xin chào",
+  //     translation: "hello, hi",
+  //     items: [
+  //         {
+  //             type: "h", // Image
+  //             order: 0,
+  //             content: "Usage",
+  //         },
+  //         {
+  //             type: "p", // video
+  //             order: 1,
+  //             content: "This word can be use as a sentence to greet people formally.\nIt can be use as *chào*, but it can have different meaning depending on context.",
+  //         }
+  //     ]
+  //   }
+  // ]
+
+  const [id, setId] = useState(0);
 
   async function startRecording() {
     try {
@@ -101,196 +153,166 @@ export const Lesson = (props: ILessonProps) => {
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
       });
-      const uri = recording.getURI();
-      setUriSend(uri);
-      console.log('Recording stopped and stored at', uri);
+      const uriSend = recording.getURI();
+      setUri(uriSend ? uriSend : "")
+      console.log('Recording stopped and stored at', uriSend);
     }
   }
 
-  const flashCards = [
-    {
-      id: 0,
-      type: "w",
-      audio_url: require("../../../assets/happy_new_year.mp3"),
-      content: "tôi",
-      translation: "I, me",
-      items: [
-        {
-            type: "h", // header, possible values: ["h", "p", "i", "v"]
-            order: 0, // appear at first
-            content: "Examples:",
-        },
-        {
-            type: "p", // paragraph
-            order: 1, // appear as second, after above header
-            content: "*Tôi* là một bác sĩ.\n*I* am a doctor.\n\nNgười phụ trách là *tôi*.\nThe person in charge is *me*.",
-        }
-      ]
-    },
-    {
-      id: 1,
-      type: "w",
-      audio_url: require("../../../assets/happy_new_year.mp3"),
-      content: "bạn",
-      translation: "you, friend",
-      items: [
-        {
-            type: "h", // header, possible values: ["h", "p", "i", "v"]
-            order: 0, // appear at first
-            content: "Examples:",
-        },
-        {
-            type: "p", // paragraph
-            order: 1, // appear as second, after above header
-            content: "*Bạn* là ai?\nWho are *you*?\n\nAnh ấy là *bạn* của tôi.\nHe is my *friend*.",
-        }
-      ]
-    },
-    {
-      id: 2,
-      type: "s", // sentence
-      audio_url: require("../../../assets/happy_new_year.mp3"),
-      content: "xin chào",
-      translation: "hello, hi",
-      items: [
-          {
-              type: "h", // Image
-              order: 0,
-              content: "Usage",
-          },
-          {
-              type: "p", // video
-              order: 1,
-              content: "This word can be use as a sentence to greet people formally.\nIt can be use as *chào*, but it can have different meaning depending on context.",
-          }
-      ]
-    }
-  ]
-
-  const [id, setId] = useState(0)
-
-  const [uploadRecord, { data, isSuccess, isLoading, error }] =
-    useAiPredictionMutation();
+  // aiPrediction = [uploadRecord, { data, isSuccess, isLoading, error }]
+  const aiPrediction = useAiPredictionMutation();
 
   useEffect(() => {
-    const uri = uriSend || "";
     const fileUri =
       Platform.OS === "android" ? uri : uri.replace("file://", "");
     const uriParts = uri.split(".");
     const fileType = uriParts[uriParts.length - 1];
     const formData = new FormData();
-    formData.append("transcript", flashCards[id].content);
+    formData.append("transcript", currentLesson ? currentLesson.cards.value[id].content : "");
     formData.append("audio", {
       uri: fileUri,
       name: `record.${fileType}`,
       type: `audio/${fileType}`,
     } as any);
-    uploadRecord(formData);
-    console.log(formData);
-    console.log(data as AudioType);
-    console.log(isLoading);
-    console.log(isSuccess);
-    console.log(error);
-  }, [uriSend]);
+    aiPrediction[0](formData);
+    console.log(aiPrediction[1].data);
+    console.log(uri);
+  }, [uri]);
+
+  useEffect(() => {
+    setCurrentLesson(lesson);
+  }, [lesson]);
+
+  const mapText = (element: number, index: number) => {
+    return (
+      <Text
+        key={index}
+        style={{ fontSize: FontSize.REGULAR, color: element === 0 ? Colors.TEXT_ERROR : Colors.TEXT_CORRECT }}
+      >
+        {currentLesson?.cards.value[id].content.split(" ")[index]}{" "}
+      </Text>
+    )
+  };
+
+  const [currentLesson, setCurrentLesson] = useState(lesson);
+
+  const defaultImage: number = require("../../../assets/smile.png");
+
+  const total = currentLesson ? currentLesson?.cards.total : 10;
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backContainer}
-          onPress={() => onNavigate(MainScreens.HOME)}
-        >
-          <Ionicons
-            name="chevron-back"
-            size={IconSize.HUGE}
-            color={Colors.TEXT}
-          />
-        </TouchableOpacity>
-        <View style={styles.textHeaderContainer}>
-          <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
-            Get to know
+      {isLoading ? (
+        <HStack space={2} justifyContent="center">
+          <Spinner accessibilityLabel="Loading posts" />
+          <Heading color="primary.500" fontSize="md">
+            Loading
           </Heading>
-          <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-            Greeting
-          </Text>
-        </View>
-        <View style={styles.thumbnailHeaderContainer}>
-          <Image
-            style={styles.thumbnail}
-            source={require("../../../assets/smile.png")}
-          />
-        </View>
-      </View>
-      <View style={styles.body}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          {recallButton ? (
-            <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-              Recall
-            </Heading>
-          ) : (
-            <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-              Learn
-            </Heading>
-          )}
-          <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-            {id+1}/3
-          </Text>
-        </View>
-        <FCard 
-          id={flashCards[id].id}
-          type={flashCards[id].type}
-          audio_url={flashCards[id].audio_url}
-          content={flashCards[id].content}
-          translation={flashCards[id].translation}
-          items={flashCards[id].items}
-        />
-        {recallButton ? (
-          <></>
-        ) : (
-          <View>
-            <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-              Practice
-            </Heading>
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              {Counter({title: flashCards[id].content.split(" ")[0], color: Colors.TEXT})}
+        </HStack>
+      ) : (
+        <>
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backContainer}
+              onPress={() => onNavigate(MainScreens.HOME)}
+            >
+              <Ionicons
+                name="chevron-back"
+                size={IconSize.HUGE}
+                color={Colors.TEXT}
+              />
+            </TouchableOpacity>
+            <View style={styles.textHeaderContainer}>
+              <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
+                {currentLesson?.name}
+              </Heading>
+              <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                {currentLesson?.category.name}
+              </Text>
+            </View>
+            <View style={styles.thumbnailHeaderContainer}>
+              <Image
+                style={styles.thumbnail}
+                source={currentLesson?.category.image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0, -1) + currentLesson?.category.image}}
+              />
             </View>
           </View>
-        )}
-      </View>
-      <View style={styles.footer}>
-        <TouchableOpacity onPress={() => setId(id-1 > 0 ? id-1 : 0)}>
-          <Ionicons
-            name="chevron-back"
-            size={IconSize.LARGE}
-            color={id > 0 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
-          />
-        </TouchableOpacity>
-        {recallButton ? (
-          <></>
-        ) : (
-          <TouchableOpacity style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]} onPress={recording ? stopRecording : startRecording}>
-            <Ionicons
-              name="mic-outline"
-              size={IconSize.HUGE}
-              color={Colors.TEXT}
+          <View style={styles.body}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              {recallButton ? (
+                <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                  Recall
+                </Heading>
+              ) : (
+                <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                  Learn
+                </Heading>
+              )}
+              <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                {id+1}/{currentLesson?.cards.total}
+              </Text>
+            </View>
+            <FCard 
+              id={currentLesson?.cards.value[id].id}
+              type={currentLesson?.cards.value[id].type}
+              audio_url={currentLesson?.cards.value[id].audio_url}
+              content={currentLesson?.cards.value[id].content}
+              translation={currentLesson?.cards.value[id].translation}
+              items={currentLesson?.cards.value[id].items}
             />
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity onPress={() => setId(id+1 < 2 ? id+1 : 2)}>
-          <Ionicons
-            name="chevron-forward"
-            size={IconSize.LARGE}
-            color={id < 2 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
-          />
-        </TouchableOpacity>
-      </View>
+            {recallButton ? (
+              <></>
+            ) : (
+              <View>
+                <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                  Practice
+                </Heading>
+                <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                  { 
+                    score.map(mapText as any)
+                  }
+                </View>
+              </View>
+            )}
+          </View>
+          <View style={styles.footer}>
+            <TouchableOpacity onPress={() => setId(id-1 > 0 ? id-1 : 0)}>
+              <Ionicons
+                name="chevron-back"
+                size={IconSize.LARGE}
+                color={id > 0 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
+              />
+            </TouchableOpacity>
+            {recallButton ? (
+              <></>
+            ) : (
+              <TouchableOpacity style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]} onPress={recording ? stopRecording : startRecording}>
+                <Ionicons
+                  name="mic-outline"
+                  size={IconSize.HUGE}
+                  color={Colors.TEXT}
+                />
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity onPress={() => {
+                setId(id+1 < total ? id+1 : total - 1)
+              }}>
+              <Ionicons
+                name="chevron-forward"
+                size={IconSize.LARGE}
+                color={id < total - 1 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
+              />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 };

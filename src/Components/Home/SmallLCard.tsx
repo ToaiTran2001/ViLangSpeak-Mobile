@@ -1,24 +1,31 @@
 import React from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Colors, FontSize } from "@/Theme";
-import { LessonCardTemp } from "@/Services";
+import { Category, Progress } from "@/Services";
+import { Config } from "@/Config";
 import { Heading } from "native-base";
 
 export interface ILessonProps {
-    data: LessonCardTemp;
+    id: number;
+    name: string;
+    visible: boolean;
+    category: Category | undefined;
+    progress: Progress | undefined;
     onPress: () => void;
 }
 
 export const SmallLCard = (props: ILessonProps) => {
-    const { data, onPress } = props
+    const { id, name, visible, category, progress, onPress } = props
 
-    let thumbnailContainerColor: string = Colors.PRIMARY
+    let thumbnailContainerColor: string = Colors.NEW
 
-    if (data.progress === 100) {
+    if (progress?.progress.value === 100) {
         thumbnailContainerColor = Colors.SUCCESS
-    } else if (data.progress === 0) {
-        thumbnailContainerColor = Colors.NEW
+    } else if (progress && progress.progress.value !== 0) {
+        thumbnailContainerColor = Colors.PRIMARY
     }
+
+    const defaultImage: number = require("../../../assets/smile.png");
 
     return (
         <TouchableOpacity
@@ -26,10 +33,10 @@ export const SmallLCard = (props: ILessonProps) => {
             onPress={() => {return null;}}
         >
             <View style={[styles.thumbnailContainer, {backgroundColor: thumbnailContainerColor}]}>
-                <Image style={styles.thumbnail} source={data.category.image} />
+                <Image style={styles.thumbnail} source={category?.image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0,-1) + category?.image}} />
             </View>
             <View style={styles.titleContainer}>
-                <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>{data.name}</Heading>
+                <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>{name}</Heading>
             </View>
         </TouchableOpacity>
     )
@@ -57,7 +64,7 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 80,
-        height: 60,
+        width: 64,
+        height: 64,
     },
 })

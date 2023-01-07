@@ -1,29 +1,27 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Colors, FontSize } from "@/Theme";
-import { LessonCardTemp } from "@/Services";
+import { Config } from "@/Config";
 import { Heading } from "native-base";
 import { Switch } from 'react-native-switch';
-
-export interface ILessonProps {
-    data: LessonCardTemp;
-    onPress: () => void;
-}
+import { ILessonProps } from "./SmallLCard";
 
 export const NormalLCard = (props: ILessonProps) => {
-    const { data, onPress } = props
+    const { id, name, visible, category, progress, onPress } = props
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-    let containerColor: string = Colors.PRIMARY
+    let containerColor: string = Colors.NEW
     let recallButton: boolean = false
 
-    if (data.progress === 100) {
+    if (progress?.progress.value === 100) {
         containerColor = Colors.SUCCESS
         recallButton = true
-    } else if (data.progress === 0) {
-        containerColor = Colors.NEW
+    } else if (progress && progress.progress.value !== 0) {
+        containerColor = Colors.PRIMARY
     }
+
+    const defaultImage: number = require("../../../assets/smile.png");
 
     return (
         <TouchableOpacity
@@ -31,15 +29,15 @@ export const NormalLCard = (props: ILessonProps) => {
             onPress={onPress}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={data.category.image}></Image>
+                <Image style={styles.thumbnail} source={category?.image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0, -1) + category?.image}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
-                    <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>{data.name}</Heading>
-                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{data.progress}%</Text>
+                    <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>{name}</Heading>
+                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{progress ? progress.progress.value : 0}%</Text>
                 </View>
                 <View style={styles.categoryContainer}>
-                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{data.category.name}</Text>
+                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category?.name}</Text>
                     <View style={styles.switch}>
                         {recallButton ? (
                             <Switch
@@ -108,8 +106,8 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 80,
-        height: 60,
+        width: 64,
+        height: 64,
     },
     switch: {
         marginRight: 30,

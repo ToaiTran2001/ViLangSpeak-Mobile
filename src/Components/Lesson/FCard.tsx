@@ -8,10 +8,11 @@ import {
 } from "react-native";
 import { Audio } from 'expo-av';
 import { Colors, FontSize, IconSize } from "@/Theme";
-import { Item, FlashCard } from "@/Services";
+import { Item, Card } from "@/Services";
 import { Heading } from "native-base";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import GestureFlipView from "react-native-gesture-flip-card";
+import { Config } from "@/Config";
 
 const screenWidth: number = Dimensions.get("window").width;
 const screenHeight: number = Dimensions.get("window").height;
@@ -19,60 +20,74 @@ const screenHeight: number = Dimensions.get("window").height;
 const recallButton: boolean = false;
 
 export interface IFrontFlashProps {
-  audio_url: number;
-  content: string;
+  audio_url: string | undefined;
+  content: string | undefined;
 }
 
 export interface IBackFlashProps {
-  content: string;
-  translation: string;
-  items: Item[];
+  content: string | undefined;
+  translation: string | undefined;
+  items: Item[] | undefined;
+}
+
+export interface IFlashProps {
+  id: number | undefined;
+  type: string | undefined;
+  audio_url: string | undefined;
+  content: string | undefined;
+  translation: string | undefined;
+  items: Item[] | undefined;
 }
 
 const renderFront = (props: IFrontFlashProps) => {
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [soundStatus, setSoundStatus] = useState("no sound");
+  const [sound, setSound] = useState<Audio.Sound | undefined>(undefined);
 
   async function playSound() {
     console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync(
-      props.audio_url
+      { uri: props.audio_url ? Config.API_APP_URL.slice(0, -1) + props.audio_url : "" }
     );
     setSound(sound);
-
     console.log("Playing Sound");
     await sound.playAsync();
-    setSoundStatus("play");
   }
 
-  async function playAndPauseSound() {
-    if (sound) {
-        if (soundStatus == "play") {
-            console.log("Pausing Sound");
-            await sound.pauseAsync();
-            setSoundStatus("paused");
-        } else {
-            console.log("Playing Sound");
-            await sound.playAsync();
-            setSoundStatus("play");
-        }
-    }
-  }
+  // async function playAndPauseSound() {
+  //   if (sound) {
+  //       if (soundStatus == "play") {
+  //           console.log("Pausing Sound");
+  //           await sound.pauseAsync();
+  //           setSoundStatus("paused");
+  //       } else {
+  //           console.log("Playing Sound");
+  //           await sound.playAsync();
+  //           setSoundStatus("play");
+  //       }
+  //   } else {
+  //     setSoundStatus("no sound");
+  //   }
+  // }
 
-  function playAndPause() {
-    switch (soundStatus) {
-        case "no sound":
-            playSound();
-            break;
-        case "paused":
-        case "play":
-            playAndPauseSound();
-            break;
-    }
-  }
+  // function playAndPause() {
+  //   switch (soundStatus) {
+  //       case "no sound":
+  //           playSound();
+  //           break;
+  //       case "paused":
+  //       case "play":
+  //           playAndPauseSound();
+  //           break;
+  //   }
+  // }
 
   useEffect(() => {
-    return () => { sound && sound.unloadAsync(); }
+    // return () => { sound && sound.unloadAsync(); }
+    return sound
+      ? () => {
+        console.log('Unloading Sound');
+        sound.unloadAsync();
+      }
+      : undefined;
   }, [sound]);
 
   return (
@@ -80,7 +95,7 @@ const renderFront = (props: IFrontFlashProps) => {
       <Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
         {props.content}
       </Text>
-      <TouchableOpacity style={[styles.iconContainer, {backgroundColor: soundStatus == "play" ? Colors.PRIMARY : Colors.NEW}]} onPress={playAndPause}>
+      <TouchableOpacity style={[styles.iconContainer, {backgroundColor: Colors.NEW}]} onPress={playSound}>
         <Ionicons
           name="volume-high-outline"
           size={IconSize.HUGE}
@@ -102,6 +117,20 @@ const renderFront = (props: IFrontFlashProps) => {
 };
 
 const renderBack = (props: IBackFlashProps) => {
+
+  const mapText = (element: Item, index: number) => {
+    const fontSize = element.type === "h" ? FontSize.REGULAR : FontSize.SMALL;
+    const fontWeight = element.type === "h" ? "bold" : "normal";
+    return (
+      <Text
+        key={index}
+        style={{ fontSize: fontSize, fontWeight: fontWeight}}
+      >
+        {element.content}
+      </Text>
+    )
+  };
+  
   return (
     <View style={styles.cardContainerBack}>
       {recallButton ? (
@@ -119,12 +148,9 @@ const renderBack = (props: IBackFlashProps) => {
             {props.translation}
           </Text>
           <View style={styles.detailContainer}>
-            <Heading style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }}>
-              {props.items[0].content}
-            </Heading>
-            <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-              {props.items[1].content}
-            </Text>
+            { 
+              props.items?.map(mapText as any)
+            }
           </View>
         </>
       )}
@@ -132,7 +158,7 @@ const renderBack = (props: IBackFlashProps) => {
   );
 };
 
-export const FCard = (props: FlashCard) => {
+export const FCard = (props: IFlashProps) => {
 
   const frontProps: IFrontFlashProps = {
     audio_url: props.audio_url,
@@ -191,7 +217,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   detailContainer: {
-    marginTop: 10,
+    padding: 10,
+    width: "100%",
     justifyContent: "flex-start",
     alignItems: "flex-start",
   },
