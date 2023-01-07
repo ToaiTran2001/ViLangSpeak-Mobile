@@ -1,8 +1,8 @@
 import React from "react";
-import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { Heading } from "native-base";
 import { Colors, FontSize } from "@/Theme";
 import { Category, ProgressTest } from "@/Services";
-import { Heading } from "native-base";
 import { Config } from "@/Config";
 
 export interface ITestProps {
@@ -12,33 +12,33 @@ export interface ITestProps {
     category: Category | undefined;
     progress: ProgressTest | undefined;
     onPress: () => void;
-}
+};
 
 export const SmallTCard = (props: ITestProps) => {
-    const { id, name, visible, category, progress } = props
+    const { id, name, visible, category, progress, onPress } = props;
 
-    let thumbnailContainerColor: string = Colors.NEW
+    let thumbnailContainerColor: string = Colors.NEW;
 
     if (progress && progress.progress.score !== 0) {
-        thumbnailContainerColor = Colors.SUCCESS
+        thumbnailContainerColor = Colors.SUCCESS;
     }
 
-    const defaultImage: number = require("../../../assets/smile.png");
+    const defaultImage: string = "/public/image/test-default.png";
 
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={() => {return null;}}
+            onPress={onPress}
         >
             <View style={[styles.thumbnailContainer, {backgroundColor: thumbnailContainerColor}]}>
-                <Image style={styles.thumbnail} source={category?.image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0,-1) + category?.image}}></Image>
+                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}}></Image>
             </View>
             <View style={styles.titleContainer}>
                 <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>{name}</Heading>
             </View>
         </TouchableOpacity>
     )
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -65,4 +65,4 @@ const styles = StyleSheet.create({
         width: 80,
         height: 60,
     },
-})
+});

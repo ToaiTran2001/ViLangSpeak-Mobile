@@ -1,24 +1,24 @@
 import React from "react";
-import { Text, StyleSheet, View, Image, TouchableOpacity, Button } from "react-native";
-import { Colors, FontSize } from "@/Theme";
+import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Heading } from "native-base";
-import { ITestProps } from "./SmallTCard";
+import { Colors, FontSize } from "@/Theme";
 import { Config } from "@/Config";
+import { ITestProps } from "./SmallTCard";
 
 export const NormalTCard = (props: ITestProps) => {
-    const { id, name, visible, category, progress, onPress } = props
+    const { id, name, visible, category, progress, onPress } = props;
 
-    let containerColor: string = Colors.NEW
-    let buttonTitle: string = "Start"
-    let buttonColor: string = Colors.BUTTON_START
+    let containerColor: string = Colors.NEW;
+    let buttonTitle: string = "Start";
+    let buttonColor: string = Colors.BUTTON_START;
 
     if (progress && progress.progress.score !== 0) {
-        containerColor = Colors.SUCCESS
-        buttonTitle = "Review"
-        buttonColor = Colors.BUTTON_REVIEW
+        containerColor = Colors.SUCCESS;
+        buttonTitle = "Review";
+        buttonColor = Colors.BUTTON_REVIEW;
     }
 
-    const defaultImage: number = require("../../../assets/smile.png");
+    const defaultImage: string = "/public/image/test-default.png";
 
     return (
         <TouchableOpacity
@@ -26,7 +26,7 @@ export const NormalTCard = (props: ITestProps) => {
             onPress={onPress}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={category?.image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0, -1) + category?.image}}></Image>
+                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
@@ -42,7 +42,7 @@ export const NormalTCard = (props: ITestProps) => {
             </View>
         </TouchableOpacity>
     )
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     }
-})
+});

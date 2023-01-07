@@ -1,1 +1,1 @@
-export * from "./Variables"
+export * from "./Variables";

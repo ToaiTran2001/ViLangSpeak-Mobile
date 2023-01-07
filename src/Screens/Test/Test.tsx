@@ -1,6 +1,3 @@
-import { ListCategory, ListTestInfo, ListProgressTest, Category, ProgressTest, TestInfo } from "@/Services";
-import { Colors, FontSize, IconSize } from "@/Theme";
-import { NormalTCard, SmallTCard } from "@/Components";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -13,6 +10,9 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading, HStack } from "native-base";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { ListCategory, ListTestInfo, ListProgressTest, Category, ProgressTest, TestInfo } from "@/Services";
+import { Colors, FontSize, IconSize } from "@/Theme";
+import { NormalTCard, SmallTCard } from "@/Components";
 import { MainScreens } from "..";
 
 export interface ITestProps {
@@ -22,7 +22,7 @@ export interface ITestProps {
   allTests: ListTestInfo | undefined;
   allProgressesTest: ListProgressTest | undefined;
   onNavigate: (string: MainScreens) => void;
-}
+};
 
 export interface TestInfoUser {
   id: number;
@@ -30,37 +30,16 @@ export interface TestInfoUser {
   visible: boolean;
   category: Category | undefined;
   progress: ProgressTest | undefined;
-}
+};
 
 export const Test = (props: ITestProps) => {
-  // const dataTemp = [
-  //   {
-  //     id: "1",
-  //     thumbnail: require("../../../assets/smile.png"),
-  //     title: "Get to know",
-  //     category: "Greeting",
-  //     score: "9/10",
-  //   },
-  //   {
-  //     id: "2",
-  //     thumbnail: require("../../../assets/smile.png"),
-  //     title: "Vehicles",
-  //     category: "category 2",
-  //     score: "0",
-  //   },
-  //   {
-  //     id: "3",
-  //     thumbnail: require("../../../assets/smile.png"),
-  //     title: "Animals",
-  //     category: "category 3",
-  //     score: "0",
-  //   },
-  // ];
-
   const { isLoading, allCategories, recommendTests, allTests, allProgressesTest, onNavigate } = props;
   
   const [recommendTestsUser, setRecommendTestsUser] = useState<TestInfoUser[]>([]);
+  
   const [allTestsUser, setAllTestsUser] = useState<TestInfoUser[]>([]);
+
+  const [loadMore, setLoadMore] = useState(false);
 
   const updateTests = (tests: TestInfo[] | undefined) => {
     if (tests) {
@@ -78,14 +57,12 @@ export const Test = (props: ITestProps) => {
     } else {
       return [];
     }
-  }
+  };
 
   useEffect(() => {
     setRecommendTestsUser(updateTests(recommendTests?.tests));
     setAllTestsUser(updateTests(allTests?.tests));
-  }, [recommendTests?.tests, allTests?.tests, allCategories?.categories, allProgressesTest?.progresses])
-
-  const [loadMore, setLoadMore] = useState(false);
+  }, [recommendTests?.tests, allTests?.tests, allCategories?.categories, allProgressesTest?.progresses]);
 
   return (
     <View style={styles.container}>
@@ -213,6 +190,7 @@ export const Test = (props: ITestProps) => {
                   onEndReached={() => {
                     setLoadMore(true);
                     setTimeout(() => {
+                      setAllTestsUser(updateTests(allTests?.tests).concat([]));
                       setLoadMore(false);
                     }, 1000);
                   }}

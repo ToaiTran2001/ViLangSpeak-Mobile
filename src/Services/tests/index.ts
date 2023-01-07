@@ -5,17 +5,17 @@ export interface TestInfo {
   name: string;
   visible: boolean;
   category: number;
-}
+};
 
 export interface ListTestInfo {
   tests: TestInfo[];
   total: number;
-}
+};
 
 export interface ListTestInfoResponse {
   data: ListTestInfo;
   total: number;
-}
+};
 
 export interface ProgressTest {
   test: number;
@@ -24,27 +24,27 @@ export interface ProgressTest {
     times: number;
     last_date: number;
   };
-}
+};
 
 export interface ProgressTestResponse {
   data: ProgressTest;
   timestamp: number;
-}
+};
 
 export interface ListProgressTest {
   progresses: ProgressTest[];
   total: number;
-}
+};
 
 export interface ListProgressTestResponse {
   data: ListProgressTest;
   timestamp: number;
-}
+};
 
 type TestIds = {
   test_id: string;
   account_id: string;
-}
+};
 
 const allTestsApi = API_APP.injectEndpoints({
   endpoints: (build) => ({

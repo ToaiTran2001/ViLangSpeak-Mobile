@@ -1,9 +1,9 @@
-import { Test } from "./Test";
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MainBottomBarParamList } from "@/Navigation/Main";
-import { MainScreens } from "..";
 import { useLazyGetAllCategoriesQuery, useLazyGetAllTestsQuery, useLazyGetRmdTestsQuery, useLazyGetAllProgressesTestQuery } from "@/Services";
+import { MainScreens } from "..";
+import { Test } from "./Test";
 
 type TestScreenNavigatorProps = NativeStackScreenProps<
   MainBottomBarParamList,

@@ -4,12 +4,12 @@ export interface AudioType {
   transcript: string;
   scores: number[];
   total: number;
-}
+};
 
 export interface AudioTypeResponse {
   data: AudioType;
   timestamp: number;
-}
+};
 
 const aiApi = API_AI.injectEndpoints({
   endpoints: (build) => ({

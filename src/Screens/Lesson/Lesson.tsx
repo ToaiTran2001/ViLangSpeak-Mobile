@@ -9,19 +9,21 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { Audio } from 'expo-av';
 import { Heading, HStack, Spinner } from "native-base";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import LoadingDots from "react-native-loading-dots";
+import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat } from "expo-av/build/Audio";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { AiResult, FCard } from "@/Components";
-import { MainScreens } from "..";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat } from "expo-av/build/Audio";
 import { LessonDetail } from "@/Services";
 import { Config } from "@/Config";
+import { MainScreens } from "..";
+import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
 
 export interface ILessonProps {
   isLoading: boolean;
   lesson: LessonDetail | undefined;
   onNavigate: (string: MainScreens) => void;
-}
+};
 
 const recallButton: boolean = false;
 
@@ -31,6 +33,18 @@ export const Lesson = (props: ILessonProps) => {
   const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
   const [uri, setUri] = useState<string>("");
+
+  const [id, setId] = useState(0);
+
+  const [isChanged, setIsChanged] = useState(false);
+
+  const [currentLesson, setCurrentLesson] = useState(lesson);
+
+  // const [timeId, setTimeId] = useState<TimeoutId>();
+
+  const defaultImage: number = require("../../../assets/smile.png");
+
+  const total = currentLesson ? currentLesson?.cards.total : 10;
 
   const recordingSettings = {
     isMeteringEnabled: true,
@@ -59,70 +73,6 @@ export const Lesson = (props: ILessonProps) => {
     },
   };
 
-  // const flashCards = [
-  //   {
-  //     id: 0,
-  //     type: "w",
-  //     audio_url: require("../../../assets/happy_new_year.mp3"),
-  //     content: "tôi",
-  //     translation: "I, me",
-  //     items: [
-  //       {
-  //           type: "h", // header, possible values: ["h", "p", "i", "v"]
-  //           order: 0, // appear at first
-  //           content: "Examples:",
-  //       },
-  //       {
-  //           type: "p", // paragraph
-  //           order: 1, // appear as second, after above header
-  //           content: "*Tôi* là một bác sĩ.\n*I* am a doctor.\n\nNgười phụ trách là *tôi*.\nThe person in charge is *me*.",
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     id: 1,
-  //     type: "w",
-  //     audio_url: require("../../../assets/happy_new_year.mp3"),
-  //     content: "bạn",
-  //     translation: "you, friend",
-  //     items: [
-  //       {
-  //           type: "h", // header, possible values: ["h", "p", "i", "v"]
-  //           order: 0, // appear at first
-  //           content: "Examples:",
-  //       },
-  //       {
-  //           type: "p", // paragraph
-  //           order: 1, // appear as second, after above header
-  //           content: "*Bạn* là ai?\nWho are *you*?\n\nAnh ấy là *bạn* của tôi.\nHe is my *friend*.",
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     id: 2,
-  //     type: "s", // sentence
-  //     audio_url: require("../../../assets/happy_new_year.mp3"),
-  //     content: "xin chào",
-  //     translation: "hello, hi",
-  //     items: [
-  //         {
-  //             type: "h", // Image
-  //             order: 0,
-  //             content: "Usage",
-  //         },
-  //         {
-  //             type: "p", // video
-  //             order: 1,
-  //             content: "This word can be use as a sentence to greet people formally.\nIt can be use as *chào*, but it can have different meaning depending on context.",
-  //         }
-  //     ]
-  //   }
-  // ]
-
-  const [id, setId] = useState(0);
-
-  const [isChanged, setIsChanged] = useState(false);
-
   async function startRecording() {
     try {
       console.log('Requesting permissions..');
@@ -131,13 +81,13 @@ export const Lesson = (props: ILessonProps) => {
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
-
       console.log('Starting recording..');
       const recording = new Audio.Recording();
       await recording.prepareToRecordAsync(recordingSettings);
       await recording.startAsync();
       setRecording(recording);
       console.log('Recording started');
+      // setTimeId(setTimeout(stopRecording, 5000))
     } catch (err) {
       console.error('Failed to start recording', err);
     }
@@ -145,6 +95,7 @@ export const Lesson = (props: ILessonProps) => {
 
   async function stopRecording() {
     console.log('Stopping recording..');
+    // clearTimeout(timeId);
     setRecording(undefined);
     if (recording) {
       await recording.stopAndUnloadAsync();
@@ -158,35 +109,9 @@ export const Lesson = (props: ILessonProps) => {
     }
   }
 
-  // aiPrediction = [uploadRecord, { data, isSuccess, isLoading, error }]
-  // const aiPrediction = useAiPredictionMutation();
-
-  // useEffect(() => {
-  //   const fileUri =
-  //     Platform.OS === "android" ? uri : uri.replace("file://", "");
-  //   const uriParts = uri.split(".");
-  //   const fileType = uriParts[uriParts.length - 1];
-  //   const formData = new FormData();
-  //   formData.append("transcript", currentLesson ? currentLesson.cards.value[id].content : "");
-  //   formData.append("audio", {
-  //     uri: fileUri,
-  //     name: `record.${fileType}`,
-  //     type: `audio/${fileType}`,
-  //   } as any);
-  //   aiPrediction[0](formData);
-  //   console.log(aiPrediction[1].data);
-  //   console.log(uri);
-  // }, [uri]);
-
-  const [currentLesson, setCurrentLesson] = useState(lesson);
-
   useEffect(() => {
     setCurrentLesson(lesson);
   }, [lesson]);
-
-  const defaultImage: number = require("../../../assets/smile.png");
-
-  const total = currentLesson ? currentLesson?.cards.total : 10;
 
   return (
     <View style={styles.container}>
@@ -263,11 +188,14 @@ export const Lesson = (props: ILessonProps) => {
                   Practice
                 </Heading>
                 { 
-                  isChanged ? <Text></Text>
+                  isChanged ? null
                   : <AiResult transcript={currentLesson ? currentLesson.cards.value[id].content : ""} uri={uri} />
                 }
               </View>
             )}
+          </View>
+          <View style={{width: "15%", justifyContent: "space-evenly"}}>
+            {recording ? <LoadingDots dots={3} color={[Colors.PRIMARY, Colors.NEW, Colors.FLASHCARD]} size={IconSize.TINY} bounceHeight={IconSize.TINY} /> : null}
           </View>
           <View style={styles.footer}>
             <TouchableOpacity onPress={() => {
@@ -283,13 +211,15 @@ export const Lesson = (props: ILessonProps) => {
             {recallButton ? (
               <></>
             ) : (
-              <TouchableOpacity style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]} onPress={recording ? stopRecording : startRecording}>
-                <Ionicons
-                  name="mic-outline"
-                  size={IconSize.HUGE}
-                  color={Colors.TEXT}
-                />
-              </TouchableOpacity>
+              <View style={{flexDirection: "column"}}>
+                <TouchableOpacity style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]} onPressIn={startRecording} onPressOut={stopRecording}>
+                  <Ionicons
+                    name="mic-outline"
+                    size={IconSize.HUGE}
+                    color={Colors.TEXT}
+                  />
+                </TouchableOpacity>
+              </View>
             )}
             <TouchableOpacity onPress={() => {
                 setIsChanged(true);
@@ -338,13 +268,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   body: {
-    flex: 6.5,
+    flex: 6,
     width: "100%",
     padding: 20,
     overflow: "hidden",
   },
   footer: {
-    flex: 1.5,
+    flex: 2,
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-between",

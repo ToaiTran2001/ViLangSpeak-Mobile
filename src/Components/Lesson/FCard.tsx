@@ -7,11 +7,11 @@ import {
   Dimensions,
 } from "react-native";
 import { Audio } from 'expo-av';
-import { Colors, FontSize, IconSize } from "@/Theme";
-import { Item, Card } from "@/Services";
-import { Heading } from "native-base";
+import { Heading, HStack, Spinner } from "native-base";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import GestureFlipView from "react-native-gesture-flip-card";
+import { Colors, FontSize, IconSize } from "@/Theme";
+import { Item } from "@/Services";
 import { Config } from "@/Config";
 
 const screenWidth: number = Dimensions.get("window").width;
@@ -22,13 +22,13 @@ const recallButton: boolean = false;
 export interface IFrontFlashProps {
   audio_url: string | undefined;
   content: string | undefined;
-}
+};
 
 export interface IBackFlashProps {
   content: string | undefined;
   translation: string | undefined;
   items: Item[] | undefined;
-}
+};
 
 export interface IFlashProps {
   id: number | undefined;
@@ -37,18 +37,22 @@ export interface IFlashProps {
   content: string | undefined;
   translation: string | undefined;
   items: Item[] | undefined;
-}
+};
 
 const renderFront = (props: IFrontFlashProps) => {
   const [sound, setSound] = useState<Audio.Sound | undefined>(undefined);
 
+  const [isLoadingSound, setIsLoadingSound] = useState(false);
+
   async function playSound() {
     console.log("Loading Sound");
+    setIsLoadingSound(true);
     const { sound } = await Audio.Sound.createAsync(
       { uri: props.audio_url ? Config.API_APP_URL.slice(0, -1) + props.audio_url : "" }
     );
     setSound(sound);
     console.log("Playing Sound");
+    setIsLoadingSound(false);
     await sound.playAsync();
   }
 
@@ -92,8 +96,8 @@ const renderFront = (props: IFrontFlashProps) => {
 
   return (
     <View style={styles.cardContainerFront}>
-      <Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
-        {props.content}
+      <Text style={{ fontSize: FontSize.LARGE, color: Colors.TEXT }}>
+        {props.content}{"\n"}
       </Text>
       <TouchableOpacity style={[styles.iconContainer, {backgroundColor: Colors.NEW}]} onPress={playSound}>
         <Ionicons
@@ -102,6 +106,16 @@ const renderFront = (props: IFrontFlashProps) => {
           color={Colors.TEXT}
         />
       </TouchableOpacity>
+      {isLoadingSound ? (
+        <HStack space={2} justifyContent="center">
+          <Spinner accessibilityLabel="Loading posts" />
+          <Heading color="primary.500" fontSize="md">
+            Loading
+          </Heading>
+        </HStack>
+      ) : (
+        <Text></Text>
+      )}
       <TouchableOpacity style={{ flexDirection: "row" }}>
         <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
           Normal
@@ -192,8 +206,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.FLASHCARD,
     borderRadius: 20,
     width: screenWidth - 40,
-    height: 300,
-    marginVertical: 10,
+    height: 320,
+    marginVertical: 5,
     padding: 10,
     justifyContent: "space-evenly",
     alignItems: "center",
@@ -203,8 +217,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.FLASHCARD,
     borderRadius: 20,
     width: screenWidth - 40,
-    height: 300,
-    marginVertical: 10,
+    height: 320,
+    marginVertical: 5,
     padding: 10,
     justifyContent: "flex-start",
     alignItems: "center",

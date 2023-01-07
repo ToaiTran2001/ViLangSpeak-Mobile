@@ -4,40 +4,40 @@ export interface Category {
   id: number;
   name: string;
   image: string;
-}
+};
 
 export interface ListCategory {
   categories: Category[];
   total: number;
-}
+};
 
 export interface ListCategoryResponse {
   data: ListCategory;
   timestamp: number;
-}
+};
 
 export interface LessonInfo {
   id: number;
   name: string;
   visible: boolean;
   category: number;
-}
+};
 
 export interface ListLessonInfo {
   lessons: LessonInfo[];
   total: number;
-}
+};
 
 export interface ListLessonInfoResponse {
   data: ListLessonInfo;
   timestamp: number;
-}
+};
 
 export interface Item {
   type: string;
   order: number;
   content: string;
-}
+};
 
 export interface Card {
   id: number;
@@ -46,12 +46,12 @@ export interface Card {
   content: string;
   translation: string;
   items: Item[];
-}
+};
 
 export interface ListCard {
   value: Card[];
   total: number;
-}
+};
 
 export interface LessonDetail {
   id: number;
@@ -60,14 +60,14 @@ export interface LessonDetail {
   category: Category;
   test: number;
   cards: ListCard;
-}
+};
 
 export interface LessonDetailResponse {
   data: {
     lesson: LessonDetail;
   };
   timestamp: number;
-}
+};
 
 export interface Progress {
   lesson: number;
@@ -75,27 +75,27 @@ export interface Progress {
     value: number;
     last_date: number;
   }
-}
+};
 
 export interface ListProgress {
   progresses: Progress[];
   total: number;
-}
+};
 
 export interface ProgressResponse {
   data: Progress;
   timestamp: number;
-}
+};
 
 export interface ListProgressResponse {
   data: ListProgress;
   timestamp: number;
-}
+};
 
 type LessonIds = {
   lesson_id: string;
   account_id: string;
-}
+};
 
 const allCategoriesApi = API_APP.injectEndpoints({
   endpoints: (build) => ({

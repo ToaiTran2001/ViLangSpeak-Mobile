@@ -6,47 +6,50 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  Pressable,
+  Alert,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading, HStack } from "native-base";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { NormalACard } from "@/Components";
 import { Profile, ListAchievement, Achievement } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { MainScreens } from "..";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface IPersonalProps {
   profile: Profile | undefined;
   listAchievement: ListAchievement | undefined;
   isLoading: boolean;
   onNavigate: (string: MainScreens) => void;
-}
+};
 
 export const Personal = (props: IPersonalProps) => {
-  
-  // const dataTemp = [
-  //   {
-  //     id: "1",
-  //     thumbnail: require("../../../assets/smile.png"),
-  //     title: "Get 7 day series",
-  //   },
-  //   {
-  //     id: "2",
-  //     thumbnail: require("../../../assets/smile.png"),
-  //     title: "Get full points for 5 tests",
-  //   },
-  //   {
-  //     id: "3",
-  //     thumbnail: require("../../../assets/smile.png"),
-  //     title: "Achievement 3",
-  //   },
-  // ];
-
   const { profile, listAchievement, isLoading, onNavigate } = props;
 
-  const [currentAccount, setCurrentAccount] = useState(profile?.account)
+  const [currentAccount, setCurrentAccount] = useState(profile?.account);
+  
   const [currentAchievements, setCurrentAchievements] = useState(listAchievement?.achievements);
+
   const [loadMore, setLoadMore] = useState(false);
+
+  const createTwoButtonAlert = () => {
+    Alert.alert(
+      "ViLangSpeak",
+      "Authors: Hòa - Toại - Tuấn\nImages: flaticon.com",
+      [
+        { 
+          text: "Ok",
+          onPress: () => console.log("Ok Pressed")
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ]
+    );
+  };
 
   useEffect(() => {
     setCurrentAccount(profile?.account);
@@ -89,7 +92,7 @@ export const Personal = (props: IPersonalProps) => {
             </View>
           </View>
           <View style={styles.body}>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1.5 }}>
               <View
                 style={{
                   flexDirection: "row",
@@ -119,7 +122,7 @@ export const Personal = (props: IPersonalProps) => {
                 </Text>
               </View>
             </View>
-            <View style={{ flex: 3, overflow: "hidden" }}>
+            <View style={{ flex: 6, overflow: "hidden" }}>
               <View
                 style={{
                   flexDirection: "row",
@@ -188,7 +191,7 @@ export const Personal = (props: IPersonalProps) => {
                 />
               </View>
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 2.5 }}>
               <View
                 style={{
                   flexDirection: "row",
@@ -217,6 +220,20 @@ export const Personal = (props: IPersonalProps) => {
                 <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
                   Theme: SkyBlue
                 </Text>
+                <Pressable
+                  onPress={createTwoButtonAlert}
+                  style={{
+                    backgroundColor: Colors.PRIMARY,
+                    borderRadius: 10,
+                    width: 64,
+                    marginVertical: 5,
+                    padding: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                    About
+                  </Text>
+                </Pressable>
               </View>
             </View>
           </View>

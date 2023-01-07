@@ -61,6 +61,7 @@ export enum MetricsSizes {
  * IconSize
  */
  export enum IconSize {
+  TINY = 10,
   SMALL = 16,
   REGULAR = 20,
   MEDIUM = 24,

@@ -4,17 +4,16 @@ import {
   View,
   Platform,
 } from "react-native";
+import { Heading, HStack, Spinner } from "native-base";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { AudioTypeResponse, useAiPredictionMutation } from "@/Services";
-import { Heading, HStack, Spinner } from "native-base";
 
 export interface IAiProps {
   transcript: string;
   uri: string;
-}
+};
 
 export const AiResult = (props: IAiProps) => {
-
   const { transcript, uri } = props;
 
   const [uploadRecord, { data, isSuccess, isLoading, error }] = useAiPredictionMutation();
@@ -38,7 +37,7 @@ export const AiResult = (props: IAiProps) => {
 
   useEffect(() => {
     setDataResponse(data);
-  }, [data])
+  }, [data]);
 
   const mapText = (element: number, index: number) => {
     return (
@@ -65,4 +64,4 @@ export const AiResult = (props: IAiProps) => {
       )}
     </View>
   );
-}
+};

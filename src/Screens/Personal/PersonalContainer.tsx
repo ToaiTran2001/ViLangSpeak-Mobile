@@ -16,8 +16,6 @@ export const PersonalContainer = ({ navigation }: PersonalScreenNavigatorProps) 
   // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
   const profile = useLazyGetUserProfileQuery();
 
-  const profileData = profile[1].data?.data;
-
   // achievements: [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
   const listAchievement = useLazyGetUserAchievementsQuery();
 

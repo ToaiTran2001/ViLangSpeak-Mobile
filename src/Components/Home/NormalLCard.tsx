@@ -1,27 +1,27 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
-import { Colors, FontSize } from "@/Theme";
-import { Config } from "@/Config";
 import { Heading } from "native-base";
 import { Switch } from 'react-native-switch';
+import { Colors, FontSize } from "@/Theme";
+import { Config } from "@/Config";
 import { ILessonProps } from "./SmallLCard";
 
 export const NormalLCard = (props: ILessonProps) => {
-    const { id, name, visible, category, progress, onPress } = props
+    const { id, name, visible, category, progress, onPress } = props;
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-    let containerColor: string = Colors.NEW
-    let recallButton: boolean = false
+    let containerColor: string = Colors.NEW;
+    let recallButton: boolean = false;
 
     if (progress?.progress.value === 100) {
-        containerColor = Colors.SUCCESS
-        recallButton = true
+        containerColor = Colors.SUCCESS;
+        recallButton = true;
     } else if (progress && progress.progress.value !== 0) {
-        containerColor = Colors.PRIMARY
+        containerColor = Colors.PRIMARY;
     }
 
-    const defaultImage: number = require("../../../assets/smile.png");
+    const defaultImage: string = "/public/image/lesson-default.png";
 
     return (
         <TouchableOpacity
@@ -29,7 +29,7 @@ export const NormalLCard = (props: ILessonProps) => {
             onPress={onPress}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={category?.image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0, -1) + category?.image}}></Image>
+                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
@@ -71,8 +71,8 @@ export const NormalLCard = (props: ILessonProps) => {
                 </View>
             </View>
         </TouchableOpacity>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
     switch: {
         marginRight: 30,
     }
-})
+});

@@ -6,34 +6,34 @@ export interface Account {
   birthday: string;
   username: string;
   role: number;
-}
+};
 
 export interface Profile {
   account: Account;
-}
+};
 
 export interface ProfileResponse {
   data: Profile;
   timestamp: number;
-}
+};
 
 export interface Achievement {
   id: number;
   name: string;
   image: string;
   date: number;
-}
+};
 
 export interface ListAchievement {
   account: number;
   achievements: Achievement[];
   total: number;
-}
+};
 
 export interface ListAchievementResponse {
   data: ListAchievement;
   timestamp: number;
-}
+};
 
 const userProfileApi = API_APP.injectEndpoints({
   endpoints: (build) => ({

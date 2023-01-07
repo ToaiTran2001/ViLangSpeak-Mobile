@@ -1,14 +1,14 @@
 import React from "react";
-import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { Heading } from "native-base";
 import { Colors, FontSize } from "@/Theme";
 import { Achievement } from "@/Services";
 import { Config } from "@/Config";
-import { Heading } from "native-base";
 
 export const NormalACard = (props: Achievement) => {
-    const { id, name, image, date } = props
+    const { id, name, image, date } = props;
 
-    const defaultImage: number = require("../../../assets/smile.png");
+    const defaultImage: string = "/public/image/achievement-default.png";
 
     return (
         <TouchableOpacity
@@ -16,14 +16,14 @@ export const NormalACard = (props: Achievement) => {
             onPress={() => {return null;}}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0,-1) + image}}></Image>
+                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (image === "" ? defaultImage : image)}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>{name}</Heading>
             </View>
         </TouchableOpacity>
     )
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
         width: 64,
         height: 64,
     }
-})
+});

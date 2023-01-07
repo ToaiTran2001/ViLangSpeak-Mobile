@@ -23,7 +23,7 @@ export interface IHomeProps {
   allLessons: ListLessonInfo | undefined;
   allProgresses: ListProgress | undefined;
   onNavigate: (string: RootScreens) => void;
-}
+};
 
 export interface LessonInfoUser {
   id: number;
@@ -31,50 +31,18 @@ export interface LessonInfoUser {
   visible: boolean;
   category: Category | undefined;
   progress: Progress | undefined;
-}
+};
 
 export const Home = (props: IHomeProps) => {
-  // const dataTemp = [
-  //   {
-  //     id: 1,
-  //     name: "Get to know",
-  //     visible: true,
-  //     category: {
-  //       id: 0,
-  //       name: "Greeting",
-  //       image: require("../../../assets/smile.png"),
-  //     },
-  //     progress: 100,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Vehicles",
-  //     visible: true,
-  //     category: {
-  //       id: 1,
-  //       name: "category 2",
-  //       image: require("../../../assets/smile.png"),
-  //     },
-  //     progress: 75,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Animals",
-  //     visible: true,
-  //     category: {
-  //       id: 3,
-  //       name: "category 3",
-  //       image: require("../../../assets/smile.png"),
-  //     },
-  //     progress: 0,
-  //   },
-  // ];
-
   const { isLoading, profile, allCategories, recommendLessons, allLessons, allProgresses, onNavigate } = props;
 
   const [currentAccount, setCurrentAccount] = useState(profile?.account);
+
   const [recommendLessonsUser, setRecommendLessonsUser] = useState<LessonInfoUser[]>([]);
+
   const [allLessonsUser, setAllLessonsUser] = useState<LessonInfoUser[]>([]);
+
+  const [loadMore, setLoadMore] = useState(false);
 
   const updateLessons = (lessons: LessonInfo[] | undefined) => {
     if (lessons) {
@@ -92,15 +60,13 @@ export const Home = (props: IHomeProps) => {
     } else {
       return [];
     }
-  }
+  };
 
   useEffect(() => {
     setCurrentAccount(profile?.account);
     setRecommendLessonsUser(updateLessons(recommendLessons?.lessons));
     setAllLessonsUser(updateLessons(allLessons?.lessons));
-  }, [profile?.account, recommendLessons?.lessons, allLessons?.lessons, allCategories?.categories, allProgresses?.progresses])
-
-  const [loadMore, setLoadMore] = useState(false);
+  }, [profile?.account, recommendLessons?.lessons, allLessons?.lessons, allCategories?.categories, allProgresses?.progresses]);
 
   return (
     <View style={styles.container}>
@@ -223,6 +189,7 @@ export const Home = (props: IHomeProps) => {
                   onEndReached={() => {
                     setLoadMore(true);
                     setTimeout(() => {
+                      setAllLessonsUser(updateLessons(allLessons?.lessons).concat([]));
                       setLoadMore(false);
                     }, 1000);
                   }}

@@ -1,11 +1,11 @@
-import { Lesson } from "./Lesson";
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { CompositeScreenProps } from '@react-navigation/native';
 import { MainBottomBarParamList } from "@/Navigation/Main";
-import { MainScreens, RootScreens } from "..";
 import { RootStackParamList } from "@/Navigation";
 import { useLazyGetLessonQuery } from "@/Services";
+import { MainScreens, RootScreens } from "..";
+import { Lesson } from "./Lesson";
 
 type LessonScreenNavigatorProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList, RootScreens.LESSON>,
