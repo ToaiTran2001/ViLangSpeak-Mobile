@@ -5,17 +5,15 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Platform,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Audio } from 'expo-av';
 import { Heading, HStack, Spinner } from "native-base";
 import { Colors, FontSize, IconSize } from "@/Theme";
-import { FCard } from "@/Components";
+import { AiResult, FCard } from "@/Components";
 import { MainScreens } from "..";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat } from "expo-av/build/Audio";
-import { AudioType, useAiPredictionMutation } from "@/Services/ai";
 import { LessonDetail } from "@/Services";
 import { Config } from "@/Config";
 
@@ -33,8 +31,6 @@ export const Lesson = (props: ILessonProps) => {
   const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
   const [uri, setUri] = useState<string>("");
-
-  const [score, setScore] = useState<number[]>([1, 2]);
 
   const recordingSettings = {
     isMeteringEnabled: true,
@@ -125,6 +121,8 @@ export const Lesson = (props: ILessonProps) => {
 
   const [id, setId] = useState(0);
 
+  const [isChanged, setIsChanged] = useState(false);
+
   async function startRecording() {
     try {
       console.log('Requesting permissions..');
@@ -154,47 +152,37 @@ export const Lesson = (props: ILessonProps) => {
         allowsRecordingIOS: false,
       });
       const uriSend = recording.getURI();
-      setUri(uriSend ? uriSend : "")
+      setUri(uriSend ? uriSend : "");
+      setIsChanged(false);
       console.log('Recording stopped and stored at', uriSend);
     }
   }
 
   // aiPrediction = [uploadRecord, { data, isSuccess, isLoading, error }]
-  const aiPrediction = useAiPredictionMutation();
+  // const aiPrediction = useAiPredictionMutation();
 
-  useEffect(() => {
-    const fileUri =
-      Platform.OS === "android" ? uri : uri.replace("file://", "");
-    const uriParts = uri.split(".");
-    const fileType = uriParts[uriParts.length - 1];
-    const formData = new FormData();
-    formData.append("transcript", currentLesson ? currentLesson.cards.value[id].content : "");
-    formData.append("audio", {
-      uri: fileUri,
-      name: `record.${fileType}`,
-      type: `audio/${fileType}`,
-    } as any);
-    aiPrediction[0](formData);
-    console.log(aiPrediction[1].data);
-    console.log(uri);
-  }, [uri]);
+  // useEffect(() => {
+  //   const fileUri =
+  //     Platform.OS === "android" ? uri : uri.replace("file://", "");
+  //   const uriParts = uri.split(".");
+  //   const fileType = uriParts[uriParts.length - 1];
+  //   const formData = new FormData();
+  //   formData.append("transcript", currentLesson ? currentLesson.cards.value[id].content : "");
+  //   formData.append("audio", {
+  //     uri: fileUri,
+  //     name: `record.${fileType}`,
+  //     type: `audio/${fileType}`,
+  //   } as any);
+  //   aiPrediction[0](formData);
+  //   console.log(aiPrediction[1].data);
+  //   console.log(uri);
+  // }, [uri]);
+
+  const [currentLesson, setCurrentLesson] = useState(lesson);
 
   useEffect(() => {
     setCurrentLesson(lesson);
   }, [lesson]);
-
-  const mapText = (element: number, index: number) => {
-    return (
-      <Text
-        key={index}
-        style={{ fontSize: FontSize.REGULAR, color: element === 0 ? Colors.TEXT_ERROR : Colors.TEXT_CORRECT }}
-      >
-        {currentLesson?.cards.value[id].content.split(" ")[index]}{" "}
-      </Text>
-    )
-  };
-
-  const [currentLesson, setCurrentLesson] = useState(lesson);
 
   const defaultImage: number = require("../../../assets/smile.png");
 
@@ -274,16 +262,18 @@ export const Lesson = (props: ILessonProps) => {
                 <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
                   Practice
                 </Heading>
-                <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                  { 
-                    score.map(mapText as any)
-                  }
-                </View>
+                { 
+                  isChanged ? <Text></Text>
+                  : <AiResult transcript={currentLesson ? currentLesson.cards.value[id].content : ""} uri={uri} />
+                }
               </View>
             )}
           </View>
           <View style={styles.footer}>
-            <TouchableOpacity onPress={() => setId(id-1 > 0 ? id-1 : 0)}>
+            <TouchableOpacity onPress={() => {
+                setIsChanged(true);
+                setId(id-1 > 0 ? id-1 : 0);
+              }}>
               <Ionicons
                 name="chevron-back"
                 size={IconSize.LARGE}
@@ -302,12 +292,13 @@ export const Lesson = (props: ILessonProps) => {
               </TouchableOpacity>
             )}
             <TouchableOpacity onPress={() => {
-                setId(id+1 < total ? id+1 : total - 1)
+                setIsChanged(true);
+                setId(id+1 < total ? id+1 : total-1);
               }}>
               <Ionicons
                 name="chevron-forward"
                 size={IconSize.LARGE}
-                color={id < total - 1 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
+                color={id < total-1 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
               />
             </TouchableOpacity>
           </View>

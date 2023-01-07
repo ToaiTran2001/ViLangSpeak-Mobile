@@ -2,7 +2,7 @@ import { API_AI } from "../baseAi";
 
 export interface AudioType {
   transcript: string;
-  score: number[];
+  scores: number[];
   total: number;
 }
 

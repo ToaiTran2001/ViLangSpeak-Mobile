@@ -256,14 +256,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   body: {
-    flex: 7,
+    flex: 8,
     width: "100%",
     padding: 20,
     overflow: "hidden",
-  },
-  footer: {
-    flex: 1,
-    flexDirection: "row",
   },
   logo: {
     resizeMode: "contain",
