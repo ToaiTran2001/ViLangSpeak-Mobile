@@ -41,27 +41,21 @@ export const Test = (props: ITestProps) => {
 
   const [loadMore, setLoadMore] = useState(false);
 
-  const updateTests = (tests: TestInfo[] | undefined) => {
-    if (tests) {
-      const tempTests: TestInfoUser[] = [];
-      for (let i = 0; i < tests.length; i++) {
-        tempTests.push({
-          id: tests[i].id,
-          name: tests[i].name,
-          visible: tests[i].visible,
-          category: allCategories?.categories[tests[i].category - 1],
-          progress: allProgressesTest?.progresses[i],
-        });
+  const mapTestUser = (test: TestInfo) => {
+    return (
+      {
+        id: test.id,
+        name: test.name,
+        visible: test.visible,
+        category: allCategories?.categories[test.category - 1],
+        progress: allProgressesTest?.progresses.find(progress => progress.test === test.id),
       }
-      return tempTests;
-    } else {
-      return [];
-    }
+    );
   };
 
   useEffect(() => {
-    setRecommendTestsUser(updateTests(recommendTests?.tests));
-    setAllTestsUser(updateTests(allTests?.tests));
+    setRecommendTestsUser(recommendTests ? recommendTests.tests.map(mapTestUser as any) : []);
+    setAllTestsUser(allTests ? allTests.tests.map(mapTestUser as any) : []);
   }, [recommendTests?.tests, allTests?.tests, allCategories?.categories, allProgressesTest?.progresses]);
 
   return (
@@ -190,7 +184,7 @@ export const Test = (props: ITestProps) => {
                   onEndReached={() => {
                     setLoadMore(true);
                     setTimeout(() => {
-                      setAllTestsUser(updateTests(allTests?.tests).concat([]));
+                      setAllTestsUser(allTests ? allTests.tests.concat([]).map(mapTestUser as any) : []);
                       setLoadMore(false);
                     }, 1000);
                   }}

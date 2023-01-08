@@ -80,10 +80,11 @@ const styles = StyleSheet.create({
         height: 60,
     },
     button: {
-        width: 60,
-        height: 30,
+        width: 72,
+        height: 36,
         borderRadius: 10,
         marginRight: 30,
+        padding: 5,
         justifyContent: "center",
         alignItems: "center",
     }

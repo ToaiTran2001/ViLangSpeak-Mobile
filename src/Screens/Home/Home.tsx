@@ -44,28 +44,22 @@ export const Home = (props: IHomeProps) => {
 
   const [loadMore, setLoadMore] = useState(false);
 
-  const updateLessons = (lessons: LessonInfo[] | undefined) => {
-    if (lessons) {
-      const tempLessons: LessonInfoUser[] = [];
-      for (let i = 0; i < lessons.length; i++) {
-        tempLessons.push({
-          id: lessons[i].id,
-          name: lessons[i].name,
-          visible: lessons[i].visible,
-          category: allCategories?.categories[lessons[i].category - 1],
-          progress: allProgresses?.progresses.find(progress => progress.lesson === lessons[i].id),
-        });
+  const mapLessonUser = (lesson: LessonInfo) => {
+    return (
+      {
+        id: lesson.id,
+        name: lesson.name,
+        visible: lesson.visible,
+        category: allCategories?.categories[lesson.category - 1],
+        progress: allProgresses?.progresses.find(progress => progress.lesson === lesson.id),
       }
-      return tempLessons;
-    } else {
-      return [];
-    }
+    );
   };
 
   useEffect(() => {
     setCurrentAccount(profile?.account);
-    setRecommendLessonsUser(updateLessons(recommendLessons?.lessons));
-    setAllLessonsUser(updateLessons(allLessons?.lessons));
+    setRecommendLessonsUser(recommendLessons ? recommendLessons.lessons.map(mapLessonUser as any) : []);
+    setAllLessonsUser(allLessons ? allLessons.lessons.map(mapLessonUser as any) : []);
   }, [profile?.account, recommendLessons?.lessons, allLessons?.lessons, allCategories?.categories, allProgresses?.progresses]);
 
   return (
@@ -189,7 +183,7 @@ export const Home = (props: IHomeProps) => {
                   onEndReached={() => {
                     setLoadMore(true);
                     setTimeout(() => {
-                      setAllLessonsUser(updateLessons(allLessons?.lessons).concat([]));
+                      setAllLessonsUser(allLessons ? allLessons.lessons.concat([]).map(mapLessonUser as any) : []);
                       setLoadMore(false);
                     }, 1000);
                   }}

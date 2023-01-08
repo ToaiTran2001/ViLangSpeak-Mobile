@@ -6,7 +6,6 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  Pressable,
   Alert,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -39,13 +38,8 @@ export const Personal = (props: IPersonalProps) => {
       "Authors: Hòa - Toại - Tuấn\nImages: flaticon.com",
       [
         { 
-          text: "Ok",
-          onPress: () => console.log("Ok Pressed")
-        },
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          text: "OK",
+          onPress: () => console.log("OK Pressed")
         }
       ]
     );
@@ -220,20 +214,23 @@ export const Personal = (props: IPersonalProps) => {
                 <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
                   Theme: SkyBlue
                 </Text>
-                <Pressable
+                <TouchableOpacity
                   onPress={createTwoButtonAlert}
                   style={{
                     backgroundColor: Colors.PRIMARY,
+                    width: 72,
+                    height: 36,
                     borderRadius: 10,
-                    width: 64,
                     marginVertical: 5,
-                    padding: 10,
+                    padding: 5,
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
                   <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
                     About
                   </Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
