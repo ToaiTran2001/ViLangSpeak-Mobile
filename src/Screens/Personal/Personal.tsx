@@ -196,7 +196,7 @@ export const Personal = (props: IPersonalProps) => {
               >
                 <View>
                   <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                    Setting
+                    Settings
                   </Heading>
                 </View>
                 <TouchableOpacity style={{ flexDirection: "row" }}>
