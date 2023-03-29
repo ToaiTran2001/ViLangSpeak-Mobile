@@ -1,4 +1,5 @@
 import { API_AI, API_APP } from "@/Services";
+import { API_AUTH } from "@/Services/baseAuth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
@@ -12,18 +13,21 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import { homeReducers, themeReducers } from "./reducers";
+import { authReducers, authRefreshReducers, homeReducers, themeReducers } from "./reducers";
 
 const reducers = combineReducers({
   api: API_APP.reducer,
+  apiAuth: API_AUTH.reducer,
   theme: themeReducers,
   home: homeReducers,
+  auth: authReducers,
+  authRefresh: authRefreshReducers,
 });
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["theme"],
+  whitelist: ["theme", "auth"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
@@ -35,7 +39,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(API_APP.middleware);
+    }).concat(API_APP.middleware).concat(API_AUTH.middleware);
 
     // if (__DEV__ && !process.env.JEST_WORKER_ID) {
     //   const createDebugger = require("redux-flipper").default;
@@ -51,3 +55,4 @@ const persistor = persistStore(store);
 setupListeners(store.dispatch);
 
 export { store, persistor };
+export type RootState = ReturnType<typeof reducers>;
