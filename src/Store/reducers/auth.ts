@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BaseQueryFn } from "@reduxjs/toolkit/dist/query";
+import { RootState } from "..";
 
 const slice = createSlice({
     name: "auth",
@@ -36,7 +37,5 @@ export const authReducers = slice.reducer;
 export const authRefreshReducers = refreshSlice.reducer;
 
 export const selectAuth = () => {
-    return (state: {
-        auth: { token: string, refreshToken: string }
-    }) => state.auth;
+    return (state: RootState) => state.auth;
 }
