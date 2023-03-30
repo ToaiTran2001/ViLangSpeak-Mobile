@@ -3,13 +3,15 @@ import { BaseQueryFn } from "@reduxjs/toolkit/dist/query";
 
 const slice = createSlice({
     name: "auth",
-    initialState: { token: null },
+    initialState: { token: null, refreshToken: null },
     reducers: {
-        logIn: (state, { payload: { token } }) => {
+        logIn: (state, { payload: { token, refreshToken } }) => {
             state.token = token;
+            state.refreshToken = refreshToken;
         },
         logOut: (state) => {
             state.token = null;
+            state.refreshToken = null;
         },
     }
 });
@@ -35,6 +37,6 @@ export const authRefreshReducers = refreshSlice.reducer;
 
 export const selectAuth = () => {
     return (state: {
-        auth: { isSignIn: boolean }
+        auth: { token: string, refreshToken: string }
     }) => state.auth;
 }
