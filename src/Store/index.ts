@@ -13,7 +13,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import { authReducers, authRefreshReducers, homeReducers, themeReducers } from "./reducers";
+import { authReducers, authRefreshReducers, homeReducers, refreshingToken, themeReducers } from "./reducers";
 
 const reducers = combineReducers({
   api: API_APP.reducer,
@@ -37,7 +37,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) => {
     const middlewares = getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, refreshingToken.type],
+        ignoredPaths: ["authRefresh"],
       },
     }).concat(API_APP.middleware).concat(API_AUTH.middleware);
 
