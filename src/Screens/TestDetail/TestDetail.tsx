@@ -17,17 +17,15 @@ import { Config } from "@/Config";
 import { Question, Answer } from "@/Components/TestDetail";
 
 export interface ITestDetailProps {
-  // isLoading: boolean;
-  // test: TestDetailData | undefined;
+  isLoading: boolean;
+  test: TestDetailData | undefined;
   onNavigate: (screen: MainScreens) => void;
 };
 
 export const TestDetail = (props: ITestDetailProps) => {
-  // const { isLoading, test, onNavigate } = props;
+  const { isLoading, test, onNavigate } = props;
 
-  const {onNavigate} = props;
-
-  // const [currentTest, setCurrentTest] = useState(test);
+  const [currentTest, setCurrentTest] = useState(test);
 
   const [id, setId] = useState(0);
 
@@ -35,25 +33,23 @@ export const TestDetail = (props: ITestDetailProps) => {
 
   const defaultImage: string = "/public/image/test-default.png";
 
-  // const total = currentTest ? currentTest?.questions.total : 10;
+  const total = currentTest ? currentTest?.questions.total : 10;
 
-  const total = 10;
-
-  // useEffect(() => {
-  //   setCurrentTest(test);
-  // }, [test]);
+  useEffect(() => {
+    setCurrentTest(test);
+  }, [test]);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      {/* {isLoading ? (
+      {isLoading ? (
         <HStack space={2} justifyContent="center">
           <Spinner accessibilityLabel="Loading posts" />
           <Heading color="primary.500" fontSize="md">
             Loading
           </Heading>
         </HStack>
-      ) : ( */}
+      ) : (
         <>
           <View style={styles.header}>
             <TouchableOpacity
@@ -68,19 +64,16 @@ export const TestDetail = (props: ITestDetailProps) => {
                 </TouchableOpacity>
                 <View style={styles.textHeaderContainer}>
                 <Heading fontSize={FontSize.LARGE} color={Colors.TEXT}>
-                    {/* {currentTest?.name} */}
-                    Hello
+                    {currentTest?.name}
                 </Heading>
                 <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-                    {/* {currentTest?.category.name} */}
-                    Category 1
+                    {currentTest?.category.name}
                 </Text>
                 </View>
                 <View style={styles.thumbnailHeaderContainer}>
                 <Image
                     style={styles.thumbnail}
-                    source={require("../../../assets/smile.png")}
-                    // source={{uri: Config.API_APP_URL.slice(0, -1) + (currentTest?.category.image === "" ? defaultImage : currentTest?.category.image)}}
+                    source={{uri: Config.API_APP_URL.slice(0, -1) + (currentTest?.category.image === "" ? defaultImage : currentTest?.category.image)}}
                 />
                 </View>
             </View>
@@ -88,20 +81,15 @@ export const TestDetail = (props: ITestDetailProps) => {
             <View style={{ flex: 1 }}>
               <View>
                 <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                  {/* Question {id+1}/{currentTest?.questions.total} */}
-                  Question 1/10
+                  Question {id+1}/{currentTest?.questions.total}
                 </Heading>
               </View>
               <View style={{ height: 96 }}>
                 <Question
-                  // id={currentTest?.questions.value[id].id}
-                  // question_type={currentTest?.questions.value[id].question_type}
-                  // type={currentTest?.questions.value[id].type}
-                  // content={currentTest?.questions.value[id].content}
-                  id={0}
-                  question_type="sc"
-                  type="p"
-                  content="This is an example question header"
+                  id={currentTest?.questions.value[id].id}
+                  question_type={currentTest?.questions.value[id].question_type}
+                  type={currentTest?.questions.value[id].type}
+                  content={currentTest?.questions.value[id].content}
                 />
               </View>    
             </View>
@@ -114,52 +102,36 @@ export const TestDetail = (props: ITestDetailProps) => {
               <View style={{ height: "90%", marginVertical: 10 }}>
                   <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
                       <Answer
-                          // id={currentTest?.questions.value[id].items[0].id}
-                          // type={currentTest?.questions.value[id].items[0].type}
-                          // content={currentTest?.questions.value[id].items[0].content}
-                          // answer={currentTest?.questions.value[id].items[0].answer}
-                          id={0}
-                          type="p"
-                          content="Option 1"
-                          answer={0}
+                          id={currentTest?.questions.value[id].items[0].id}
+                          type={currentTest?.questions.value[id].items[0].type}
+                          content={currentTest?.questions.value[id].items[0].content}
+                          answer={currentTest?.questions.value[id].items[0].answer}
                           text="A"
                           onPress={() => {return null;}}
                       />
                       <Answer
-                          // id={currentTest?.questions.value[id].items[1].id}
-                          // type={currentTest?.questions.value[id].items[1].type}
-                          // content={currentTest?.questions.value[id].items[1].content}
-                          // answer={currentTest?.questions.value[id].items[1].answer}
-                          id={1}
-                          type="p"
-                          content="Option 2"
-                          answer={1}
+                          id={currentTest?.questions.value[id].items[1].id}
+                          type={currentTest?.questions.value[id].items[1].type}
+                          content={currentTest?.questions.value[id].items[1].content}
+                          answer={currentTest?.questions.value[id].items[1].answer}
                           text="B"
                           onPress={() => {return null;}}
                       />
                   </View>
                   <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
                       <Answer
-                          // id={currentTest?.questions.value[id].items[2].id}
-                          // type={currentTest?.questions.value[id].items[2].type}
-                          // content={currentTest?.questions.value[id].items[2].content}
-                          // answer={currentTest?.questions.value[id].items[2].answer}
-                          id={2}
-                          type="p"
-                          content="Option 3"
-                          answer={0}
+                          id={currentTest?.questions.value[id].items[2].id}
+                          type={currentTest?.questions.value[id].items[2].type}
+                          content={currentTest?.questions.value[id].items[2].content}
+                          answer={currentTest?.questions.value[id].items[2].answer}
                           text="C"
                           onPress={() => {return null;}}
                       />
                       <Answer
-                          // id={currentTest?.questions.value[id].items[3].id}
-                          // type={currentTest?.questions.value[id].items[3].type}
-                          // content={currentTest?.questions.value[id].items[3].content}
-                          // answer={currentTest?.questions.value[id].items[3].answer}
-                          id={3}
-                          type="p"
-                          content="Option 4"
-                          answer={0}
+                          id={currentTest?.questions.value[id].items[3].id}
+                          type={currentTest?.questions.value[id].items[3].type}
+                          content={currentTest?.questions.value[id].items[3].content}
+                          answer={currentTest?.questions.value[id].items[3].answer}
                           text="D"
                           onPress={() => {return null;}}
                       />
@@ -193,7 +165,7 @@ export const TestDetail = (props: ITestDetailProps) => {
             </TouchableOpacity>
           </View>
         </>
-      {/* )} */}
+      )}
     </View>
   );
 };

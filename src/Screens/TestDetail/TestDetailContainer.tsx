@@ -17,19 +17,18 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
 
   // const [testId, setTestId] = useState(id);
 
-  // const [testId, setTestId] = useState("1");
+  const [testId, setTestId] = useState("1");
 
-  // // test = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  // const test = useLazyGetTestDetailQuery();
+  // test = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+  const test = useLazyGetTestDetailQuery();
 
-  // useEffect(() => {
-  //   test[0](testId);
-  // }, [test[0], testId]);
+  useEffect(() => {
+    test[0](testId);
+  }, [test[0], testId]);
 
   const onNavigate = (screen: MainScreens) => {
     navigation.navigate(screen);
   };
 
-  // return <TestDetail isLoading={test[1].isLoading} test={test[1].data?.data.test} onNavigate={onNavigate} />;
-  return <TestDetail onNavigate={onNavigate} />
+  return <TestDetail isLoading={test[1].isLoading} test={test[1].data?.data.test} onNavigate={onNavigate} />;
 };
