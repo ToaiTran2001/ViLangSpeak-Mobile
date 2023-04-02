@@ -4,6 +4,7 @@ import { BaseQueryFn } from "@reduxjs/toolkit/dist/query";
 import { RootState } from "..";
 
 export interface AuthState {
+    userId: number | null;
     token: string | null;
     refreshToken: string | null;
 }
@@ -12,17 +13,19 @@ export interface AuthRefreshState {
     promise: Promise<AuthState> | null;
 }
 
-const authInitialState = { token: null, refreshToken: null } as AuthState;
+const authInitialState = { userId: null, token: null, refreshToken: null } as AuthState;
 
 const slice = createSlice({
     name: "auth",
     initialState: authInitialState,
     reducers: {
-        logIn: (state, { payload: { token, refreshToken} }) => {
+        logIn: (state, { payload: { userId, token, refreshToken} }) => {
+            state.userId = userId;
             state.token = token;
             state.refreshToken = refreshToken;
         },
         logOut: (state) => {
+            state.userId = null;
             state.token = null;
             state.refreshToken = null;
         },
