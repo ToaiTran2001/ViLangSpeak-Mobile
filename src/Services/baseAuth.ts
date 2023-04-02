@@ -45,6 +45,7 @@ export const refreshToken = async (getState: any, dispatch: any) => {
       },
     }).then((result) => {
       const tokens: AuthState = {
+        userId: result.data.id,
         token: result.data.access_token,
         refreshToken: result.data.refresh_token,
       };
