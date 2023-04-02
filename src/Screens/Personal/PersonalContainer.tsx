@@ -4,6 +4,8 @@ import { MainBottomBarParamList } from "@/Navigation/Main";
 import { useLazyGetUserProfileQuery, useLazyGetUserAchievementsQuery } from "@/Services";
 import { MainScreens } from "..";
 import { Personal } from "./Personal";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/Store/reducers";
 
 type PersonalScreenNavigatorProps = NativeStackScreenProps<
   MainBottomBarParamList,
@@ -15,7 +17,7 @@ export const PersonalContainer = ({ navigation, route }: PersonalScreenNavigator
 
   // const [userId, setUserId] = useState(id);
 
-  const [userId, setUserId] = useState("1");
+  const userId = useSelector(selectAuth()).userId;
 
   // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
   const profile = useLazyGetUserProfileQuery();
@@ -26,8 +28,11 @@ export const PersonalContainer = ({ navigation, route }: PersonalScreenNavigator
   const isLoading = profile[1].isLoading || listAchievement[1].isLoading;
 
   useEffect(() => {
-    profile[0](userId);
-    listAchievement[0](userId);
+    if (userId) {
+      const userIdString = userId.toString();
+      profile[0](userIdString);
+      listAchievement[0](userIdString);
+    }
   }, [profile[0], listAchievement[0], userId]);
 
   const onNavigate = (screen: MainScreens) => {

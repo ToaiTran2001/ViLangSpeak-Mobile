@@ -6,6 +6,8 @@ import { RootStackParamList } from "@/Navigation";
 import { useLazyGetRmdLessonsQuery, useLazyGetAllLessonsQuery, useLazyGetAllProgressesQuery, useLazyGetUserProfileQuery, useLazyGetAllCategoriesQuery } from "@/Services";
 import { MainScreens, RootScreens } from "..";
 import { Home } from "./Home";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/Store/reducers";
 
 type HomeScreenNavigatorProps = CompositeScreenProps<
   NativeStackScreenProps<MainBottomBarParamList, MainScreens.HOME>,
@@ -13,11 +15,7 @@ type HomeScreenNavigatorProps = CompositeScreenProps<
 >;
 
 export const HomeContainer = ({ navigation, route }: HomeScreenNavigatorProps) => {
-  // const { id } = route.params;
-
-  // const [userId, setUserId] = useState(id);
-
-  const [userId, setUserId] = useState("1");
+  const userId = useSelector(selectAuth()).userId;
 
   // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
   const profile = useLazyGetUserProfileQuery();
@@ -37,11 +35,14 @@ export const HomeContainer = ({ navigation, route }: HomeScreenNavigatorProps) =
   const isLoading = profile[1].isLoading || allCategories[1].isLoading || recommendLessons[1].isLoading || allLessons[1].isLoading || allProgresses[1].isLoading;
 
   useEffect(() => {
-    profile[0](userId);
-    allCategories[0](userId)
-    recommendLessons[0](userId);
-    allLessons[0](userId);
-    allProgresses[0](userId);
+    if (userId) {
+      const userIdString = userId.toString();
+      profile[0](userIdString);
+      allCategories[0](userIdString)
+      recommendLessons[0](userIdString);
+      allLessons[0](userIdString);
+      allProgresses[0](userIdString);
+    }
   }, [profile[0], allCategories[0], recommendLessons[0], allLessons[0], allProgresses[0], userId]);
 
   const onNavigate = (screen: RootScreens) => {
