@@ -14,6 +14,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { RootScreens } from "..";
 import { LoginInfo, CredentialResponse, useLogInMutation } from "@/Services";
+import { useDispatch } from "react-redux";
+import { logIn } from "@/Store/reducers";
 
 const screenWidth: number = Dimensions.get("window").width;
 const screenHeight: number = Dimensions.get("window").height;
@@ -25,6 +27,8 @@ export interface ILoginProps {
 export const Login = (props: ILoginProps) => {
     const { onNavigate } = props;
 
+    const dispatch = useDispatch();
+
     const [username, onChangeUsername] = useState("");
 
     const [password, onChangePassword] = useState("");
@@ -33,10 +37,12 @@ export const Login = (props: ILoginProps) => {
 
     const [uploadLogin, { data, isSuccess, isLoading, error }] = useLogInMutation();
 
-    const [dataResponse, setDataResponse] = useState<CredentialResponse | undefined>();
-
     useEffect(() => {
-        setDataResponse(data);
+        dispatch(logIn({
+            userId: data?.id,
+            token: data?.access_token,
+            refreshToken: data?.refresh_token,
+        }));
     }, [data]);
 
     return (
@@ -88,7 +94,7 @@ export const Login = (props: ILoginProps) => {
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             style={styles.button}
-                            onPress={() => {uploadLogin({ username: username, password: password });onNavigate(RootScreens.MAIN);}}
+                            onPress={() => {uploadLogin({ username: username, password: password });}}
                         >
                             <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >Login</Text>
                         </TouchableOpacity>

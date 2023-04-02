@@ -15,6 +15,8 @@ import { NormalACard } from "@/Components";
 import { Profile, ListAchievement, Achievement } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { MainScreens } from "..";
+import { useDispatch } from "react-redux";
+import { logOut } from "@/Store/reducers";
 
 export interface IPersonalProps {
   profile: Profile | undefined;
@@ -25,6 +27,8 @@ export interface IPersonalProps {
 
 export const Personal = (props: IPersonalProps) => {
   const { profile, listAchievement, isLoading, onNavigate } = props;
+
+  const dispatch = useDispatch();
 
   const [currentAccount, setCurrentAccount] = useState(profile?.account);
   
@@ -40,6 +44,25 @@ export const Personal = (props: IPersonalProps) => {
         { 
           text: "OK",
           onPress: () => console.log("OK Pressed")
+        }
+      ]
+    );
+  };
+
+  const createLogoutAlert = () => {
+    Alert.alert(
+      "Log out",
+      "Do you want to log out?",
+      [
+        { 
+          text: "OK",
+          onPress: () => {
+            dispatch(logOut());
+          }
+        },
+        { 
+          text: "Cancel",
+          onPress: () => console.log("Logout cancelled")
         }
       ]
     );
@@ -214,23 +237,46 @@ export const Personal = (props: IPersonalProps) => {
                 <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
                   Theme: SkyBlue
                 </Text>
-                <TouchableOpacity
-                  onPress={createTwoButtonAlert}
-                  style={{
-                    backgroundColor: Colors.PRIMARY,
-                    width: 72,
-                    height: 36,
-                    borderRadius: 10,
-                    marginVertical: 5,
-                    padding: 5,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-                    About
-                  </Text>
-                </TouchableOpacity>
+                <View style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                }}>
+                  <TouchableOpacity
+                    onPress={createTwoButtonAlert}
+                    style={{
+                      backgroundColor: Colors.PRIMARY,
+                      width: 72,
+                      height: 36,
+                      borderRadius: 10,
+                      marginVertical: 5,
+                      padding: 5,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                      About
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={createLogoutAlert}
+                    style={{
+                      backgroundColor: Colors.PRIMARY,
+                      width: 84,
+                      height: 36,
+                      borderRadius: 10,
+                      marginVertical: 5,
+                      padding: 5,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+                      Log out
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
