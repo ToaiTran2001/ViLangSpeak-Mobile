@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { CompositeScreenProps } from '@react-navigation/native';
 import { MainBottomBarParamList } from "@/Navigation/Main";
 import { useLazyGetAllCategoriesQuery, useLazyGetAllTestsQuery, useLazyGetRmdTestsQuery, useLazyGetAllProgressesTestQuery } from "@/Services";
-import { MainScreens } from "..";
+import { MainScreens, RootScreens } from "..";
 import { Test } from "./Test";
+import { RootStackParamList } from "@/Navigation";
 
-type TestScreenNavigatorProps = NativeStackScreenProps<
-  MainBottomBarParamList,
-  MainScreens.TEST
+type TestScreenNavigatorProps = CompositeScreenProps<
+  NativeStackScreenProps<MainBottomBarParamList, MainScreens.TEST>,
+  NativeStackScreenProps<RootStackParamList>
 >;
 
-export const TestContainer = ({ navigation }: TestScreenNavigatorProps) => {
+export const TestContainer = ({ navigation, route }: TestScreenNavigatorProps) => {
+  // const { id } = route.params;
+
+  // const [userId, setUserId] = useState(id);
+
   const [userId, setUserId] = useState("1");
 
   // allCategories = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
@@ -34,7 +40,7 @@ export const TestContainer = ({ navigation }: TestScreenNavigatorProps) => {
     allProgressesTest[0](userId);
   }, [allCategories[0], recommendTests[0], allTests[0], allProgressesTest[0], userId]);
 
-  const onNavigate = (screen: MainScreens) => {
+  const onNavigate = (screen: RootScreens) => {
       navigation.navigate(screen);
   };
 

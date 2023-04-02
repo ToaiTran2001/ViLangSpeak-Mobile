@@ -43,3 +43,5 @@ export const logOutApi = API_APP.injectEndpoints({
   }),
   overrideExisting: true,
 });
+
+export const { useLogInMutation } = authApi;

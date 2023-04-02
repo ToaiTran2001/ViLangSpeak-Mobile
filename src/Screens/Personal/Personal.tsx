@@ -20,7 +20,7 @@ export interface IPersonalProps {
   profile: Profile | undefined;
   listAchievement: ListAchievement | undefined;
   isLoading: boolean;
-  onNavigate: (string: MainScreens) => void;
+  onNavigate: (screen: MainScreens) => void;
 };
 
 export const Personal = (props: IPersonalProps) => {

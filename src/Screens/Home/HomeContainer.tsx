@@ -12,7 +12,11 @@ type HomeScreenNavigatorProps = CompositeScreenProps<
   NativeStackScreenProps<RootStackParamList>
 >;
 
-export const HomeContainer = ({ navigation }: HomeScreenNavigatorProps) => {
+export const HomeContainer = ({ navigation, route }: HomeScreenNavigatorProps) => {
+  // const { id } = route.params;
+
+  // const [userId, setUserId] = useState(id);
+
   const [userId, setUserId] = useState("1");
 
   // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]

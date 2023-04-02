@@ -13,7 +13,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { ListCategory, ListTestInfo, ListProgressTest, Category, ProgressTest, TestInfo } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalTCard, SmallTCard } from "@/Components";
-import { MainScreens } from "..";
+import { MainScreens, RootScreens } from "..";
 
 export interface ITestProps {
   isLoading: boolean;
@@ -21,7 +21,7 @@ export interface ITestProps {
   recommendTests: ListTestInfo | undefined;
   allTests: ListTestInfo | undefined;
   allProgressesTest: ListProgressTest | undefined;
-  onNavigate: (string: MainScreens) => void;
+  onNavigate: (screen: RootScreens) => void;
 };
 
 export interface TestInfoUser {
@@ -73,7 +73,7 @@ export const Test = (props: ITestProps) => {
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.backContainer}
-              onPress={() => onNavigate(MainScreens.HOME)}
+              onPress={() => onNavigate(RootScreens.MAIN)}
             >
               <Ionicons
                 name="chevron-back"
@@ -111,7 +111,7 @@ export const Test = (props: ITestProps) => {
                       visible={item.visible}
                       category={item.category}
                       progress={item.progress}
-                      onPress={() => {return null;}}
+                      onPress={() => onNavigate(RootScreens.TESTDETAIL)}
                     />
                   )}
                   horizontal={true}
@@ -153,7 +153,7 @@ export const Test = (props: ITestProps) => {
                       visible={item.visible}
                       category={item.category}
                       progress={item.progress}
-                      onPress={() => {return null;}}
+                      onPress={() => onNavigate(RootScreens.TESTDETAIL)}
                     />
                   )}
                   ListFooterComponent={() => {

@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Colors, FontSize, IconSize } from "@/Theme";
+import { LoginContainer } from "@/Screens/Login";
 import { HomeContainer } from "@/Screens/Home";
 import { TestContainer } from "@/Screens/Test";
 import { PersonalContainer } from "@/Screens/Personal";
@@ -8,9 +9,11 @@ import { MainScreens } from "@/Screens";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export type MainBottomBarParamList = {
+  [MainScreens.LOGIN]: undefined;
   [MainScreens.HOME]: undefined;
   [MainScreens.LESSON]: undefined;
   [MainScreens.TEST]: undefined;
+  [MainScreens.TESTDETAIL]: undefined;
   [MainScreens.PERSONAL]: undefined;
 };
 

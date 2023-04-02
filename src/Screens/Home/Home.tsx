@@ -22,7 +22,7 @@ export interface IHomeProps {
   recommendLessons: ListLessonInfo | undefined;
   allLessons: ListLessonInfo | undefined;
   allProgresses: ListProgress | undefined;
-  onNavigate: (string: RootScreens) => void;
+  onNavigate: (screen: RootScreens) => void;
 };
 
 export interface LessonInfoUser {

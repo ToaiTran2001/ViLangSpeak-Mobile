@@ -10,7 +10,11 @@ type PersonalScreenNavigatorProps = NativeStackScreenProps<
   MainScreens.PERSONAL
 >;
 
-export const PersonalContainer = ({ navigation }: PersonalScreenNavigatorProps) => {
+export const PersonalContainer = ({ navigation, route }: PersonalScreenNavigatorProps) => {
+  // const { id } = route.params;
+
+  // const [userId, setUserId] = useState(id);
+
   const [userId, setUserId] = useState("1");
 
   // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]

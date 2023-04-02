@@ -7022,6 +7022,13 @@ react-native-loading-ellipsis@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-loading-ellipsis/-/react-native-loading-ellipsis-1.0.1.tgz#df28073311cd0353dc7ce497585d5162b753af19"
   integrity sha512-/H3JbnqMzl95kvAIMBtvN30Gt7rKLPkQWIc3Ig56udsiXf3QI026ki3/Dyq5T0rbZJE4+WKfIZfOfF7W7QRCyQ==
 
+react-native-login-screen@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-login-screen/-/react-native-login-screen-5.0.0.tgz#0fa348a21610d64ad1e1407478d45baa1d73bcac"
+  integrity sha512-vvUPtH4gJJAMfovevakBy1RBpMem7Rl3PSuIWYh/TdC5ZWfYTYgYxyC4TOoLyVC/hlbS0F6OfYoDy0Hua7n6YA==
+  dependencies:
+    react-native-text-input-interactive ">=0.1.4"
+
 react-native-paper@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.0.1.tgz#95d2e7ae647cbf306a404bf3783451319bc0e9bb"
@@ -7064,6 +7071,11 @@ react-native-switch@^1.5.1:
   integrity sha512-nfuPrrPKzeZL1mQH0u1rlEGv9W1+okU/xOcNNaDNz/LhSdzWOZ04ogJ4iEj7Sth3hkBxv4XwFQZTgCc07we+cg==
   dependencies:
     prop-types "^15.6.0"
+
+react-native-text-input-interactive@>=0.1.4, react-native-text-input-interactive@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-text-input-interactive/-/react-native-text-input-interactive-0.1.4.tgz#e1c30a6ea125e9c2415ef9c7ab0d07272e878305"
+  integrity sha512-Y8oCZkfZ03EiSXcSV9AWns2Zr5XVNRMRQRFMFXBS5vpYvpfvR3fp9MSP4uNZ3aNi6i27qLQQOCoVXf8vZiMngg==
 
 react-native-web@~0.18.9:
   version "0.18.10"

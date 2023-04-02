@@ -1,5 +1,5 @@
 import { API_APP } from "../baseApp";
-
+import { Category } from "../lessons";
 export interface TestInfo {
   id: number;
   name: string;
@@ -46,6 +46,41 @@ type TestIds = {
   account_id: string;
 };
 
+export interface AnswerInfo {
+  id: number;
+  type: string;
+  content: string;
+  answer: number;
+};
+
+export interface QuestionInfo {
+  id: number;
+  question_type: string;
+  type: string;
+  content: string;
+  items: AnswerInfo[];
+};
+
+export interface ListQuestionInfo {
+  value: QuestionInfo[];
+  total: number;
+};
+
+export interface TestDetailData {
+  id: number;
+  name: string;
+  visible: boolean;
+  category: Category;
+  questions: ListQuestionInfo;
+};
+
+export interface TestDetailDataResponse {
+  data: {
+    test: TestDetailData;
+  };
+  timestamp: number;
+};
+
 const allTestsApi = API_APP.injectEndpoints({
   endpoints: (build) => ({
     getAllTests: build.query<ListTestInfoResponse, string>({
@@ -82,6 +117,15 @@ const progressTestApi = API_APP.injectEndpoints({
   overrideExisting: true,
 });
 
+const testDetailApi = API_APP.injectEndpoints({
+  endpoints: (build) => ({
+    getTestDetail: build.query<TestDetailDataResponse, string>({
+      query: (id) => `app/test/${id}`,
+    }),
+  }),
+  overrideExisting: true,
+});
+
 export const { useLazyGetRmdTestsQuery } = recommendTestsApi;
 
 export const { useLazyGetAllTestsQuery } = allTestsApi;
@@ -89,3 +133,5 @@ export const { useLazyGetAllTestsQuery } = allTestsApi;
 export const { useLazyGetAllProgressesTestQuery } = allProgressesTestApi;
 
 export const { useLazyGetProgressTestQuery } = progressTestApi;
+
+export const { useLazyGetTestDetailQuery } = testDetailApi;

@@ -25,6 +25,7 @@ export enum Colors {
   BUTTON_REVIEW = "#06903580",
   BUTTON_START = "#244FBD80",
   SWITCH_CIRCLE_ON = "#069035",
+  PRIMARY_BOLD = "#05BAE1",
 }
 
 export enum NavigationColors {
@@ -35,6 +36,7 @@ export enum NavigationColors {
  * FontSize
  */
 export enum FontSize {
+  TINY = 12,
   SMALL = 16,
   REGULAR = 20,
   MEDIUM = 24,

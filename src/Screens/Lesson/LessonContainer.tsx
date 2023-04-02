@@ -12,7 +12,11 @@ type LessonScreenNavigatorProps = CompositeScreenProps<
   NativeStackScreenProps<MainBottomBarParamList>
 >;
 
-export const LessonContainer = ({ navigation }: LessonScreenNavigatorProps) => {
+export const LessonContainer = ({ navigation, route }: LessonScreenNavigatorProps) => {
+  // const { id } = route.params;
+
+  // const [lessonId, setLessonId] = useState(id);
+
   const [lessonId, setLessonId] = useState("1");
 
   // lesson = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]

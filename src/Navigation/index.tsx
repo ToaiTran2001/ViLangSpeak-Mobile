@@ -5,11 +5,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import { MainNavigator } from "./Main";
 import { MainScreens, RootScreens } from "@/Screens";
 import { LessonContainer } from "@/Screens/Lesson";
+import { LoginContainer } from "@/Screens/Login";
+import { TestDetailContainer } from "@/Screens/TestDetail";
 
 export type RootStackParamList = {
+  [RootScreens.LOGIN]: undefined;
   [RootScreens.MAIN]: undefined;
   [RootScreens.WELCOME]: undefined;
   [RootScreens.LESSON]: undefined;
+  [RootScreens.TESTDETAIL]: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -24,6 +28,11 @@ const ApplicationNavigator = () => {
           name={RootScreens.WELCOME}
           component={WelcomeContainer}
         /> */}
+        {/* <RootStack.Screen
+          name={RootScreens.LOGIN}
+          component={LoginContainer}
+          options={{}}
+        />
         <RootStack.Screen
           name={RootScreens.MAIN}
           component={MainNavigator}
@@ -32,6 +41,11 @@ const ApplicationNavigator = () => {
         <RootStack.Screen
           name={RootScreens.LESSON}
           component={LessonContainer}
+          options={{}}
+        /> */}
+        <RootStack.Screen
+          name={RootScreens.TESTDETAIL}
+          component={TestDetailContainer}
           options={{}}
         />
       </RootStack.Navigator>

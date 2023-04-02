@@ -22,7 +22,7 @@ import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/type
 export interface ILessonProps {
   isLoading: boolean;
   lesson: LessonDetail | undefined;
-  onNavigate: (string: MainScreens) => void;
+  onNavigate: (screen: MainScreens) => void;
 };
 
 const recallButton: boolean = false;
@@ -42,7 +42,7 @@ export const Lesson = (props: ILessonProps) => {
 
   // const [timeId, setTimeId] = useState<TimeoutId>();
 
-  const defaultImage: number = require("../../../assets/smile.png");
+  const defaultImage: string = "/public/image/lesson-default.png";
 
   const total = currentLesson ? currentLesson?.cards.total : 10;
 
@@ -147,7 +147,7 @@ export const Lesson = (props: ILessonProps) => {
             <View style={styles.thumbnailHeaderContainer}>
               <Image
                 style={styles.thumbnail}
-                source={currentLesson?.category.image === "" ? defaultImage : {uri: Config.API_APP_URL.slice(0, -1) + currentLesson?.category.image}}
+                source={{uri: Config.API_APP_URL.slice(0, -1) + (currentLesson?.category.image === "" ? defaultImage : currentLesson?.category.image)}}
               />
             </View>
           </View>
