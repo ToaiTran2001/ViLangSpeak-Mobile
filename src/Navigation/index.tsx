@@ -28,7 +28,7 @@ const ApplicationNavigator = () => {
           name={RootScreens.WELCOME}
           component={WelcomeContainer}
         /> */}
-        {/* <RootStack.Screen
+        <RootStack.Screen
           name={RootScreens.LOGIN}
           component={LoginContainer}
           options={{}}
@@ -42,7 +42,7 @@ const ApplicationNavigator = () => {
           name={RootScreens.LESSON}
           component={LessonContainer}
           options={{}}
-        /> */}
+        />
         <RootStack.Screen
           name={RootScreens.TESTDETAIL}
           component={TestDetailContainer}
