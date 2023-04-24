@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Pressable,
+  Dimensions
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Audio } from 'expo-av';
@@ -16,19 +18,19 @@ import { Colors, FontSize, IconSize } from "@/Theme";
 import { AiResult, FCard } from "@/Components";
 import { LessonDetail } from "@/Services";
 import { Config } from "@/Config";
-import { MainScreens } from "..";
-import { TimeoutId } from "@reduxjs/toolkit/dist/query/core/buildMiddleware/types";
+
+const screenWidth: number = Dimensions.get("window").width;
+const screenHeight: number = Dimensions.get("window").height;
 
 export interface ILessonProps {
   isLoading: boolean;
   lesson: LessonDetail | undefined;
-  onNavigate: (screen: MainScreens) => void;
+  onNavigateTestDetail: (id: number) => void;
+  goBack: () => void;
 };
 
-const recallButton: boolean = false;
-
 export const Lesson = (props: ILessonProps) => {
-  const { isLoading, lesson, onNavigate } = props;
+  const { isLoading, lesson, onNavigateTestDetail, goBack } = props;
 
   const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
@@ -40,11 +42,9 @@ export const Lesson = (props: ILessonProps) => {
 
   const [currentLesson, setCurrentLesson] = useState(lesson);
 
-  // const [timeId, setTimeId] = useState<TimeoutId>();
-
   const defaultImage: string = "/public/image/lesson-default.png";
 
-  const total = currentLesson ? currentLesson?.cards.total : 10;
+  const total = currentLesson ? currentLesson?.cards.total : 1;
 
   const recordingSettings = {
     isMeteringEnabled: true,
@@ -87,7 +87,6 @@ export const Lesson = (props: ILessonProps) => {
       await recording.startAsync();
       setRecording(recording);
       console.log('Recording started');
-      // setTimeId(setTimeout(stopRecording, 5000))
     } catch (err) {
       console.error('Failed to start recording', err);
     }
@@ -95,7 +94,6 @@ export const Lesson = (props: ILessonProps) => {
 
   async function stopRecording() {
     console.log('Stopping recording..');
-    // clearTimeout(timeId);
     setRecording(undefined);
     if (recording) {
       await recording.stopAndUnloadAsync();
@@ -119,7 +117,7 @@ export const Lesson = (props: ILessonProps) => {
       {isLoading ? (
         <HStack space={2} justifyContent="center">
           <Spinner accessibilityLabel="Loading posts" />
-          <Heading color="primary.500" fontSize="md">
+          <Heading color={Colors.PRIMARY} fontSize="md">
             Loading
           </Heading>
         </HStack>
@@ -128,7 +126,7 @@ export const Lesson = (props: ILessonProps) => {
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.backContainer}
-              onPress={() => onNavigate(MainScreens.HOME)}
+              onPress={() => goBack()}
             >
               <Ionicons
                 name="chevron-back"
@@ -159,40 +157,44 @@ export const Lesson = (props: ILessonProps) => {
                 alignItems: "center",
               }}
             >
-              {recallButton ? (
-                <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                  Recall
-                </Heading>
-              ) : (
-                <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                  Learn
-                </Heading>
-              )}
+              <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                Learn
+              </Heading>
               <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
-                {id+1}/{currentLesson?.cards.total}
+                {id < total ? id+1 : total}/{total}
               </Text>
             </View>
-            <FCard 
-              id={currentLesson?.cards.value[id].id}
-              type={currentLesson?.cards.value[id].type}
-              audio_url={currentLesson?.cards.value[id].audio_url}
-              content={currentLesson?.cards.value[id].content}
-              translation={currentLesson?.cards.value[id].translation}
-              items={currentLesson?.cards.value[id].items}
-            />
-            {recallButton ? (
-              <></>
-            ) : (
-              <View>
-                <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
-                  Practice
-                </Heading>
-                { 
-                  isChanged ? null
-                  : <AiResult transcript={currentLesson ? currentLesson.cards.value[id].content : ""} uri={uri} />
-                }
+            { id === total ? 
+              <View style={styles.cardContainerFront}>
+                <Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
+                  You have completed 
+                </Text>
+                <Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
+                  this lesson.
+                </Text>
+                <Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
+                  Go to test now! 
+                </Text>
               </View>
-            )}
+            : 
+              <FCard 
+                id={currentLesson?.cards.value[id].id}
+                type={currentLesson?.cards.value[id].type}
+                audio_url={currentLesson?.cards.value[id].audio_url}
+                content={currentLesson?.cards.value[id].content}
+                translation={currentLesson?.cards.value[id].translation}
+                items={currentLesson?.cards.value[id].items}
+              />
+            }
+            <View>
+              <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                Practice
+              </Heading>
+              { 
+                isChanged ? null
+                : <AiResult transcript={currentLesson ? currentLesson.cards.value[id].content : ""} uri={uri} />
+              }
+            </View>
           </View>
           <View style={{width: "15%", justifyContent: "space-evenly"}}>
             {recording ? <LoadingDots dots={3} color={[Colors.PRIMARY, Colors.NEW, Colors.FLASHCARD]} size={IconSize.TINY} bounceHeight={IconSize.TINY} /> : null}
@@ -205,30 +207,40 @@ export const Lesson = (props: ILessonProps) => {
               <Ionicons
                 name="chevron-back"
                 size={IconSize.LARGE}
-                color={id > 0 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
+                color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
               />
             </TouchableOpacity>
-            {recallButton ? (
-              <></>
-            ) : (
+            { id === total ? 
+              <TouchableOpacity 
+                style={styles.button}
+                onPress={() => onNavigateTestDetail(currentLesson ? currentLesson.test : 0)}
+              >
+                <Text style={{ fontSize: FontSize.REGULAR, color: Colors.WHITE }}>Go</Text>
+              </TouchableOpacity>
+            :
               <View style={{flexDirection: "column"}}>
-                <TouchableOpacity style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]} onPressIn={startRecording} onPressOut={stopRecording}>
+                <Pressable 
+                  style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]}
+                  onLongPress={startRecording}
+                  onPressOut={stopRecording}
+                  delayLongPress={100}
+                >
                   <Ionicons
                     name="mic-outline"
                     size={IconSize.HUGE}
                     color={Colors.TEXT}
                   />
-                </TouchableOpacity>
+                </Pressable>
               </View>
-            )}
+            }
             <TouchableOpacity onPress={() => {
                 setIsChanged(true);
-                setId(id+1 < total ? id+1 : total-1);
+                setId(id < total ? id+1 : total);
               }}>
               <Ionicons
                 name="chevron-forward"
                 size={IconSize.LARGE}
-                color={id < total-1 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
+                color={id < total ? Colors.TEXT : Colors.BACKGROUND}
               />
             </TouchableOpacity>
           </View>
@@ -241,7 +253,7 @@ export const Lesson = (props: ILessonProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.INPUT_BACKGROUND,
+    backgroundColor: Colors.BACKGROUND,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -294,4 +306,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  cardContainerFront: {
+    flex: 1,
+    backgroundColor: Colors.FLASHCARD,
+    borderRadius: 20,
+    width: screenWidth - 40,
+    height: 100,
+    marginVertical: 5,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    width: 100,
+    height: 60,
+    backgroundColor: Colors.BUTTON_START,
+    borderRadius: 10,
+    marginVertical: 5,
+    padding: 5,
+    justifyContent: "center",
+    alignItems: "center",
+}
 });

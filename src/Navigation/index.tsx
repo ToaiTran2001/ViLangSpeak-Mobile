@@ -3,19 +3,21 @@ import { StatusBar } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { MainNavigator } from "./Main";
-import { MainScreens, RootScreens } from "@/Screens";
-import { LessonContainer } from "@/Screens/Lesson";
+import { RootScreens } from "@/Screens";
 import { LoginContainer } from "@/Screens/Login";
+import { RegisterContainer } from "@/Screens/Register";
+import { LessonContainer } from "@/Screens/Lesson";
 import { TestDetailContainer } from "@/Screens/TestDetail";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
 
 export type RootStackParamList = {
-  [RootScreens.LOGIN]: undefined;
-  [RootScreens.MAIN]: undefined;
   [RootScreens.WELCOME]: undefined;
-  [RootScreens.LESSON]: undefined;
-  [RootScreens.TESTDETAIL]: undefined;
+  [RootScreens.LOGIN]: undefined;
+  [RootScreens.REGISTER]: undefined;
+  [RootScreens.MAIN]: undefined;
+  [RootScreens.LESSON]: { lessonId: number };
+  [RootScreens.TESTDETAIL]: { testId: number };
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -34,12 +36,17 @@ const ApplicationNavigator = () => {
         {
           authState.userId == null
           ? <RootStack.Navigator screenOptions={{ headerShown: false }}>
-              <RootStack.Screen
-              name={RootScreens.LOGIN}
-              component={LoginContainer}
-              options={{}}
-              />
-            </RootStack.Navigator>
+            <RootStack.Screen
+            name={RootScreens.LOGIN}
+            component={LoginContainer}
+            options={{}}
+            />
+            <RootStack.Screen
+            name={RootScreens.REGISTER}
+            component={RegisterContainer}
+            options={{}}
+            />
+          </RootStack.Navigator>
           : <RootStack.Navigator screenOptions={{ headerShown: false }}>
             <RootStack.Screen
               name={RootScreens.MAIN}

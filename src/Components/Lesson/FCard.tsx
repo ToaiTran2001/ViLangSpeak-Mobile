@@ -56,34 +56,6 @@ const renderFront = (props: IFrontFlashProps) => {
     await sound.playAsync();
   }
 
-  // async function playAndPauseSound() {
-  //   if (sound) {
-  //       if (soundStatus == "play") {
-  //           console.log("Pausing Sound");
-  //           await sound.pauseAsync();
-  //           setSoundStatus("paused");
-  //       } else {
-  //           console.log("Playing Sound");
-  //           await sound.playAsync();
-  //           setSoundStatus("play");
-  //       }
-  //   } else {
-  //     setSoundStatus("no sound");
-  //   }
-  // }
-
-  // function playAndPause() {
-  //   switch (soundStatus) {
-  //       case "no sound":
-  //           playSound();
-  //           break;
-  //       case "paused":
-  //       case "play":
-  //           playAndPauseSound();
-  //           break;
-  //   }
-  // }
-
   useEffect(() => {
     // return () => { sound && sound.unloadAsync(); }
     return sound
@@ -109,7 +81,7 @@ const renderFront = (props: IFrontFlashProps) => {
       {isLoadingSound ? (
         <HStack space={2} justifyContent="center">
           <Spinner accessibilityLabel="Loading posts" />
-          <Heading color="primary.500" fontSize="md">
+          <Heading color={Colors.PRIMARY} fontSize="md">
             Loading
           </Heading>
         </HStack>

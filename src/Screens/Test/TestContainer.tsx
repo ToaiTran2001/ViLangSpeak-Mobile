@@ -1,48 +1,67 @@
-import React, { useState, useEffect } from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { CompositeScreenProps } from '@react-navigation/native';
-import { MainBottomBarParamList } from "@/Navigation/Main";
-import { useLazyGetAllCategoriesQuery, useLazyGetAllTestsQuery, useLazyGetRmdTestsQuery, useLazyGetAllProgressesTestQuery } from "@/Services";
-import { MainScreens, RootScreens } from "..";
+import React, { useEffect } from "react";
+import {
+    useLazyGetAllCategoriesQuery,
+    useLazyGetAllTestsQuery,
+    useLazyGetRmdTestsQuery,
+    useLazyGetAllProgressesTestQuery,
+} from "@/Services";
+import { RootScreens } from "..";
 import { Test } from "./Test";
-import { RootStackParamList } from "@/Navigation";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/Store/reducers";
+import { MainScreenProps } from "../Home";
 
-type TestScreenNavigatorProps = CompositeScreenProps<
-  NativeStackScreenProps<MainBottomBarParamList, MainScreens.TEST>,
-  NativeStackScreenProps<RootStackParamList>
->;
+export const TestContainer = ({
+    navigation
+}: MainScreenProps) => {
+    const userId = useSelector(selectAuth()).userId;
 
-export const TestContainer = ({ navigation, route }: TestScreenNavigatorProps) => {
-  // const { id } = route.params;
+    // allCategories = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const allCategories = useLazyGetAllCategoriesQuery();
 
-  // const [userId, setUserId] = useState(id);
+    // recommendTests = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const recommendTests = useLazyGetRmdTestsQuery();
 
-  const [userId, setUserId] = useState("1");
+    // allLessons = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const allTests = useLazyGetAllTestsQuery();
 
-  // allCategories = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const allCategories = useLazyGetAllCategoriesQuery();
+    // allProgresses = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const allProgressesTest = useLazyGetAllProgressesTestQuery();
 
-  // recommendTests = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const recommendTests = useLazyGetRmdTestsQuery();
+    const isLoading =
+        allCategories[1].isLoading ||
+        recommendTests[1].isLoading ||
+        allTests[1].isLoading ||
+        allProgressesTest[1].isLoading;
 
-  // allLessons = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const allTests = useLazyGetAllTestsQuery();
+    useEffect(() => {
+        if (userId) {
+            const userIdString = userId.toString();
+            allCategories[0](userIdString);
+            recommendTests[0](userIdString);
+            allTests[0](userIdString);
+            allProgressesTest[0](userIdString);
+        }
+    }, [
+        allCategories[0],
+        recommendTests[0],
+        allTests[0],
+        allProgressesTest[0],
+        userId,
+    ]);
 
-  // allProgresses = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const allProgressesTest = useLazyGetAllProgressesTestQuery();
+    const onNavigateTestDetail = (id: number) => {
+        navigation.push(RootScreens.TESTDETAIL, { testId: id });
+    };
 
-  const isLoading = allCategories[1].isLoading || recommendTests[1].isLoading || allTests[1].isLoading || allProgressesTest[1].isLoading;
-
-  useEffect(() => {
-    allCategories[0](userId)
-    recommendTests[0](userId);
-    allTests[0](userId);
-    allProgressesTest[0](userId);
-  }, [allCategories[0], recommendTests[0], allTests[0], allProgressesTest[0], userId]);
-
-  const onNavigate = (screen: RootScreens) => {
-      navigation.navigate(screen);
-  };
-
-  return <Test isLoading={isLoading} allCategories={allCategories[1].data?.data} recommendTests={recommendTests[1].data?.data} allTests={allTests[1].data?.data} allProgressesTest={allProgressesTest[1].data?.data} onNavigate={onNavigate} />;
+    return (
+        <Test
+            isLoading={isLoading}
+            allCategories={allCategories[1].data?.data}
+            recommendTests={recommendTests[1].data?.data}
+            allTests={allTests[1].data?.data}
+            allProgressesTest={allProgressesTest[1].data?.data}
+            onNavigateTestDetail={onNavigateTestDetail}
+        />
+    );
 };

@@ -17,18 +17,20 @@ import { logIn } from "@/Store/reducers";
 const screenWidth: number = Dimensions.get("window").width;
 const screenHeight: number = Dimensions.get("window").height;
 
-export interface ILoginProps {
-    onNavigateRegister: () => void;
-}
+export interface IRegisterProps {
+  onNavigateLogin: () => void;
+};
 
-export const Login = (props: ILoginProps) => {
-    const { onNavigateRegister } = props;
+export const Register = (props: IRegisterProps) => {
+    const { onNavigateLogin } = props;
 
     const dispatch = useDispatch();
 
     const [username, onChangeUsername] = useState("");
 
     const [password, onChangePassword] = useState("");
+
+    const [confirmPassword, onChangeConfirmPassword] = useState("");
 
     const [secure, setSecure] = useState(true);
 
@@ -59,13 +61,13 @@ export const Login = (props: ILoginProps) => {
                     </View>
                 </View>
                 <View style={styles.titleContainer}>
-                    <TouchableOpacity>
-                        <Text style={{ fontSize: FontSize.SMALL, color: Colors.PRIMARY, textDecorationLine: "underline" }} >Login</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => onNavigateRegister()}
+                        onPress={() => onNavigateLogin()}
                     >
-                        <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }} >Register</Text>
+                        <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }} >Login</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={{ fontSize: FontSize.SMALL, color: Colors.PRIMARY, textDecorationLine: "underline" }} >Register</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.bodyContainer}>
@@ -86,16 +88,21 @@ export const Login = (props: ILoginProps) => {
                             style={styles.input}
                             placeholder="Password"
                         />
-                        <View style={styles.textBodyContainer}>
-                            <Text style={{ fontSize: FontSize.TINY, color: Colors.PRIMARY }} >Forget password ?</Text>
-                        </View>
+                        <TextInput
+                            editable
+                            onChangeText={text => onChangeConfirmPassword(text)}
+                            secureTextEntry={secure}
+                            value={confirmPassword}
+                            style={styles.input}
+                            placeholder="Confirm Password"
+                        />
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             style={styles.button}
                             onPress={() => {uploadLogin({ username: username, password: password });}}
                         >
-                            <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >Login</Text>
+                            <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >Register</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -107,8 +114,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.BACKGROUND,
-        justifyContent: "center",
         alignItems: "center",
+        justifyContent: "center",
     },
     greetingContainer: {
         flex: 4,
@@ -144,9 +151,9 @@ const styles = StyleSheet.create({
     },
     input: {
         backgroundColor: Colors.TRANSPARENT,
-        borderBottomColor: Colors.BLACK,
+        borderBottomColor: '#000000',
         borderBottomWidth: 1,
-        marginVertical: 20,
+        marginVertical: 10,
         fontSize: FontSize.SMALL,
     },
     textBodyContainer: {
@@ -162,7 +169,7 @@ const styles = StyleSheet.create({
     triangleLeftCorner: {
         width: 0,
         height: 0,
-        backgroundColor: Colors.TRANSPARENT,
+        backgroundColor: "transparent",
         borderStyle: "solid",
         borderRightWidth: screenWidth * 0.275,
         borderTopWidth: screenWidth * 0.275,
@@ -172,7 +179,7 @@ const styles = StyleSheet.create({
     triangleRightCorner: {
         width: 0,
         height: 0,
-        backgroundColor: Colors.TRANSPARENT,
+        backgroundColor: "transparent",
         borderStyle: "solid",
         borderRightWidth: screenWidth * 0.375,
         borderTopWidth: screenWidth * 0.375,
@@ -183,12 +190,12 @@ const styles = StyleSheet.create({
     trapezoid: {
         width: screenWidth * 0.375,
         height: 0,
-        borderStyle: "solid",
         borderBottomWidth: screenWidth * 0.275,
-        borderLeftWidth: screenWidth * 0.275,
-        borderLeftColor: Colors.TRANSPARENT,
-        borderRightColor: Colors.TRANSPARENT,
         borderBottomColor: Colors.PRIMARY,
+        borderLeftWidth: screenWidth * 0.275,
+        borderLeftColor: "transparent",
+        borderRightColor: "transparent",
+        borderStyle: "solid",
     },
     textHeaderContainer: {
         paddingLeft: "15%",

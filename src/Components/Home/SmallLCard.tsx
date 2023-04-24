@@ -5,7 +5,7 @@ import { Colors, FontSize } from "@/Theme";
 import { Category, Progress } from "@/Services";
 import { Config } from "@/Config";
 
-export interface ILessonProps {
+export interface ILCardProps {
     id: number;
     name: string;
     visible: boolean;
@@ -14,7 +14,7 @@ export interface ILessonProps {
     onPress: () => void;
 };
 
-export const SmallLCard = (props: ILessonProps) => {
+export const SmallLCard = (props: ILCardProps) => {
     const { id, name, visible, category, progress, onPress } = props;
 
     let thumbnailContainerColor: string = Colors.NEW;
@@ -45,7 +45,6 @@ export const SmallLCard = (props: ILessonProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: "column",
         width: 120,
         height: 160,
     },

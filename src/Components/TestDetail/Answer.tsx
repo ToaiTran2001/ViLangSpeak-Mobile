@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Heading } from "native-base";
 import { Colors, FontSize } from "@/Theme";
@@ -15,17 +15,19 @@ export interface IAnswerProps {
 };
 
 export const Answer = (props: IAnswerProps) => {
+    const [isChoosed, setIsChoosed] = useState(false)
+
     const { id, type, content, answer, text, onPress } = props;
 
     return (
         <View>
             <TouchableOpacity
-                style={styles.container}
-                onPress={onPress}
+                style={[styles.container, { backgroundColor: isChoosed ? Colors.PRIMARY : Colors.FLASHCARD }]}
+                onPress={() => setIsChoosed(!isChoosed)}
             >
                 <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }}>{content}</Text>
             </TouchableOpacity>
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View style={{ justifyContent: "center", alignItems: "center", marginTop: 2 }}>
                 <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>{text}</Text>
             </View>
         </View>
@@ -38,9 +40,9 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         width: 120,
         height: 100,
-        backgroundColor: Colors.FLASHCARD,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 10,
+        marginVertical: 5,
     },
 });

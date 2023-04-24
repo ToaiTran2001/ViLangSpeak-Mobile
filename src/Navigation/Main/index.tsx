@@ -5,16 +5,16 @@ import { LoginContainer } from "@/Screens/Login";
 import { HomeContainer } from "@/Screens/Home";
 import { TestContainer } from "@/Screens/Test";
 import { PersonalContainer } from "@/Screens/Personal";
+import { LessonContainer } from "@/Screens/Lesson";
 import { MainScreens } from "@/Screens";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export type MainBottomBarParamList = {
-  [MainScreens.LOGIN]: undefined;
   [MainScreens.HOME]: undefined;
-  [MainScreens.LESSON]: undefined;
   [MainScreens.TEST]: undefined;
-  [MainScreens.TESTDETAIL]: undefined;
   [MainScreens.PERSONAL]: undefined;
+  [MainScreens.LESSON]: undefined;
+  [MainScreens.TESTDETAIL]: undefined;
 };
 
 const Tab = createBottomTabNavigator<MainBottomBarParamList>();

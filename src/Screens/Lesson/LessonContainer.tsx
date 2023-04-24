@@ -1,34 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { CompositeScreenProps } from '@react-navigation/native';
-import { MainBottomBarParamList } from "@/Navigation/Main";
 import { RootStackParamList } from "@/Navigation";
 import { useLazyGetLessonQuery } from "@/Services";
-import { MainScreens, RootScreens } from "..";
+import { RootScreens } from "..";
 import { Lesson } from "./Lesson";
 
-type LessonScreenNavigatorProps = CompositeScreenProps<
-  NativeStackScreenProps<RootStackParamList, RootScreens.LESSON>,
-  NativeStackScreenProps<MainBottomBarParamList>
+type LessonScreenProps = NativeStackScreenProps<
+    RootStackParamList,
+    RootScreens.LESSON
 >;
 
-export const LessonContainer = ({ navigation, route }: LessonScreenNavigatorProps) => {
-  // const { id } = route.params;
+export const LessonContainer = ({ navigation, route }: LessonScreenProps) => {
+    const [lessonId, setLessonId] = useState(String(route.params.lessonId));
 
-  // const [lessonId, setLessonId] = useState(id);
+    // lesson = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const lesson = useLazyGetLessonQuery();
 
-  const [lessonId, setLessonId] = useState("1");
+    useEffect(() => {
+        lesson[0](lessonId);
+    }, [lesson[0], lessonId]);
 
-  // lesson = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const lesson = useLazyGetLessonQuery();
+    const onNavigateTestDetail = (id: number) => {
+        navigation.navigate(RootScreens.TESTDETAIL, { testId: id });
+    };
 
-  useEffect(() => {
-    lesson[0](lessonId);
-  }, [lesson[0], lessonId]);
+    const goBack = () => {
+        navigation.goBack();
+    };
 
-  const onNavigate = (screen: MainScreens) => {
-    navigation.navigate(screen);
-  };
-
-  return <Lesson isLoading={lesson[1].isLoading} lesson={lesson[1].data?.data.lesson} onNavigate={onNavigate} />;
+    return (
+        <Lesson
+            isLoading={lesson[1].isLoading}
+            lesson={lesson[1].data?.data.lesson}
+            onNavigateTestDetail={onNavigateTestDetail}
+            goBack={goBack}
+        />
+    );
 };

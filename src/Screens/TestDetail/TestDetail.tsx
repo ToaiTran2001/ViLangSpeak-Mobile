@@ -19,17 +19,17 @@ import { Question, Answer } from "@/Components/TestDetail";
 export interface ITestDetailProps {
   isLoading: boolean;
   test: TestDetailData | undefined;
-  onNavigate: (screen: MainScreens) => void;
+  goBack: () => void;
 };
 
 export const TestDetail = (props: ITestDetailProps) => {
-  const { isLoading, test, onNavigate } = props;
+  const { isLoading, test, goBack } = props;
 
   const [currentTest, setCurrentTest] = useState(test);
 
   const [id, setId] = useState(0);
 
-  const [isChanged, setIsChanged] = useState(false);
+  const [isSubmited, setIsSubmited] = useState(false);
 
   const defaultImage: string = "/public/image/test-default.png";
 
@@ -45,7 +45,7 @@ export const TestDetail = (props: ITestDetailProps) => {
       {isLoading ? (
         <HStack space={2} justifyContent="center">
           <Spinner accessibilityLabel="Loading posts" />
-          <Heading color="primary.500" fontSize="md">
+          <Heading color={Colors.PRIMARY} fontSize="md">
             Loading
           </Heading>
         </HStack>
@@ -54,7 +54,7 @@ export const TestDetail = (props: ITestDetailProps) => {
           <View style={styles.header}>
             <TouchableOpacity
                 style={styles.backContainer}
-                onPress={() => onNavigate(MainScreens.TEST)}
+                onPress={() => goBack()}
                 >
                 <Ionicons
                     name="chevron-back"
@@ -80,7 +80,7 @@ export const TestDetail = (props: ITestDetailProps) => {
           <View style={styles.body}>
             <View style={{ flex: 1 }}>
               <View>
-                <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
                   Question {id+1}/{currentTest?.questions.total}
                 </Heading>
               </View>
@@ -95,7 +95,7 @@ export const TestDetail = (props: ITestDetailProps) => {
             </View>
             <View style={{ flex: 2 }}>
               <View>
-                  <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>
+                  <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
                       Choose the correct answers
                   </Heading>
               </View>
@@ -141,26 +141,24 @@ export const TestDetail = (props: ITestDetailProps) => {
           </View>
           <View style={styles.footer}>
             <TouchableOpacity onPress={() => {
-                setIsChanged(true);
                 setId(id-1 > 0 ? id-1 : 0);
               }}>
               <Ionicons
                 name="chevron-back"
                 size={IconSize.LARGE}
-                color={id > 0 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
+                color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
               />
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
               <Text style={{ fontSize: FontSize.REGULAR, color: Colors.WHITE }}>Submit</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-                setIsChanged(true);
                 setId(id+1 < total ? id+1 : total-1);
               }}>
               <Ionicons
                 name="chevron-forward"
                 size={IconSize.LARGE}
-                color={id < total-1 ? Colors.TEXT : Colors.INPUT_BACKGROUND}
+                color={id < total-1 ? Colors.TEXT : Colors.BACKGROUND}
               />
             </TouchableOpacity>
           </View>
@@ -173,7 +171,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.INPUT_BACKGROUND,
+        backgroundColor: Colors.BACKGROUND,
         alignItems: "center",
         justifyContent: "center",
     },

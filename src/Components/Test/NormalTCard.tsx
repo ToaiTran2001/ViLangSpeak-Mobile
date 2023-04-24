@@ -23,7 +23,6 @@ export const NormalTCard = (props: ITestProps) => {
     return (
         <TouchableOpacity
             style={[styles.container, {backgroundColor: containerColor}]}
-            onPress={onPress}
         >
             <View style={styles.thumbnailContainer}>
                 <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}}></Image>
@@ -35,7 +34,10 @@ export const NormalTCard = (props: ITestProps) => {
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category?.name}</Text>
-                    <TouchableOpacity style={[styles.button, {backgroundColor: buttonColor}]}>
+                    <TouchableOpacity 
+                        style={[styles.button, {backgroundColor: buttonColor}]}
+                        onPress={onPress}
+                    >
                         <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{buttonTitle}</Text>
                     </TouchableOpacity>
                 </View>

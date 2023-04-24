@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { CompositeScreenProps } from '@react-navigation/native';
+import type { CompositeScreenProps } from "@react-navigation/native";
 import { MainBottomBarParamList } from "@/Navigation/Main";
 import { RootStackParamList } from "@/Navigation";
-import { useLazyGetRmdLessonsQuery, useLazyGetAllLessonsQuery, useLazyGetAllProgressesQuery, useLazyGetUserProfileQuery, useLazyGetAllCategoriesQuery } from "@/Services";
-import { MainScreens, RootScreens } from "..";
+import { RootScreens } from "..";
 import { Login } from "./Login";
 
-type LoginScreenNavigatorProps = CompositeScreenProps<
-  NativeStackScreenProps<RootStackParamList, RootScreens.LOGIN>,
-  NativeStackScreenProps<MainBottomBarParamList>
+type LoginScreenNavigatorProps = NativeStackScreenProps<
+	RootStackParamList,
+	RootScreens.LOGIN
 >;
 
 export const LoginContainer = ({ navigation }: LoginScreenNavigatorProps) => {
+	const onNavigateRegister = () => {
+		navigation.navigate(RootScreens.REGISTER);
+	};
 
-  const onNavigate = (screen: RootScreens) => {
-    navigation.navigate(screen);
-  };
-
-  return <Login onNavigate={onNavigate} />
+  	return <Login onNavigateRegister={onNavigateRegister} />;
 };

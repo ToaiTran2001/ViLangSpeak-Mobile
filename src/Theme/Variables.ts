@@ -10,20 +10,20 @@
  */
 export enum Colors {
   TRANSPARENT = "rgba(0,0,0,0)",
-  INPUT_BACKGROUND = "#FFFFFF",
-  WHITE = "#ffffff",
+  BACKGROUND = "#FFFFFF",
+  WHITE = "#FFFFFF",
   GRAY = "#D9D9D9",
   BLACK = "#000000",
-  PRIMARY = "#05BAE180",
-  SUCCESS = "#03FD6780",
-  NEW = "#99E1F180",
-  FLASHCARD = "#D1FAFD",
-  TEXT = "#212529",
-  TEXT_CORRECT = "#03FD67",
-  TEXT_NEUTRAL = "#05BAE1",
-  TEXT_ERROR = "#dc3545",
-  BUTTON_REVIEW = "#06903580",
-  BUTTON_START = "#244FBD80",
+  PRIMARY = "#86D3FF",
+  SUCCESS = "#83FFB4",
+  NEW = "#C4F4FE",
+  FLASHCARD = "#DCFDFF",
+  TEXT = "#2C2C2C",
+  TEXT_CORRECT = "#83FFB4",
+  TEXT_NEUTRAL = "#86D3FF",
+  TEXT_ERROR = "#FF6262",
+  BUTTON_REVIEW = "#00B73E",
+  BUTTON_START = "#2C64F6",
   SWITCH_CIRCLE_ON = "#069035",
   PRIMARY_BOLD = "#05BAE1",
 }
@@ -47,7 +47,7 @@ export enum FontSize {
 /**
  * Metrics Sizes
  */
-const tiny = 5; // 10
+const tiny = 5; // 5
 const small = tiny * 2; // 10
 const regular = tiny * 3; // 15
 const large = regular * 2; // 30

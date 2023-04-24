@@ -4,19 +4,19 @@ import { Heading } from "native-base";
 import { Switch } from 'react-native-switch';
 import { Colors, FontSize } from "@/Theme";
 import { Config } from "@/Config";
-import { ILessonProps } from "./SmallLCard";
+import { ILCardProps } from "./SmallLCard";
 
-export const NormalLCard = (props: ILessonProps) => {
+export const NormalLCard = (props: ILCardProps) => {
     const { id, name, visible, category, progress, onPress } = props;
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    // const [isEnabled, setIsEnabled] = useState(false);
+    // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     let containerColor: string = Colors.NEW;
-    let recallButton: boolean = false;
+    // let isRecall: boolean = false;
 
     if (progress?.progress.value === 100) {
         containerColor = Colors.SUCCESS;
-        recallButton = true;
+        // isRecall = true;
     } else if (progress && progress.progress.value !== 0) {
         containerColor = Colors.PRIMARY;
     }
@@ -38,8 +38,8 @@ export const NormalLCard = (props: ILessonProps) => {
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category?.name}</Text>
-                    <View style={styles.switch}>
-                        {recallButton ? (
+                    {/* <View style={styles.switch}>
+                        {isRecall ? (
                             <Switch
                                 value={isEnabled}
                                 onValueChange={toggleSwitch}
@@ -47,7 +47,6 @@ export const NormalLCard = (props: ILessonProps) => {
                                 activeText={"R"}
                                 inActiveText={"L"}
                                 circleSize={30}
-                                // barHeight={1}
                                 circleBorderWidth={1}
                                 backgroundActive={Colors.BUTTON_REVIEW}
                                 backgroundInactive={Colors.GRAY}
@@ -55,6 +54,7 @@ export const NormalLCard = (props: ILessonProps) => {
                                 circleInActiveColor={Colors.WHITE}
                                 switchLeftPx={2.5} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
                                 switchRightPx={2.5} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
+                                // barHeight={1}
                                 // renderInsideCircle={() => <Text></Text>} // custom component to render inside the Switch circle (Text, Image, etc.)
                                 // changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
                                 // innerCircleStyle={{ alignItems: "center", justifyContent: "center" }} // style for inner animated circle for what you (may) be rendering inside the circle
@@ -67,7 +67,7 @@ export const NormalLCard = (props: ILessonProps) => {
                         ) : (
                             <></>
                         )}
-                    </View>
+                    </View> */}
                 </View>
             </View>
         </TouchableOpacity>
@@ -78,9 +78,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "row",
-        borderRadius: 20,
         width: "96%",
         height: 96,
+        borderRadius: 20,
         margin: 5,
     },
     thumbnailContainer: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     categoryContainer: {
         flex: 1,
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         alignItems: "center",
     },
     thumbnail: {

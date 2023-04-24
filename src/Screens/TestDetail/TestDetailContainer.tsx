@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { CompositeScreenProps } from '@react-navigation/native';
-import { MainBottomBarParamList } from "@/Navigation/Main";
 import { RootStackParamList } from "@/Navigation";
 import { useLazyGetTestDetailQuery } from "@/Services";
 import { MainScreens, RootScreens } from "..";
 import { TestDetail } from "./TestDetail";
 
-type TestDetailScreenNavigatorProps = CompositeScreenProps<
-  NativeStackScreenProps<RootStackParamList, RootScreens.TESTDETAIL>,
-  NativeStackScreenProps<MainBottomBarParamList>
+type TestDetailScreenNavigatorProps = NativeStackScreenProps<
+  RootStackParamList,
+  RootScreens.TESTDETAIL
 >;
 
 export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavigatorProps) => {
-  // const { id } = route.params;
-
-  // const [testId, setTestId] = useState(id);
-
-  const [testId, setTestId] = useState("1");
+  const [testId, setTestId] = useState(String(route.params.testId));
 
   // test = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
   const test = useLazyGetTestDetailQuery();
@@ -26,9 +20,9 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
     test[0](testId);
   }, [test[0], testId]);
 
-  const onNavigate = (screen: MainScreens) => {
-    navigation.navigate(screen);
-  };
+  const goBack = () => {
+    navigation.goBack();
+};
 
-  return <TestDetail isLoading={test[1].isLoading} test={test[1].data?.data.test} onNavigate={onNavigate} />;
+  return <TestDetail isLoading={test[1].isLoading} test={test[1].data?.data.test} goBack={goBack} />;
 };
