@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Audio } from 'expo-av';
-import { Heading, HStack, Spinner } from "native-base";
+import { Fab, Heading, HStack, Spinner } from "native-base";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import LoadingDots from "react-native-loading-dots";
 import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat } from "expo-av/build/Audio";
@@ -52,16 +52,16 @@ export const Lesson = (props: ILessonProps) => {
       extension: '.wav',
       outputFormat: AndroidOutputFormat.MPEG_4,
       audioEncoder: AndroidAudioEncoder.AAC,
-      sampleRate: 44100,
-      numberOfChannels: 2,
+      sampleRate: 16000,
+      numberOfChannels: 1,
       bitRate: 128000,
     },
     ios: {
       extension: '.wav',
-      outputFormat: IOSOutputFormat.MPEG4AAC,
+      // outputFormat: IOSOutputFormat.MPEGLAYER3, // Dont have format runnable
       audioQuality: IOSAudioQuality.MAX,
-      sampleRate: 44100,
-      numberOfChannels: 2,
+      sampleRate: 16000,
+      numberOfChannels: 1,
       bitRate: 128000,
       linearPCMBitDepth: 16,
       linearPCMIsBigEndian: false,
@@ -102,7 +102,7 @@ export const Lesson = (props: ILessonProps) => {
       });
       const uriSend = recording.getURI();
       setUri(uriSend ? uriSend : "");
-      setIsChanged(false);
+      setIsChanged(true);
       console.log('Recording stopped and stored at', uriSend);
     }
   }
@@ -191,8 +191,8 @@ export const Lesson = (props: ILessonProps) => {
                 Practice
               </Heading>
               { 
-                isChanged ? null
-                : <AiResult transcript={currentLesson ? currentLesson.cards.value[id].content : ""} uri={uri} />
+                isChanged ? <AiResult transcript={currentLesson ? currentLesson.cards.value[id].content : ""} uri={uri} />
+                : null
               }
             </View>
           </View>
@@ -201,7 +201,7 @@ export const Lesson = (props: ILessonProps) => {
           </View>
           <View style={styles.footer}>
             <TouchableOpacity onPress={() => {
-                setIsChanged(true);
+                setIsChanged(false);
                 setId(id-1 > 0 ? id-1 : 0);
               }}>
               <Ionicons
@@ -234,7 +234,7 @@ export const Lesson = (props: ILessonProps) => {
               </View>
             }
             <TouchableOpacity onPress={() => {
-                setIsChanged(true);
+                setIsChanged(false);
                 setId(id < total ? id+1 : total);
               }}>
               <Ionicons
