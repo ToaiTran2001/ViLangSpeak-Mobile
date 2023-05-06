@@ -22,7 +22,7 @@ export const HomeMoreContainer = ({
         setAllLessonsUser(route.params.allLessonsUser);
     }, [
         accountId,
-        allLessonsUser
+        allLessonsUser,
     ]);
 
     const onNavigateLesson = (accountId: number | undefined, id: number) => {
