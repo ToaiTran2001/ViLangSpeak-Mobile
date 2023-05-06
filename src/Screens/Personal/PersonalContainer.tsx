@@ -24,7 +24,7 @@ export const PersonalContainer = () => {
             profile[0](userIdString);
             listAchievement[0](userIdString);
         }
-    }, [profile[0], listAchievement[0], userId]);
+    }, [profile[1].data, listAchievement[1].data, userId]);
 
     return (
         <Personal

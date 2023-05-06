@@ -18,6 +18,7 @@ import {
     ListProgress,
     Category,
     Progress,
+    Account
 } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalLCard, SmallLCard } from "@/Components";
@@ -29,7 +30,8 @@ export interface IHomeProps {
     recommendLessons: ListLessonInfo | undefined;
     allLessons: ListLessonInfo | undefined;
     allProgresses: ListProgress | undefined;
-    onNavigateLesson: (id: number) => void;
+    onNavigateLesson: (accountId: number | undefined, lessonId: number) => void;
+    onNavigateHomeMore: (accountId: number | undefined, allLessonsUser: LessonInfoUser[]) => void;
 }
 
 export interface LessonInfoUser {
@@ -49,6 +51,7 @@ export const Home = (props: IHomeProps) => {
         allLessons,
         allProgresses,
         onNavigateLesson,
+        onNavigateHomeMore
     } = props;
 
     const [currentAccount, setCurrentAccount] = useState(profile?.account);
@@ -91,136 +94,139 @@ export const Home = (props: IHomeProps) => {
 
     return (
         <View style={styles.container}>
-        <StatusBar style="auto" />
-        {isLoading ? (
-            <HStack space={2} justifyContent="center">
-            <Spinner accessibilityLabel="Loading posts" />
-            <Heading color={Colors.PRIMARY} fontSize="md">
-                Loading
-            </Heading>
-            </HStack>
-        ) : (
-            <>
-            <View style={styles.header}>
-                <View style={styles.textHeaderContainer}>
-                    <Heading style={styles.textHeader}>
-                        Hi, {currentAccount?.name}
-                    </Heading>
-                    <Heading style={styles.textHeader}>
-                        Choose a lesson!
-                    </Heading>
-                </View>
-                <View style={styles.logoHeaderContainer}>
-                    <Image
-                        style={styles.logo}
-                        source={require("../../../assets/logo.png")}
-                    />
-                </View>
-            </View>
-            <View style={styles.body}>
-                <View>
-                    <Heading style={styles.textTitle}>
-                        Recommend for you
-                    </Heading>
-                </View>
-                <View>
-                    <FlatList
-                        data={recommendLessonsUser}
-                        keyExtractor={(item: LessonInfoUser) => String(item.id)}
-                        renderItem={({ item }) => (
-                            <SmallLCard
-                                id={item.id}
-                                name={item.name}
-                                visible={item.visible}
-                                category={item.category}
-                                progress={item.progress}
-                                onPress={() => onNavigateLesson(item.id)}
-                            />
-                        )}
-                        horizontal={true}
-                    />
-                </View>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <Heading style={styles.textTitle}>
-                        All lessons
-                    </Heading>
-                    <TouchableOpacity style={{ flexDirection: "row" }}>
-                        <Text
-                            style={styles.textNormal}
-                        >
-                            More
-                        </Text>
-                        <Ionicons
-                            name="chevron-forward"
-                            size={IconSize.SMALL}
-                            color={Colors.TEXT}
+            <StatusBar style="auto" />
+            {isLoading ? (
+                <HStack space={2} justifyContent="center">
+                <Spinner accessibilityLabel="Loading posts" />
+                <Heading color={Colors.PRIMARY} fontSize="md">
+                    Loading
+                </Heading>
+                </HStack>
+            ) : (
+                <>
+                <View style={styles.header}>
+                    <View style={styles.textHeaderContainer}>
+                        <Heading style={styles.textHeader}>
+                            Hi, {currentAccount?.name}
+                        </Heading>
+                        <Heading style={styles.textHeader}>
+                            Choose a lesson!
+                        </Heading>
+                    </View>
+                    <View style={styles.logoHeaderContainer}>
+                        <Image
+                            style={styles.logo}
+                            source={require("../../../assets/logo.png")}
                         />
-                    </TouchableOpacity>
+                    </View>
                 </View>
-                <View>
-                    <FlatList
-                        data={allLessonsUser}
-                        keyExtractor={(item: LessonInfoUser) => String(item.id)}
-                        renderItem={({ item }) => (
-                            <NormalLCard
-                                id={item.id}
-                                name={item.name}
-                                visible={item.visible}
-                                category={item.category}
-                                progress={item.progress}
-                                onPress={() => onNavigateLesson(item.id)}
+                <View style={styles.body}>
+                    <View>
+                        <Heading style={styles.textTitle}>
+                            Recommend for you
+                        </Heading>
+                    </View>
+                    <View>
+                        <FlatList
+                            data={recommendLessonsUser}
+                            keyExtractor={(item: LessonInfoUser) => String(item.id)}
+                            renderItem={({ item }) => (
+                                <SmallLCard
+                                    id={item.id}
+                                    name={item.name}
+                                    visible={item.visible}
+                                    category={item.category}
+                                    progress={item.progress}
+                                    onPress={() => onNavigateLesson(currentAccount?.id, item.id)}
+                                />
+                            )}
+                            horizontal={true}
+                        />
+                    </View>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Heading style={styles.textTitle}>
+                            All lessons
+                        </Heading>
+                        <TouchableOpacity 
+                            style={{ flexDirection: "row" }}
+                            onPress={() => onNavigateHomeMore(currentAccount?.id, allLessonsUser)}
+                        >
+                            <Text
+                                style={styles.textNormal}
+                            >
+                                More
+                            </Text>
+                            <Ionicons
+                                name="chevron-forward"
+                                size={IconSize.SMALL}
+                                color={Colors.TEXT}
                             />
-                        )}
-                        ListFooterComponent={() => {
-                            return loadMore ? (
-                                <View
-                                    style={{
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        padding: 5,
-                                    }}
-                                >
-                                    <Text
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <FlatList
+                            data={allLessonsUser}
+                            keyExtractor={(item: LessonInfoUser) => String(item.id)}
+                            renderItem={({ item }) => (
+                                <NormalLCard
+                                    id={item.id}
+                                    name={item.name}
+                                    visible={item.visible}
+                                    category={item.category}
+                                    progress={item.progress}
+                                    onPress={() => onNavigateLesson(currentAccount?.id, item.id)}
+                                />
+                            )}
+                            ListFooterComponent={() => {
+                                return loadMore ? (
+                                    <View
                                         style={{
-                                            fontSize: FontSize.SMALL,
-                                            color: Colors.PRIMARY,
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            padding: 5,
                                         }}
                                     >
-                                        Load More
-                                    </Text>
-                                    <Spinner
-                                        accessibilityLabel="Loading posts"
-                                        color={Colors.PRIMARY}
-                                        size={IconSize.REGULAR}
-                                    />
-                                </View>
-                            ) : null;
-                        }}
-                        onEndReached={() => {
-                            setLoadMore(true);
-                            setTimeout(() => {
-                            setAllLessonsUser(
-                                allLessons
-                                ? allLessons.lessons
-                                    .concat([])
-                                    .map(mapLessonUser as any)
-                                : []
-                            );
-                            setLoadMore(false);
-                            }, 1000);
-                        }}
-                        onEndReachedThreshold={0.1}
-                    />
+                                        <Text
+                                            style={{
+                                                fontSize: FontSize.SMALL,
+                                                color: Colors.PRIMARY,
+                                            }}
+                                        >
+                                            Load More
+                                        </Text>
+                                        <Spinner
+                                            accessibilityLabel="Loading posts"
+                                            color={Colors.PRIMARY}
+                                            size={IconSize.REGULAR}
+                                        />
+                                    </View>
+                                ) : null;
+                            }}
+                            onEndReached={() => {
+                                setLoadMore(true);
+                                setTimeout(() => {
+                                setAllLessonsUser(
+                                    allLessons
+                                    ? allLessons.lessons
+                                        .concat([])
+                                        .map(mapLessonUser as any)
+                                    : []
+                                );
+                                setLoadMore(false);
+                                }, 1000);
+                            }}
+                            onEndReachedThreshold={0.1}
+                        />
+                    </View>
                 </View>
-            </View>
-            </>
-        )}
+                </>
+            )}
         </View>
     );
 };
@@ -258,7 +264,7 @@ const styles = StyleSheet.create({
     logo: {
         resizeMode: "contain",
         width: 80,
-        height: 60,
+        height: 80,
     },
     textHeader: {
         fontSize: FontSize.LARGE,

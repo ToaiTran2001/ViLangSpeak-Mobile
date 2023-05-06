@@ -13,7 +13,7 @@ type LoginScreenNavigatorProps = NativeStackScreenProps<
 
 export const LoginContainer = ({ navigation }: LoginScreenNavigatorProps) => {
 	const onNavigateRegister = () => {
-		navigation.navigate(RootScreens.REGISTER);
+		navigation.replace(RootScreens.REGISTER);
 	};
 
   	return <Login onNavigateRegister={onNavigateRegister} />;

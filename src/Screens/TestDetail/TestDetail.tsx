@@ -6,13 +6,13 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading, HStack } from "native-base";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TestDetailData } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
-import { MainScreens } from "..";
 import { Config } from "@/Config";
 import { Question, Answer } from "@/Components/TestDetail";
 
@@ -29,11 +29,34 @@ export const TestDetail = (props: ITestDetailProps) => {
 
   const [id, setId] = useState(0);
 
-  const [isSubmited, setIsSubmited] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const [isChoosedA, setIsChoosedA] = useState(false);
+
+  const [isChoosedB, setIsChoosedB] = useState(false);
+
+  const [isChoosedC, setIsChoosedC] = useState(false);
+
+  const [isChoosedD, setIsChoosedD] = useState(false);
 
   const defaultImage: string = "/public/image/test-default.png";
 
   const total = currentTest ? currentTest?.questions.total : 10;
+
+  const createCompletedAlert = () => {
+    Alert.alert(
+        "Congratulation",
+        "You have completed this test!",
+        [
+            {
+                text: "OK",
+                onPress: () => {
+                    goBack();
+                },
+            },
+        ]
+    );
+};
 
   useEffect(() => {
     setCurrentTest(test);
@@ -78,70 +101,125 @@ export const TestDetail = (props: ITestDetailProps) => {
                 </View>
             </View>
           <View style={styles.body}>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 2 }}>
               <View>
                 <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
                   Question {id+1}/{currentTest?.questions.total}
                 </Heading>
               </View>
-              <View style={{ height: 96 }}>
-                <Question
-                  id={currentTest?.questions.value[id].id}
-                  question_type={currentTest?.questions.value[id].question_type}
-                  type={currentTest?.questions.value[id].type}
-                  content={currentTest?.questions.value[id].content}
-                />
-              </View>    
+              <Question
+                id={currentTest?.questions.value[id].id}
+                questionType={currentTest?.questions.value[id].question_type}
+                type={currentTest?.questions.value[id].type}
+                content={currentTest?.questions.value[id].content}
+              />
             </View>
-            <View style={{ flex: 2 }}>
+            <View style={{ flex: 3 }}>
               <View>
                   <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
                       Choose the correct answers
                   </Heading>
               </View>
               <View style={{ height: "90%", marginVertical: 10 }}>
-                  <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
-                      <Answer
-                          id={currentTest?.questions.value[id].items[0].id}
-                          type={currentTest?.questions.value[id].items[0].type}
-                          content={currentTest?.questions.value[id].items[0].content}
-                          answer={currentTest?.questions.value[id].items[0].answer}
-                          text="A"
-                          onPress={() => {return null;}}
-                      />
-                      <Answer
-                          id={currentTest?.questions.value[id].items[1].id}
-                          type={currentTest?.questions.value[id].items[1].type}
-                          content={currentTest?.questions.value[id].items[1].content}
-                          answer={currentTest?.questions.value[id].items[1].answer}
-                          text="B"
-                          onPress={() => {return null;}}
-                      />
-                  </View>
-                  <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
-                      <Answer
-                          id={currentTest?.questions.value[id].items[2].id}
-                          type={currentTest?.questions.value[id].items[2].type}
-                          content={currentTest?.questions.value[id].items[2].content}
-                          answer={currentTest?.questions.value[id].items[2].answer}
-                          text="C"
-                          onPress={() => {return null;}}
-                      />
-                      <Answer
-                          id={currentTest?.questions.value[id].items[3].id}
-                          type={currentTest?.questions.value[id].items[3].type}
-                          content={currentTest?.questions.value[id].items[3].content}
-                          answer={currentTest?.questions.value[id].items[3].answer}
-                          text="D"
-                          onPress={() => {return null;}}
-                      />
-                  </View>
+                <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
+                    <Answer
+                        id={currentTest?.questions.value[id].items[0].id}
+                        questionType={currentTest?.questions.value[id].question_type}
+                        type={currentTest?.questions.value[id].items[0].type}
+                        content={currentTest?.questions.value[id].items[0].content}
+                        answer={currentTest?.questions.value[id].items[0].answer}
+                        text="A"
+                        isChoosed={isChoosedA}
+                        isSubmitted={isSubmitted}
+                        onPress={() => 
+                          {
+                            setIsChoosedA(!isChoosedA);
+                            if (currentTest?.questions.value[id].question_type === "sc")
+                            {
+                              setIsChoosedB(false);
+                              setIsChoosedC(false);
+                              setIsChoosedD(false);
+                            }
+                          }
+                        }
+                    />
+                    <Answer
+                        id={currentTest?.questions.value[id].items[1].id}
+                        questionType={currentTest?.questions.value[id].question_type}
+                        type={currentTest?.questions.value[id].items[1].type}
+                        content={currentTest?.questions.value[id].items[1].content}
+                        answer={currentTest?.questions.value[id].items[1].answer}
+                        text="B"
+                        isChoosed={isChoosedB}
+                        isSubmitted={isSubmitted}
+                        onPress={() => 
+                          {
+                            setIsChoosedB(!isChoosedB);
+                            if (currentTest?.questions.value[id].question_type === "sc")
+                            {
+                              setIsChoosedA(false);
+                              setIsChoosedC(false);
+                              setIsChoosedD(false);
+                            }
+                          }
+                        }
+                    />
+                </View>
+                <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around" }}>
+                    <Answer
+                        id={currentTest?.questions.value[id].items[2].id}
+                        questionType={currentTest?.questions.value[id].question_type}
+                        type={currentTest?.questions.value[id].items[2].type}
+                        content={currentTest?.questions.value[id].items[2].content}
+                        answer={currentTest?.questions.value[id].items[2].answer}
+                        text="C"
+                        isChoosed={isChoosedC}
+                        isSubmitted={isSubmitted}
+                        onPress={() => 
+                          {
+                            setIsChoosedC(!isChoosedC);
+                            if (currentTest?.questions.value[id].question_type === "sc")
+                            {
+                              setIsChoosedA(false);
+                              setIsChoosedB(false);
+                              setIsChoosedD(false);
+                            }
+                          }
+                        }
+                    />
+                    <Answer
+                        id={currentTest?.questions.value[id].items[3].id}
+                        questionType={currentTest?.questions.value[id].question_type}
+                        type={currentTest?.questions.value[id].items[3].type}
+                        content={currentTest?.questions.value[id].items[3].content}
+                        answer={currentTest?.questions.value[id].items[3].answer}
+                        text="D"
+                        isChoosed={isChoosedD}
+                        isSubmitted={isSubmitted}
+                        onPress={() => 
+                          {
+                            setIsChoosedD(!isChoosedD);
+                            if (currentTest?.questions.value[id].question_type === "sc")
+                            {
+                              setIsChoosedA(false);
+                              setIsChoosedB(false);
+                              setIsChoosedC(false);
+                            }
+                          }
+                        }
+                    />
+                </View>
               </View>
             </View>
           </View>
           <View style={styles.footer}>
             <TouchableOpacity onPress={() => {
                 setId(id-1 > 0 ? id-1 : 0);
+                setIsChoosedA(false);
+                setIsChoosedB(false);
+                setIsChoosedC(false);
+                setIsChoosedD(false);
+                setIsSubmitted(false);
               }}>
               <Ionicons
                 name="chevron-back"
@@ -149,16 +227,30 @@ export const TestDetail = (props: ITestDetailProps) => {
                 color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity 
+              style={styles.button}
+              onPress={() => {
+                setIsSubmitted(true);
+              }}
+            >
               <Text style={{ fontSize: FontSize.REGULAR, color: Colors.WHITE }}>Submit</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
                 setId(id+1 < total ? id+1 : total-1);
+                if (id+1 === total) {
+                  createCompletedAlert();
+                } else {
+                  setIsChoosedA(false);
+                  setIsChoosedB(false);
+                  setIsChoosedC(false);
+                  setIsChoosedD(false);
+                  setIsSubmitted(false);
+                }
               }}>
               <Ionicons
                 name="chevron-forward"
                 size={IconSize.LARGE}
-                color={id < total-1 ? Colors.TEXT : Colors.BACKGROUND}
+                color={id < total ? Colors.TEXT : Colors.BACKGROUND}
               />
             </TouchableOpacity>
           </View>
@@ -198,13 +290,13 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
     },
     body: {
-        flex: 6,
+        flex: 6.5,
         width: "100%",
         padding: 20,
         overflow: "hidden",
     },
     footer: {
-        flex: 2,
+        flex: 1.5,
         flexDirection: "row",
         width: "100%",
         justifyContent: "space-between",

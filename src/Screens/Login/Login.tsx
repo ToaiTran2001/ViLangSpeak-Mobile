@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Dimensions
+  Dimensions,
+  Alert
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -26,6 +27,8 @@ export const Login = (props: ILoginProps) => {
 
     const dispatch = useDispatch();
 
+    const [pressLogin, setPressLogin] = useState(false);
+
     const [username, onChangeUsername] = useState("");
 
     const [password, onChangePassword] = useState("");
@@ -41,6 +44,21 @@ export const Login = (props: ILoginProps) => {
             refreshToken: data?.refresh_token,
         }));
     }, [data]);
+
+    const createForgetPasswordAlert = () => {
+        Alert.alert(
+            "Forget Password",
+            "Updating...",
+            [
+                {
+                    text: "OK",
+                    onPress: () => {
+                        
+                    },
+                },
+            ]
+        );
+    };
 
     return (
         <View style={styles.container}>
@@ -78,22 +96,41 @@ export const Login = (props: ILoginProps) => {
                             style={styles.input}
                             placeholder="Username"
                         />
-                        <TextInput
-                            editable
-                            onChangeText={text => onChangePassword(text)}
-                            secureTextEntry={secure}
-                            value={password}
-                            style={styles.input}
-                            placeholder="Password"
-                        />
-                        <View style={styles.textBodyContainer}>
-                            <Text style={{ fontSize: FontSize.TINY, color: Colors.PRIMARY }} >Forget password ?</Text>
+                        <View style={[styles.input, { flexDirection: "row" }]}>
+                            <TextInput
+                                editable
+                                onChangeText={text => onChangePassword(text)}
+                                secureTextEntry={secure}
+                                value={password}
+                                style={{ flex: 1, fontSize: FontSize.SMALL }}
+                                placeholder="Password"
+                            />
+                            <TouchableOpacity onPress={() => setSecure(!secure)}>
+                                {
+                                    secure 
+                                    ?
+                                        <Ionicons name="eye-off" size={IconSize.MEDIUM} color={Colors.BLACK}/>
+                                    :
+                                        <Ionicons name="eye" size={IconSize.MEDIUM} color={Colors.BLACK}/>
+                                }
+                            </TouchableOpacity>
                         </View>
+                        {
+                            !data && pressLogin ?
+                            <Text style={{ fontSize: FontSize.TINY, color: Colors.TEXT_ERROR }}>Invalid username or password!</Text>
+                            : null
+                        }
+                        <TouchableOpacity 
+                            style={styles.textBodyContainer}
+                            onPress={() => createForgetPasswordAlert()}
+                        >
+                            <Text style={{ fontSize: FontSize.TINY, color: Colors.PRIMARY }} >Forget password ?</Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             style={styles.button}
-                            onPress={() => {uploadLogin({ username: username, password: password });}}
+                            onPress={() => {uploadLogin({ username: username, password: password });setTimeout(() => setPressLogin(true), 500)}}
                         >
                             <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >Login</Text>
                         </TouchableOpacity>
@@ -146,18 +183,19 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.TRANSPARENT,
         borderBottomColor: Colors.BLACK,
         borderBottomWidth: 1,
-        marginVertical: 20,
+        marginVertical: 10,
         fontSize: FontSize.SMALL,
     },
     textBodyContainer: {
         alignItems: "flex-end",
+        marginTop: 5,
     },
     button: {
         height: 40,
         backgroundColor: Colors.PRIMARY,
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 10,
+        borderRadius: 5,
     },
     triangleLeftCorner: {
         width: 0,

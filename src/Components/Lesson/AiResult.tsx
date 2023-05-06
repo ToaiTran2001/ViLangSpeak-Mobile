@@ -55,7 +55,7 @@ export const AiResult = (props: IAiProps) => {
       {isLoading ? (
         <HStack space={2} justifyContent="center">
           <Spinner accessibilityLabel="Loading posts" />
-          <Heading color="primary.500" fontSize="md">
+          <Heading color={Colors.PRIMARY} fontSize="md">
             Scoring
           </Heading>
         </HStack>

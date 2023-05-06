@@ -6,16 +6,17 @@ import { Colors, FontSize, IconSize } from "@/Theme";
 import { Config } from "@/Config";
 import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Video from 'react-native-video';
 
 export interface IQuestionProps {
     id: number | undefined;
-    question_type: string | undefined;
+    questionType: string | undefined;
     type: string | undefined;
     content: string | undefined;
 };
 
 export const Question = (props: IQuestionProps) => {
-    const { id, question_type, type, content } = props;
+    const { id, questionType, type, content } = props;
 
     const [sound, setSound] = useState<Audio.Sound | undefined>(undefined);
 
@@ -45,25 +46,41 @@ export const Question = (props: IQuestionProps) => {
 
     return (
         <View style={styles.container}>
-            { type === "p" 
+            { type === "p"
             ?
-                <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }}>{content}</Text>
+                <View style={styles.pContainer}>
+                    <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }}>{content}</Text>
+                </View>
             :   
-                <View>
-                    <TouchableOpacity style={[styles.iconContainer, {backgroundColor: Colors.NEW}]} onPress={() => playSound(content ? Config.API_APP_URL.slice(0, -1) + content : "")}>
-                        <Ionicons
-                            name="volume-high-outline"
-                            size={IconSize.HUGE}
-                            color={Colors.TEXT}
-                        />
-                    </TouchableOpacity>
-                    {isLoadingSound ? (
-                        <HStack space={2} justifyContent="center">
-                            <Spinner accessibilityLabel="Loading posts" />
-                        </HStack>
-                    ) : (
-                        <Text></Text>
-                    )}
+                <View style={styles.iContainer}>
+                    {
+                        type === "a"
+                        ?
+                            <View>
+                                <TouchableOpacity style={[styles.iconContainer, {backgroundColor: Colors.NEW}]} onPress={() => playSound(content ? Config.API_APP_URL.slice(0, -1) + content : "")}>
+                                    <Ionicons
+                                        name="volume-high-outline"
+                                        size={IconSize.HUGE}
+                                        color={Colors.TEXT}
+                                    />
+                                </TouchableOpacity>
+                                {
+                                    isLoadingSound 
+                                    ? 
+                                        <HStack space={2} justifyContent="center">
+                                            <Spinner accessibilityLabel="Loading posts" />
+                                        </HStack>
+                                    : 
+                                        null
+                                }
+                            </View>
+                        :   type === "i"
+                        ?
+                            <Image style={styles.image} source={{uri: Config.API_APP_URL.slice(0, -1) + content}}/>
+                        :    
+                            // <Video source={{uri: Config.API_APP_URL.slice(0, -1) + content}} />
+                            null
+                    }
                 </View>
             }
         </View>
@@ -73,13 +90,23 @@ export const Question = (props: IQuestionProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    pContainer: {
         borderRadius: 10,
         width: "96%",
-        height: 96,
+        height: 120,
         margin: 5,
         padding: 10,
         backgroundColor: Colors.FLASHCARD,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    iContainer: {
+        height: 120,
+        margin: 5,
+        backgroundColor: Colors.BACKGROUND,
         justifyContent: "center",
         alignItems: "center"
     },
@@ -89,5 +116,13 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         justifyContent: "center",
         alignItems: "center",
+    },
+    image: {
+        resizeMode: "contain",
+        height: 120,
+    },
+    video: {
+        resizeMode: "contain",
+        height: 120,
     },
 });

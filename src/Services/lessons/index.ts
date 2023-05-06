@@ -97,6 +97,20 @@ type LessonIds = {
   account_id: string;
 };
 
+export interface RecordProgressInfo {
+  lesson_id: string;
+  record: {
+    timestamp: number;
+    value: number;
+    account_id: string;
+  };
+}
+
+export interface RecordProgressResponse {
+  timestamp: number;
+  status: string;
+}
+
 const allCategoriesApi = API_APP.injectEndpoints({
   endpoints: (build) => ({
     getAllCategories: build.query<ListCategoryResponse, string>({
@@ -151,6 +165,19 @@ const progressApi = API_APP.injectEndpoints({
   overrideExisting: true,
 });
 
+const recordLessonApi = API_APP.injectEndpoints({
+  endpoints: (build) => ({
+    recordLesson: build.mutation<RecordProgressResponse, RecordProgressInfo>({
+      query: ({ lesson_id, record }) => ({
+        url: `app/lesson/${lesson_id}/progress`,
+        method: "POST",
+        body: record,
+      }),
+    }),
+  }),
+  overrideExisting: true,
+});
+
 export const { useLazyGetAllCategoriesQuery } = allCategoriesApi;
 
 export const { useLazyGetRmdLessonsQuery } = recommendLessonsApi;
@@ -162,3 +189,5 @@ export const { useLazyGetLessonQuery } = lessonApi;
 export const { useLazyGetAllProgressesQuery } = allProgressesApi;
 
 export const { useLazyGetProgressQuery } = progressApi;
+
+export const { useRecordLessonMutation } = recordLessonApi;

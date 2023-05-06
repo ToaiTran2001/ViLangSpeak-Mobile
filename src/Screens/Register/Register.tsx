@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Dimensions
+  Dimensions,
+  Alert
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -44,6 +45,21 @@ export const Register = (props: IRegisterProps) => {
         }));
     }, [data]);
 
+    const createRegisterAlert = () => {
+        Alert.alert(
+            "Register",
+            "You have successfully registered!",
+            [
+                {
+                    text: "OK",
+                    onPress: () => {
+                        onNavigateLogin();
+                    },
+                },
+            ]
+        );
+    };
+
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
@@ -80,14 +96,25 @@ export const Register = (props: IRegisterProps) => {
                             style={styles.input}
                             placeholder="Username"
                         />
-                        <TextInput
-                            editable
-                            onChangeText={text => onChangePassword(text)}
-                            secureTextEntry={secure}
-                            value={password}
-                            style={styles.input}
-                            placeholder="Password"
-                        />
+                        <View style={[styles.input, { flexDirection: "row" }]}>
+                            <TextInput
+                                editable
+                                onChangeText={text => onChangePassword(text)}
+                                secureTextEntry={secure}
+                                value={password}
+                                style={{ flex: 1, fontSize: FontSize.SMALL }}
+                                placeholder="Password"
+                            />
+                            <TouchableOpacity onPress={() => setSecure(!secure)}>
+                                {
+                                    secure 
+                                    ?
+                                        <Ionicons name="eye-off" size={IconSize.MEDIUM} color={Colors.BLACK}/>
+                                    :
+                                        <Ionicons name="eye" size={IconSize.MEDIUM} color={Colors.BLACK}/>
+                                }
+                            </TouchableOpacity>
+                        </View>
                         <TextInput
                             editable
                             onChangeText={text => onChangeConfirmPassword(text)}
@@ -100,7 +127,7 @@ export const Register = (props: IRegisterProps) => {
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             style={styles.button}
-                            onPress={() => {uploadLogin({ username: username, password: password });}}
+                            onPress={() => {uploadLogin({ username: username, password: password });createRegisterAlert();}}
                         >
                             <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >Register</Text>
                         </TouchableOpacity>
@@ -151,7 +178,7 @@ const styles = StyleSheet.create({
     },
     input: {
         backgroundColor: Colors.TRANSPARENT,
-        borderBottomColor: '#000000',
+        borderBottomColor: Colors.BLACK,
         borderBottomWidth: 1,
         marginVertical: 10,
         fontSize: FontSize.SMALL,

@@ -4,33 +4,71 @@ import { Heading } from "native-base";
 import { Colors, FontSize } from "@/Theme";
 import { Category, Progress } from "@/Services";
 import { Config } from "@/Config";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 export interface IAnswerProps {
     id: number | undefined;
+    questionType: string | undefined;
     type: string | undefined;
     content: string | undefined;
     answer: number | undefined;
     text: string;
+    isChoosed: boolean;
+    isSubmitted: boolean;
     onPress: () => void;
 };
 
 export const Answer = (props: IAnswerProps) => {
-    const [isChoosed, setIsChoosed] = useState(false)
-
-    const { id, type, content, answer, text, onPress } = props;
+    const { id, questionType, type, content, answer, text, isChoosed, isSubmitted, onPress } = props;
+    var backgroundColor = Colors.FLASHCARD;
+    var textColor = Colors.TEXT;
+    if (!isSubmitted) {
+        if (isChoosed) {
+            backgroundColor = Colors.PRIMARY;
+        }
+    } else {
+        if (isChoosed) {
+            if (answer === 1) {
+                backgroundColor = Colors.TEXT_CORRECT;
+            } else {
+                backgroundColor = Colors.TEXT_ERROR;
+            }
+        }
+        if (answer === 1) {
+            textColor = Colors.TEXT_CORRECT;
+        }
+    }
 
     return (
-        <View>
-            <TouchableOpacity
-                style={[styles.container, { backgroundColor: isChoosed ? Colors.PRIMARY : Colors.FLASHCARD }]}
-                onPress={() => setIsChoosed(!isChoosed)}
-            >
-                <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }}>{content}</Text>
-            </TouchableOpacity>
-            <View style={{ justifyContent: "center", alignItems: "center", marginTop: 2 }}>
-                <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>{text}</Text>
+        <TouchableOpacity onPress={onPress}>
+            {
+                type === "p"
+                ?
+                    <View
+                        style={[styles.container, { backgroundColor: backgroundColor }]}
+                    >
+                        <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }}>{content}</Text>
+                    </View>
+                :
+                    <Image style={styles.image} source={{uri: Config.API_APP_URL.slice(0, -1) + content}}/>
+            }
+            
+            <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 2 }}>
+                {
+                    questionType === "mc"
+                    ?
+                        <BouncyCheckbox 
+                            isChecked={isChoosed} 
+                            disableBuiltInState 
+                            onPress={onPress}
+                            fillColor={Colors.PRIMARY}
+                        />
+                    :
+                        null 
+                }
+                <Text style={{ fontSize: FontSize.SMALL, color: textColor }}>{text}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
@@ -45,4 +83,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 5,
     },
+    image: {
+        resizeMode: "contain",
+        width: 120,
+        height: 100,
+        marginVertical: 5,
+    }
 });

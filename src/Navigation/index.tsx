@@ -4,19 +4,26 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { MainNavigator } from "./Main";
 import { RootScreens } from "@/Screens";
+import { WelcomeContainer } from "@/Screens/Welcome";
 import { LoginContainer } from "@/Screens/Login";
 import { RegisterContainer } from "@/Screens/Register";
 import { LessonContainer } from "@/Screens/Lesson";
 import { TestDetailContainer } from "@/Screens/TestDetail";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
+import { LessonInfoUser } from "@/Screens/Home/Home";
+import { TestInfoUser } from "@/Screens/Test/Test";
+import { HomeMoreContainer } from "@/Screens/HomeMore";
+import { TestMoreContainer } from "@/Screens/TestMore";
 
 export type RootStackParamList = {
   [RootScreens.WELCOME]: undefined;
   [RootScreens.LOGIN]: undefined;
   [RootScreens.REGISTER]: undefined;
   [RootScreens.MAIN]: undefined;
-  [RootScreens.LESSON]: { lessonId: number };
+  [RootScreens.HOMEMORE]: { accountId: number | undefined, allLessonsUser: LessonInfoUser[] };
+  [RootScreens.TESTMORE]: { allTestsUser: TestInfoUser[] };
+  [RootScreens.LESSON]: { accountId: number | undefined, lessonId: number };
   [RootScreens.TESTDETAIL]: { testId: number };
 };
 
@@ -29,28 +36,39 @@ const ApplicationNavigator = () => {
   return (
     <NavigationContainer>
       <StatusBar />
-        {/* <RootStack.Screen
-          name={RootScreens.WELCOME}
-          component={WelcomeContainer}
-        /> */}
         {
           authState.userId == null
           ? <RootStack.Navigator screenOptions={{ headerShown: false }}>
             <RootStack.Screen
-            name={RootScreens.LOGIN}
-            component={LoginContainer}
-            options={{}}
+              name={RootScreens.WELCOME}
+              component={WelcomeContainer}
+              options={{}}
             />
             <RootStack.Screen
-            name={RootScreens.REGISTER}
-            component={RegisterContainer}
-            options={{}}
+              name={RootScreens.LOGIN}
+              component={LoginContainer}
+              options={{}}
+            />
+            <RootStack.Screen
+              name={RootScreens.REGISTER}
+              component={RegisterContainer}
+              options={{}}
             />
           </RootStack.Navigator>
           : <RootStack.Navigator screenOptions={{ headerShown: false }}>
             <RootStack.Screen
               name={RootScreens.MAIN}
               component={MainNavigator}
+              options={{}}
+            />
+            <RootStack.Screen
+              name={RootScreens.HOMEMORE}
+              component={HomeMoreContainer}
+              options={{}}
+            />
+            <RootStack.Screen
+              name={RootScreens.TESTMORE}
+              component={TestMoreContainer}
               options={{}}
             />
             <RootStack.Screen

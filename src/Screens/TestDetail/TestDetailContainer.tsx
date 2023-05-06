@@ -18,7 +18,7 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
 
   useEffect(() => {
     test[0](testId);
-  }, [test[0], testId]);
+  }, [test[1].data, testId]);
 
   const goBack = () => {
     navigation.goBack();

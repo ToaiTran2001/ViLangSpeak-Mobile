@@ -6,7 +6,7 @@ import {
     useLazyGetAllProgressesTestQuery,
 } from "@/Services";
 import { RootScreens } from "..";
-import { Test } from "./Test";
+import { Test, TestInfoUser } from "./Test";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
 import { MainScreenProps } from "../Home";
@@ -54,6 +54,10 @@ export const TestContainer = ({
         navigation.push(RootScreens.TESTDETAIL, { testId: id });
     };
 
+    const onNavigateTestMore = (allTestsUser: TestInfoUser[]) => {
+        navigation.push(RootScreens.TESTMORE, { allTestsUser: allTestsUser });
+    }
+
     return (
         <Test
             isLoading={isLoading}
@@ -62,6 +66,7 @@ export const TestContainer = ({
             allTests={allTests[1].data?.data}
             allProgressesTest={allProgressesTest[1].data?.data}
             onNavigateTestDetail={onNavigateTestDetail}
+            onNavigateTestMore={onNavigateTestMore}
         />
     );
 };

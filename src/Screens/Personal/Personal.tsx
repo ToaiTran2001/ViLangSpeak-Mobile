@@ -36,10 +36,16 @@ export const Personal = (props: IPersonalProps) => {
 
     const [loadMore, setLoadMore] = useState(false);
 
+    const [showProfile, setShowProfile] = useState(true);
+
+    const [showAchievements, setShowAchievements] = useState(true);
+
+    const [showSettings, setShowSettings] = useState(true);
+
     const createAboutAlert = () => {
         Alert.alert(
             "ViLangSpeak",
-            "Authors: Hòa - Toại - Tuấn\nImages: flaticon.com",
+            "Authors: Hòa - Toại - Tuấn\nImages: storyset.com",
             [
                 {
                     text: "OK",
@@ -99,170 +105,204 @@ export const Personal = (props: IPersonalProps) => {
                 </View>
             </View>
             <View style={styles.body}>
-                <View style={{ flex: 1.5 }}>
-                    <View
+                <View>
+                    <TouchableOpacity
                         style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
                             alignItems: "center",
                         }}
+                        onPress={() => setShowProfile(!showProfile)}
                     >
                         <Heading style={styles.textTitle}>
                             Profile
                         </Heading>
-                        <TouchableOpacity style={{ flexDirection: "row" }}>
-                            <Ionicons
-                                name="chevron-down"
-                                size={IconSize.SMALL}
-                                color={Colors.TEXT}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={styles.textNormal}>
-                        Username: {currentAccount?.name}
-                    </Text>
+                        <View>
+                            {
+                                showProfile
+                                ?
+                                    <Ionicons
+                                        name="chevron-down"
+                                        size={IconSize.SMALL}
+                                        color={Colors.TEXT}
+                                    />
+                                :
+                                    <Ionicons
+                                        name="chevron-back"
+                                        size={IconSize.SMALL}
+                                        color={Colors.TEXT}
+                                    />
+                            }
+                        </View>
+                    </TouchableOpacity>
+                    {
+                        showProfile 
+                        ?
+                            <Text style={styles.textNormal}>
+                                Username: {currentAccount?.name}
+                            </Text>
+                        :
+                            null
+                    }
                 </View>
-                <View style={{ flex: 6, overflow: "hidden" }}>
-                    <View
+                <View style={{ maxHeight: "70%", overflow: "hidden" }}>
+                    <TouchableOpacity
                         style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
                             alignItems: "center",
                         }}
+                        onPress={() => setShowAchievements(!showAchievements)}
                     >
                         <Heading style={styles.textTitle}>
                             Achievements
                         </Heading>
-                        <TouchableOpacity style={{ flexDirection: "row" }}>
-                            <Ionicons
-                                name="chevron-down"
-                                size={IconSize.SMALL}
-                                color={Colors.TEXT}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <FlatList
-                            data={currentAchievements}
-                            keyExtractor={(item: Achievement) => String(item.id)}
-                            renderItem={({ item }) => (
-                                <NormalACard
-                                    id={item.id}
-                                    name={item.name}
-                                    image={item.image}
-                                    date={item.date}
-                                />
-                            )}
-                            ListFooterComponent={() => {
-                                return loadMore ? (
-                                <View
-                                    style={{
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        padding: 5,
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            fontSize: FontSize.SMALL,
-                                            color: Colors.PRIMARY,
-                                        }}
-                                        >
-                                        Load More
-                                    </Text>
-                                    <Spinner
-                                        accessibilityLabel="Loading posts"
-                                        color={Colors.PRIMARY}
-                                        size={IconSize.REGULAR}
+                        <View>
+                        {
+                                showAchievements
+                                ?
+                                    <Ionicons
+                                        name="chevron-down"
+                                        size={IconSize.SMALL}
+                                        color={Colors.TEXT}
                                     />
-                                </View>
-                                ) : null;
-                            }}
-                            onEndReached={() => {
-                                setLoadMore(true);
-                                setTimeout(() => {
-                                setCurrentAchievements(
-                                    listAchievement?.achievements.concat([])
-                                );
-                                setLoadMore(false);
-                                }, 1000);
-                            }}
-                            onEndReachedThreshold={0.1}
-                        />
-                    </View>
+                                :
+                                    <Ionicons
+                                        name="chevron-back"
+                                        size={IconSize.SMALL}
+                                        color={Colors.TEXT}
+                                    />
+                            }
+                        </View>
+                    </TouchableOpacity>
+                    {
+                        showAchievements
+                        ? 
+                            <View>
+                                <FlatList
+                                    data={currentAchievements}
+                                    keyExtractor={(item: Achievement) => String(item.id)}
+                                    renderItem={({ item }) => (
+                                        <NormalACard
+                                            id={item.id}
+                                            name={item.name}
+                                            image={item.image}
+                                            date={item.date}
+                                        />
+                                    )}
+                                    ListFooterComponent={() => {
+                                        return loadMore ? (
+                                        <View
+                                            style={{
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                padding: 5,
+                                            }}
+                                        >
+                                            <Text
+                                                style={{
+                                                    fontSize: FontSize.SMALL,
+                                                    color: Colors.PRIMARY,
+                                                }}
+                                                >
+                                                Load More
+                                            </Text>
+                                            <Spinner
+                                                accessibilityLabel="Loading posts"
+                                                color={Colors.PRIMARY}
+                                                size={IconSize.REGULAR}
+                                            />
+                                        </View>
+                                        ) : null;
+                                    }}
+                                    onEndReached={() => {
+                                        setLoadMore(true);
+                                        setTimeout(() => {
+                                        setCurrentAchievements(
+                                            listAchievement?.achievements.concat([])
+                                        );
+                                        setLoadMore(false);
+                                        }, 1000);
+                                    }}
+                                    onEndReachedThreshold={0.1}
+                                />
+                            </View>
+                        :
+                            null
+                    }
                 </View>
-                <View style={{ flex: 2.5 }}>
-                    <View
+                <View>
+                    <TouchableOpacity
                         style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
                             alignItems: "center",
-                            marginTop: 10,
                         }}
+                        onPress={() => setShowSettings(!showSettings)}
                     >
                         <Heading style={styles.textTitle}>
                             Settings
                         </Heading>
-                        <TouchableOpacity style={{ flexDirection: "row" }}>
-                            <Ionicons
-                                name="chevron-down"
-                                size={IconSize.SMALL}
-                                color={Colors.TEXT}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={styles.textNormal}>
-                        Language: English
-                    </Text>
-                    <Text style={styles.textNormal}>
-                        Theme: Default
-                    </Text>
-                    <View
-                        style={{
-                            flex: 1,
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                        }}
+                        <View>
+                        {
+                            showSettings
+                            ?
+                                <Ionicons
+                                    name="chevron-down"
+                                    size={IconSize.SMALL}
+                                    color={Colors.TEXT}
+                                />
+                            :
+                                <Ionicons
+                                    name="chevron-back"
+                                    size={IconSize.SMALL}
+                                    color={Colors.TEXT}
+                                />
+                        }
+                        </View>
+                    </TouchableOpacity>
+                    {
+                        showSettings
+                        ?
+                            <>
+                                <Text style={styles.textNormal}>
+                                    Language: English
+                                </Text>
+                                <Text style={styles.textNormal}>
+                                    Theme: Default
+                                </Text>
+                            </>
+                        :
+                            null
+                    }
+                </View>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <TouchableOpacity
+                        onPress={createAboutAlert}
+                        style={styles.button}
                     >
-                        <TouchableOpacity
-                            onPress={createAboutAlert}
-                            style={{
-                                backgroundColor: Colors.PRIMARY,
-                                width: 84,
-                                height: 36,
-                                borderRadius: 10,
-                                marginVertical: 5,
-                                padding: 5,
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}
+                        <Text
+                            style={styles.textNormal}
                         >
-                            <Text
-                                style={styles.textNormal}
-                            >
-                                About
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={createLogoutAlert}
-                            style={{
-                                backgroundColor: Colors.PRIMARY,
-                                width: 84,
-                                height: 36,
-                                borderRadius: 10,
-                                marginVertical: 5,
-                                padding: 5,
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}
+                            About
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={createLogoutAlert}
+                        style={styles.button}
+                    >
+                        <Text
+                            style={styles.textNormal}
                         >
-                            <Text
-                                style={styles.textNormal}
-                            >
-                                Log out
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                            Log out
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             </>
@@ -304,10 +344,20 @@ const styles = StyleSheet.create({
     logo: {
         resizeMode: "contain",
         width: 80,
-        height: 60,
+        height: 80,
     },
     iconFooterContainer: {
         flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    button: {
+        backgroundColor: Colors.PRIMARY,
+        width: 84,
+        height: 36,
+        borderRadius: 10,
+        marginVertical: 5,
+        padding: 5,
         justifyContent: "center",
         alignItems: "center",
     },

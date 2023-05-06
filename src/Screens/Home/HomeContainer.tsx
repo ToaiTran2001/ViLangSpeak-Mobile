@@ -9,7 +9,7 @@ import {
     useLazyGetAllCategoriesQuery,
 } from "@/Services";
 import { RootScreens } from "..";
-import { Home } from "./Home";
+import { Home, LessonInfoUser } from "./Home";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
 
@@ -55,17 +55,21 @@ export const HomeContainer = ({
             allProgresses[0](userIdString);
         }
     }, [
-        profile[0],
-        allCategories[0],
-        recommendLessons[0],
-        allLessons[0],
-        allProgresses[0],
+        profile[1].data,
+        allCategories[1].data,
+        recommendLessons[1].data,
+        allLessons[1].data,
+        allProgresses[1].data,
         userId,
     ]);
 
-    const onNavigateLesson = (id: number) => {
-        navigation.push(RootScreens.LESSON, { lessonId: id });
+    const onNavigateLesson = (accountId: number | undefined, lessonId: number) => {
+        navigation.push(RootScreens.LESSON, { accountId: accountId, lessonId: lessonId });
     };
+
+    const onNavigateHomeMore = (accountId: number | undefined, allLessonsUser: LessonInfoUser[]) => {
+        navigation.push(RootScreens.HOMEMORE, {accountId: accountId, allLessonsUser: allLessonsUser });
+    }
 
     return (
         <Home
@@ -76,6 +80,7 @@ export const HomeContainer = ({
             allLessons={allLessons[1].data?.data}
             allProgresses={allProgresses[1].data?.data}
             onNavigateLesson={onNavigateLesson}
+            onNavigateHomeMore={onNavigateHomeMore}
         />
     );
 };

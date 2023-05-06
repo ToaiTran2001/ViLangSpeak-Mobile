@@ -13,7 +13,7 @@ export const RegisterContainer = ({
     navigation
 }: RegisterScreenNavigatorProps) => {
     const onNavigateLogin = () => {
-        navigation.navigate(RootScreens.LOGIN);
+        navigation.replace(RootScreens.LOGIN);
     };
 
     return <Register onNavigateLogin={onNavigateLogin} />;

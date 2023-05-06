@@ -28,6 +28,7 @@ export interface ITestProps {
     allTests: ListTestInfo | undefined;
     allProgressesTest: ListProgressTest | undefined;
     onNavigateTestDetail: (id: number) => void;
+    onNavigateTestMore: (allTestsUser: TestInfoUser[]) => void;
 }
 
 export interface TestInfoUser {
@@ -46,6 +47,7 @@ export const Test = (props: ITestProps) => {
         allTests,
         allProgressesTest,
         onNavigateTestDetail,
+        onNavigateTestMore
     } = props;
 
     const [recommendTestsUser, setRecommendTestsUser] = useState<TestInfoUser[]>(
@@ -137,10 +139,13 @@ export const Test = (props: ITestProps) => {
                 >
                     <View>
                         <Heading style={styles.textTitle}>
-                            All lessons
+                            All tests
                         </Heading>
                     </View>
-                    <TouchableOpacity style={{ flexDirection: "row" }}>
+                    <TouchableOpacity 
+                        style={{ flexDirection: "row" }}
+                        onPress={() => onNavigateTestMore(allTestsUser)}
+                    >
                         <Text
                             style={styles.textNormal}
                         >
@@ -246,7 +251,7 @@ const styles = StyleSheet.create({
     logo: {
         resizeMode: "contain",
         width: 80,
-        height: 60,
+        height: 80,
     },
     textHeader: {
         fontSize: FontSize.LARGE,

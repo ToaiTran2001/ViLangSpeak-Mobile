@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from "react-native";
 import { Audio } from 'expo-av';
 import { Heading, HStack, Spinner } from "native-base";
@@ -43,6 +44,21 @@ const renderFront = (props: IFrontFlashProps) => {
   const [sound, setSound] = useState<Audio.Sound | undefined>(undefined);
 
   const [isLoadingSound, setIsLoadingSound] = useState(false);
+
+  const createSpeedAlert = () => {
+    Alert.alert(
+        "Audio Speed",
+        "Updating...",
+        [
+            {
+                text: "OK",
+                onPress: () => {
+                    
+                },
+            },
+        ]
+    );
+  };
 
   async function playSound() {
     console.log("Loading Sound");
@@ -88,7 +104,10 @@ const renderFront = (props: IFrontFlashProps) => {
       ) : (
         <Text></Text>
       )}
-      <TouchableOpacity style={{ flexDirection: "row" }}>
+      <TouchableOpacity 
+        style={{ flexDirection: "row" }}
+        onPress={() => createSpeedAlert()}
+      >
         <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
           Normal
         </Text>
@@ -104,16 +123,45 @@ const renderFront = (props: IFrontFlashProps) => {
 
 const renderBack = (props: IBackFlashProps) => {
 
+  const getSmartBold = (text: string) => {
+    // Split the text around *
+    const arr = text.split("*");
+
+    // Here we will store an array of Text components
+    var newTextArr: any[] = [];
+
+    // Loop over split text
+    arr.forEach((element, index) => {
+      // If its an odd element then it is inside *...* block
+      if (index % 2 !== 0) {
+        // Wrap with bold text style
+        const newElement = <Text key={index} style={{ fontSize: FontSize.SMALL, fontWeight: "700" }}>{element}</Text>;
+        newTextArr.push(newElement);
+      } else {
+        // Simple Text
+        const newElement = <Text key={index} style={{ fontSize: FontSize.SMALL, fontWeight: "normal" }}>{element}</Text>;
+        newTextArr.push(newElement);
+      }
+    });
+
+    return newTextArr;
+  }
+
   const mapText = (element: Item, index: number) => {
-    const fontSize = element.type === "h" ? FontSize.REGULAR : FontSize.SMALL;
-    const fontWeight = element.type === "h" ? "bold" : "normal";
     return (
-      <Text
-        key={index}
-        style={{ fontSize: fontSize, fontWeight: fontWeight}}
-      >
-        {element.content}
-      </Text>
+      <View key={index}>
+        {
+          element.type === "h"
+          ?
+            <Text style={{ fontSize: FontSize.REGULAR, fontWeight: "700", fontStyle: "italic" }}>
+              {element.content}
+            </Text>
+          :
+            <Text>
+              {getSmartBold(element.content)}
+            </Text>
+        }
+      </View>
     )
   };
   
