@@ -22,7 +22,7 @@ export const LessonContainer = ({ navigation, route }: LessonScreenProps) => {
     useEffect(() => {
         lesson[0](lessonId);
         lessonProgress[0]({lesson_id: lessonId, account_id: String(accountId)});
-    }, [lesson[0], lessonProgress[0], lessonId, accountId]);
+    }, [lesson[1].data, lessonProgress[1].data, lessonId, accountId]);
 
     const onNavigateTestDetail = (accountId: number | undefined, testId: number) => {
         navigation.navigate(RootScreens.TESTDETAIL, { accountId: accountId, testId: testId });

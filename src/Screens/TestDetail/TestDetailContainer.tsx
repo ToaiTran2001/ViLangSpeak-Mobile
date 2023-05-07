@@ -21,11 +21,12 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
 
   useEffect(() => {
     test[0](testId);
-  }, [test[1].data, testId]);
+    testProgress[0]({test_id: testId, account_id: String(accountId)});
+  }, [test[1].data, testProgress[1].data, testId, accountId]);
 
   const goBack = () => {
     navigation.goBack();
 };
 
-  return <TestDetail isLoading={test[1].isLoading} testProgress={testProgress[1].data?.data.progress.score} accountId={accountId} test={test[1].data?.data.test} goBack={goBack} />;
+  return <TestDetail isLoading={test[1].isLoading} testProgress={testProgress[1].data?.data.progress.score.highest} accountId={accountId} test={test[1].data?.data.test} goBack={goBack} />;
 };

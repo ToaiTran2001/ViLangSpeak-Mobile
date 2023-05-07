@@ -17,18 +17,20 @@ import {
     Category,
     ProgressTest,
     TestInfo,
+    Profile,
 } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalTCard, SmallTCard } from "@/Components";
 
 export interface ITestProps {
     isLoading: boolean;
+    profile: Profile | undefined;
     allCategories: ListCategory | undefined;
     recommendTests: ListTestInfo | undefined;
     allTests: ListTestInfo | undefined;
     allProgressesTest: ListProgressTest | undefined;
-    onNavigateTestDetail: (id: number) => void;
-    onNavigateTestMore: (allTestsUser: TestInfoUser[]) => void;
+    onNavigateTestDetail: (accountId: number | undefined, testId: number) => void;
+    onNavigateTestMore: (accountId: number | undefined, allTestsUser: TestInfoUser[]) => void;
 }
 
 export interface TestInfoUser {
@@ -42,6 +44,7 @@ export interface TestInfoUser {
 export const Test = (props: ITestProps) => {
     const {
         isLoading,
+        profile,
         allCategories,
         recommendTests,
         allTests,
@@ -49,6 +52,8 @@ export const Test = (props: ITestProps) => {
         onNavigateTestDetail,
         onNavigateTestMore
     } = props;
+
+    const [currentAccount, setCurrentAccount] = useState(profile?.account);
 
     const [recommendTestsUser, setRecommendTestsUser] = useState<TestInfoUser[]>(
         []
@@ -71,11 +76,13 @@ export const Test = (props: ITestProps) => {
     };
 
     useEffect(() => {
+        setCurrentAccount(profile?.account);
         setRecommendTestsUser(
             recommendTests ? recommendTests.tests.map(mapTestUser as any) : []
         );
         setAllTestsUser(allTests ? allTests.tests.map(mapTestUser as any) : []);
     }, [
+        profile?.account,
         recommendTests?.tests,
         allTests?.tests,
         allCategories?.categories,
@@ -124,7 +131,7 @@ export const Test = (props: ITestProps) => {
                                 visible={item.visible}
                                 category={item.category}
                                 progress={item.progress}
-                                onPress={() => onNavigateTestDetail(item.id)}
+                                onPress={() => onNavigateTestDetail(currentAccount?.id, item.id)}
                             />
                         )}
                         horizontal={true}
@@ -144,7 +151,7 @@ export const Test = (props: ITestProps) => {
                     </View>
                     <TouchableOpacity 
                         style={{ flexDirection: "row" }}
-                        onPress={() => onNavigateTestMore(allTestsUser)}
+                        onPress={() => onNavigateTestMore(currentAccount?.id, allTestsUser)}
                     >
                         <Text
                             style={styles.textNormal}
@@ -169,7 +176,7 @@ export const Test = (props: ITestProps) => {
                                 visible={item.visible}
                                 category={item.category}
                                 progress={item.progress}
-                                onPress={() => onNavigateTestDetail(item.id)}
+                                onPress={() => onNavigateTestDetail(currentAccount?.id, item.id)}
                             />
                         )}
                         ListFooterComponent={() => {

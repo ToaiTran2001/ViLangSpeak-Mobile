@@ -66,7 +66,7 @@ export const TestDetail = (props: ITestDetailProps) => {
             {
                 text: "OK",
                 onPress: () => {
-                  recordTest[0]({test_id: String(currentTest?.id), record: {timestamp: Date.now(), score: testProgress ? score < testProgress ? testProgress : score : score, account_id: String(accountId)}});setTimeout(() => {goBack();}, 200);
+                  recordTest[0]({test_id: String(currentTest?.id), record: {timestamp: Date.now(), score: testProgress ? score < testProgress ? testProgress : score : score, account_id: String(accountId)}});setTimeout(() => {goBack();}, 500);
                 },
             },
         ]

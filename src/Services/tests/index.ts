@@ -27,7 +27,18 @@ export interface ProgressTest {
 };
 
 export interface ProgressTestResponse {
-  data: ProgressTest;
+  data: {
+    test: number;
+    progress: {
+      score: {
+        average: number;
+        highest: number;
+        lowest: number;
+      };
+      times: number;
+      last_date: number;
+    };
+  };
   timestamp: number;
 };
 
