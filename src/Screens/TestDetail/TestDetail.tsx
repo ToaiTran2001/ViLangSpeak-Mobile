@@ -251,9 +251,9 @@ export const TestDetail = (props: ITestDetailProps) => {
                 setIsChoosedC(false);
                 setIsChoosedD(false);
                 setIsCorrectA(false);
-                setIsChoosedB(false);
-                setIsChoosedC(false);
-                setIsChoosedD(false);
+                setIsCorrectB(false);
+                setIsCorrectC(false);
+                setIsCorrectD(false);
                 setIsSubmitted(false);
               }}>
               <Ionicons
@@ -279,11 +279,11 @@ export const TestDetail = (props: ITestDetailProps) => {
                   setIsChoosedB(false);
                   setIsChoosedC(false);
                   setIsChoosedD(false);
-                  setIsSubmitted(false);
                   setIsCorrectA(false);
-                  setIsChoosedB(false);
-                  setIsChoosedC(false);
-                  setIsChoosedD(false);
+                  setIsCorrectB(false);
+                  setIsCorrectC(false);
+                  setIsCorrectD(false);
+                  setIsSubmitted(false);
                 }
               }}>
               <Ionicons
