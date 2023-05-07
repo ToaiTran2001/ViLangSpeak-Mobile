@@ -34,6 +34,7 @@ export const TestMoreContainer = ({
 
     return (
         <TestMore
+            accountId={accountId}
             allTestsUser={allTestsUser}
             onNavigateTestDetail={onNavigateTestDetail}
             goBack={goBack}

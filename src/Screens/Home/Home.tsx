@@ -18,7 +18,6 @@ import {
     ListProgress,
     Category,
     Progress,
-    Account
 } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalLCard, SmallLCard } from "@/Components";

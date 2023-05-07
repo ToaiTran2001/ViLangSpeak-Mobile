@@ -11,6 +11,7 @@ import { Test, TestInfoUser } from "./Test";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
 import { MainScreenProps } from "../Home";
+import { useIsFocused } from "@react-navigation/native";
 
 export const TestContainer = ({
     navigation
@@ -48,13 +49,22 @@ export const TestContainer = ({
             allProgressesTest[0](userIdString);
         }
     }, [
-        profile[1].data,
-        allCategories[1].data,
-        recommendTests[1].data,
-        allTests[1].data,
-        allProgressesTest[1].data,
         userId,
     ]);
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            // Update the state you want to be updated
+            if (userId) {
+                const userIdString = userId.toString();
+                recommendTests[0](userIdString);
+                allTests[0](userIdString);
+                allProgressesTest[0](userIdString);
+            }
+        }
+    }, [isFocused])
 
     const onNavigateTestDetail = (accountId: number | undefined, testId: number) => {
         navigation.push(RootScreens.TESTDETAIL, { accountId: accountId, testId: testId });

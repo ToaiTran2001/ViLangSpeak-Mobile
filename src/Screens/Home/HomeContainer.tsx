@@ -12,6 +12,7 @@ import { RootScreens } from "..";
 import { Home, LessonInfoUser } from "./Home";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
+import { useIsFocused } from '@react-navigation/native';
 
 export type MainScreenProps = NativeStackScreenProps<
     RootStackParamList,
@@ -55,13 +56,22 @@ export const HomeContainer = ({
             allProgresses[0](userIdString);
         }
     }, [
-        profile[1].data,
-        allCategories[1].data,
-        recommendLessons[1].data,
-        allLessons[1].data,
-        allProgresses[1].data,
         userId,
     ]);
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            // Update the state you want to be updated
+            if (userId) {
+                const userIdString = userId.toString();
+                recommendLessons[0](userIdString);
+                allLessons[0](userIdString);
+                allProgresses[0](userIdString);
+            }
+        }
+    }, [isFocused])
 
     const onNavigateLesson = (accountId: number | undefined, lessonId: number) => {
         navigation.push(RootScreens.LESSON, { accountId: accountId, lessonId: lessonId });

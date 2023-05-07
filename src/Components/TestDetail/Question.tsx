@@ -6,7 +6,7 @@ import { Colors, FontSize, IconSize } from "@/Theme";
 import { Config } from "@/Config";
 import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Video from 'react-native-video';
+import { Video, ResizeMode } from 'expo-av';
 
 export interface IQuestionProps {
     id: number | undefined;
@@ -78,7 +78,7 @@ export const Question = (props: IQuestionProps) => {
                         ?
                             <Image style={styles.image} source={{uri: Config.API_APP_URL.slice(0, -1) + content}}/>
                         :    
-                            // <Video source={{uri: Config.API_APP_URL.slice(0, -1) + content}} />
+                            // <Video resizeMode={ResizeMode.CONTAIN} source={{uri: Config.API_APP_URL.slice(0, -1) + content}} />
                             null
                     }
                 </View>

@@ -131,7 +131,15 @@ export const Lesson = (props: ILessonProps) => {
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.backContainer}
-              onPress={() => {recordLesson[0]({lesson_id: String(currentLesson?.id), record: {timestamp: Date.now(), value: lessonProgress ? (id+1)*100/total < lessonProgress ? lessonProgress : (id+1)*100/total : (id+1)*100/total, account_id: String(accountId)}});setTimeout(() => {goBack();}, 200);}}
+              onPress={() => {
+                recordLesson[0]({lesson_id: String(currentLesson?.id), 
+                  record: {
+                    timestamp: Date.now(), 
+                    value: lessonProgress ? 
+                    (id+1)*100/total < lessonProgress ? lessonProgress : 
+                    (id+1)*100/total : (id+1)*100/total, 
+                    account_id: String(accountId)}});setTimeout(() => {goBack();}, 200);
+              }}
             >
               <Ionicons
                 name="chevron-back"

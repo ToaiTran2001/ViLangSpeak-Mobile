@@ -22,7 +22,7 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
   useEffect(() => {
     test[0](testId);
     testProgress[0]({test_id: testId, account_id: String(accountId)});
-  }, [test[1].data, testProgress[1].data, testId, accountId]);
+  }, [testId, accountId]);
 
   const goBack = () => {
     navigation.goBack();
