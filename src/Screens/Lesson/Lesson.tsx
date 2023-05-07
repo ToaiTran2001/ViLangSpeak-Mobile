@@ -27,8 +27,8 @@ export interface ILessonProps {
   isLoading: boolean;
   lesson: LessonDetail | undefined;
   lessonProgress: number | undefined;
-  accountId: string;
-  onNavigateTestDetail: (id: number) => void;
+  accountId: number | undefined;
+  onNavigateTestDetail: (accountId: number | undefined, testId: number) => void;
   goBack: () => void;
 };
 
@@ -131,7 +131,7 @@ export const Lesson = (props: ILessonProps) => {
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.backContainer}
-              onPress={() => {recordLesson[0]({lesson_id: String(currentLesson?.id), record: {timestamp: Date.now(), value: lessonProgress ? (id+1)*100/total < lessonProgress ? lessonProgress : (id+1)*100/total : (id+1)*100/total, account_id: accountId}});setTimeout(() => {goBack();}, 200);}}
+              onPress={() => {recordLesson[0]({lesson_id: String(currentLesson?.id), record: {timestamp: Date.now(), value: lessonProgress ? (id+1)*100/total < lessonProgress ? lessonProgress : (id+1)*100/total : (id+1)*100/total, account_id: String(accountId)}});setTimeout(() => {goBack();}, 200);}}
             >
               <Ionicons
                 name="chevron-back"
@@ -218,7 +218,7 @@ export const Lesson = (props: ILessonProps) => {
             { id === total ? 
               <TouchableOpacity 
                 style={styles.button}
-                onPress={() => {recordLesson[0]({lesson_id: String(currentLesson?.id), record: {timestamp: Date.now(), value: 100, account_id: accountId}});onNavigateTestDetail(currentLesson ? currentLesson.test : 0)}}
+                onPress={() => {recordLesson[0]({lesson_id: String(currentLesson?.id), record: {timestamp: Date.now(), value: 100, account_id: String(accountId)}});onNavigateTestDetail(accountId, currentLesson ? currentLesson.test : 0)}}
               >
                 <Text style={{ fontSize: FontSize.REGULAR, color: Colors.WHITE }}>Go</Text>
               </TouchableOpacity>

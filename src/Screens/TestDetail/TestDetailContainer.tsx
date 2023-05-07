@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/Navigation";
-import { useLazyGetTestDetailQuery } from "@/Services";
+import { useLazyGetProgressTestQuery, useLazyGetTestDetailQuery } from "@/Services";
 import { MainScreens, RootScreens } from "..";
 import { TestDetail } from "./TestDetail";
 
@@ -11,10 +11,13 @@ type TestDetailScreenNavigatorProps = NativeStackScreenProps<
 >;
 
 export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavigatorProps) => {
+  const [accountId, setAccountId] = useState(route.params.accountId);
   const [testId, setTestId] = useState(String(route.params.testId));
 
   // test = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
   const test = useLazyGetTestDetailQuery();
+
+  const testProgress = useLazyGetProgressTestQuery();
 
   useEffect(() => {
     test[0](testId);
@@ -24,5 +27,5 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
     navigation.goBack();
 };
 
-  return <TestDetail isLoading={test[1].isLoading} test={test[1].data?.data.test} goBack={goBack} />;
+  return <TestDetail isLoading={test[1].isLoading} testProgress={testProgress[1].data?.data.progress.score} accountId={accountId} test={test[1].data?.data.test} goBack={goBack} />;
 };

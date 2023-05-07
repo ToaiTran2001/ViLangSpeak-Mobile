@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Heading } from "native-base";
 import { Colors, FontSize } from "@/Theme";
@@ -15,11 +15,13 @@ export interface IAnswerProps {
     text: string;
     isChoosed: boolean;
     isSubmitted: boolean;
+    isCorrect: boolean;
+    setIsCorrect: (correct: boolean) => void;
     onPress: () => void;
 };
 
 export const Answer = (props: IAnswerProps) => {
-    const { id, questionType, type, content, answer, text, isChoosed, isSubmitted, onPress } = props;
+    const { id, questionType, type, content, answer, text, isChoosed, isSubmitted, isCorrect, setIsCorrect, onPress } = props;
     var backgroundColor = Colors.FLASHCARD;
     var textColor = Colors.TEXT;
     if (!isSubmitted) {
@@ -38,6 +40,14 @@ export const Answer = (props: IAnswerProps) => {
             textColor = Colors.TEXT_CORRECT;
         }
     }
+
+    useEffect(() => {
+        if (isSubmitted) {
+            if ((isChoosed && answer === 1) || (!isChoosed && answer === 0)) {
+                setIsCorrect(true);
+            }
+        }
+    }, [isCorrect, isSubmitted, isChoosed])
 
     return (
         <TouchableOpacity onPress={onPress}>

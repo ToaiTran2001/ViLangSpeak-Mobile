@@ -15,15 +15,18 @@ import { TestDetailData } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { Config } from "@/Config";
 import { Question, Answer } from "@/Components/TestDetail";
+import { useRecordTestMutation } from "@/Services";
 
 export interface ITestDetailProps {
   isLoading: boolean;
   test: TestDetailData | undefined;
+  testProgress: number | undefined;
+  accountId: number | undefined;
   goBack: () => void;
 };
 
 export const TestDetail = (props: ITestDetailProps) => {
-  const { isLoading, test, goBack } = props;
+  const { isLoading, test, testProgress, accountId, goBack } = props;
 
   const [currentTest, setCurrentTest] = useState(test);
 
@@ -39,9 +42,21 @@ export const TestDetail = (props: ITestDetailProps) => {
 
   const [isChoosedD, setIsChoosedD] = useState(false);
 
+  const [isCorrectA, setIsCorrectA] = useState(false);
+
+  const [isCorrectB, setIsCorrectB] = useState(false);
+
+  const [isCorrectC, setIsCorrectC] = useState(false);
+
+  const [isCorrectD, setIsCorrectD] = useState(false);
+
+  const [score, setScore] = useState(0);
+
   const defaultImage: string = "/public/image/test-default.png";
 
   const total = currentTest ? currentTest?.questions.total : 10;
+
+  const recordTest = useRecordTestMutation();
 
   const createCompletedAlert = () => {
     Alert.alert(
@@ -51,7 +66,7 @@ export const TestDetail = (props: ITestDetailProps) => {
             {
                 text: "OK",
                 onPress: () => {
-                    goBack();
+                  recordTest[0]({test_id: String(currentTest?.id), record: {timestamp: Date.now(), score: testProgress ? score < testProgress ? testProgress : score : score, account_id: String(accountId)}});setTimeout(() => {goBack();}, 200);
                 },
             },
         ]
@@ -61,6 +76,14 @@ export const TestDetail = (props: ITestDetailProps) => {
   useEffect(() => {
     setCurrentTest(test);
   }, [test]);
+
+  useEffect(() => {
+    if (isCorrectA && isChoosedB && isCorrectC && isCorrectD) {
+      setScore(score+1);
+    }
+  }, [isCorrectA, isChoosedB, isCorrectC, isChoosedD])
+
+  console.log(recordTest[1].data);
 
   return (
     <View style={styles.container}>
@@ -131,6 +154,8 @@ export const TestDetail = (props: ITestDetailProps) => {
                         text="A"
                         isChoosed={isChoosedA}
                         isSubmitted={isSubmitted}
+                        isCorrect={isCorrectA}
+                        setIsCorrect={setIsCorrectA}
                         onPress={() => 
                           {
                             setIsChoosedA(!isChoosedA);
@@ -152,6 +177,8 @@ export const TestDetail = (props: ITestDetailProps) => {
                         text="B"
                         isChoosed={isChoosedB}
                         isSubmitted={isSubmitted}
+                        isCorrect={isCorrectB}
+                        setIsCorrect={setIsCorrectB}
                         onPress={() => 
                           {
                             setIsChoosedB(!isChoosedB);
@@ -175,6 +202,8 @@ export const TestDetail = (props: ITestDetailProps) => {
                         text="C"
                         isChoosed={isChoosedC}
                         isSubmitted={isSubmitted}
+                        isCorrect={isCorrectC}
+                        setIsCorrect={setIsCorrectC}
                         onPress={() => 
                           {
                             setIsChoosedC(!isChoosedC);
@@ -196,6 +225,8 @@ export const TestDetail = (props: ITestDetailProps) => {
                         text="D"
                         isChoosed={isChoosedD}
                         isSubmitted={isSubmitted}
+                        isCorrect={isCorrectD}
+                        setIsCorrect={setIsCorrectD}
                         onPress={() => 
                           {
                             setIsChoosedD(!isChoosedD);
@@ -216,6 +247,10 @@ export const TestDetail = (props: ITestDetailProps) => {
             <TouchableOpacity onPress={() => {
                 setId(id-1 > 0 ? id-1 : 0);
                 setIsChoosedA(false);
+                setIsChoosedB(false);
+                setIsChoosedC(false);
+                setIsChoosedD(false);
+                setIsCorrectA(false);
                 setIsChoosedB(false);
                 setIsChoosedC(false);
                 setIsChoosedD(false);
@@ -245,6 +280,10 @@ export const TestDetail = (props: ITestDetailProps) => {
                   setIsChoosedC(false);
                   setIsChoosedD(false);
                   setIsSubmitted(false);
+                  setIsCorrectA(false);
+                  setIsChoosedB(false);
+                  setIsChoosedC(false);
+                  setIsChoosedD(false);
                 }
               }}>
               <Ionicons

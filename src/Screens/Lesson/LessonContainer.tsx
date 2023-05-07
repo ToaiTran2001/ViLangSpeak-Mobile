@@ -11,7 +11,7 @@ type LessonScreenProps = NativeStackScreenProps<
 >;
 
 export const LessonContainer = ({ navigation, route }: LessonScreenProps) => {
-    const [accountId, setAccountId] = useState(String(route.params.accountId))
+    const [accountId, setAccountId] = useState(route.params.accountId)
     const [lessonId, setLessonId] = useState(String(route.params.lessonId));
 
     // lesson = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
@@ -21,11 +21,11 @@ export const LessonContainer = ({ navigation, route }: LessonScreenProps) => {
 
     useEffect(() => {
         lesson[0](lessonId);
-        lessonProgress[0]({lesson_id: lessonId, account_id: accountId});
+        lessonProgress[0]({lesson_id: lessonId, account_id: String(accountId)});
     }, [lesson[0], lessonProgress[0], lessonId, accountId]);
 
-    const onNavigateTestDetail = (id: number) => {
-        navigation.navigate(RootScreens.TESTDETAIL, { testId: id });
+    const onNavigateTestDetail = (accountId: number | undefined, testId: number) => {
+        navigation.navigate(RootScreens.TESTDETAIL, { accountId: accountId, testId: testId });
     };
 
     const goBack = () => {

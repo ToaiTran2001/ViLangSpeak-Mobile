@@ -22,9 +22,9 @@ export type RootStackParamList = {
   [RootScreens.REGISTER]: undefined;
   [RootScreens.MAIN]: undefined;
   [RootScreens.HOMEMORE]: { accountId: number | undefined, allLessonsUser: LessonInfoUser[] };
-  [RootScreens.TESTMORE]: { allTestsUser: TestInfoUser[] };
+  [RootScreens.TESTMORE]: { accountId: number | undefined, allTestsUser: TestInfoUser[] };
   [RootScreens.LESSON]: { accountId: number | undefined, lessonId: number };
-  [RootScreens.TESTDETAIL]: { testId: number };
+  [RootScreens.TESTDETAIL]: { accountId: number | undefined, testId: number };
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();

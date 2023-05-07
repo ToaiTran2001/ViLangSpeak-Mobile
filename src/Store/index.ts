@@ -36,9 +36,11 @@ const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => {
     const middlewares = getDefaultMiddleware({
+      immutableCheck: { warnAfter: 128 },
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, refreshingToken.type],
         ignoredPaths: ["authRefresh"],
+        warnAfter: 128,
       },
     }).concat(API_APP.middleware).concat(API_AUTH.middleware);
 

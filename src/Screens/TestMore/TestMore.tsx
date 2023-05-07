@@ -15,13 +15,15 @@ import { NormalTCard } from "@/Components";
 import { TestInfoUser } from "../Test/Test";
 
 export interface IHomeMoreProps {
+    accountId: number | undefined;
     allTestsUser: TestInfoUser[];
-    onNavigateTestDetail: (id: number) => void;
+    onNavigateTestDetail: (accountId: number | undefined, testId: number) => void;
     goBack: () => void;
 }
 
 export const TestMore = (props: IHomeMoreProps) => {
     const {
+        accountId,
         allTestsUser,
         onNavigateTestDetail,
         goBack
@@ -67,7 +69,7 @@ export const TestMore = (props: IHomeMoreProps) => {
                                 visible={item.visible}
                                 category={item.category}
                                 progress={item.progress}
-                                onPress={() => onNavigateTestDetail(item.id)}
+                                onPress={() => onNavigateTestDetail(accountId, item.id)}
                             />
                         )}
                         ListFooterComponent={() => {

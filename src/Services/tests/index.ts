@@ -81,6 +81,20 @@ export interface TestDetailDataResponse {
   timestamp: number;
 };
 
+export interface RecordProgressTestInfo {
+  test_id: string;
+  record: {
+    timestamp: number;
+    score: number;
+    account_id: string;
+  };
+}
+
+export interface RecordProgressTestResponse {
+  timestamp: number;
+  status: string;
+}
+
 const allTestsApi = API_APP.injectEndpoints({
   endpoints: (build) => ({
     getAllTests: build.query<ListTestInfoResponse, string>({
@@ -126,6 +140,19 @@ const testDetailApi = API_APP.injectEndpoints({
   overrideExisting: true,
 });
 
+const recordTestApi = API_APP.injectEndpoints({
+  endpoints: (build) => ({
+    recordTest: build.mutation<RecordProgressTestResponse, RecordProgressTestInfo>({
+      query: ({ test_id, record }) => ({
+        url: `app/test/${test_id}/progress`,
+        method: "POST",
+        body: record,
+      }),
+    }),
+  }),
+  overrideExisting: true,
+});
+
 export const { useLazyGetRmdTestsQuery } = recommendTestsApi;
 
 export const { useLazyGetAllTestsQuery } = allTestsApi;
@@ -135,3 +162,5 @@ export const { useLazyGetAllProgressesTestQuery } = allProgressesTestApi;
 export const { useLazyGetProgressTestQuery } = progressTestApi;
 
 export const { useLazyGetTestDetailQuery } = testDetailApi;
+
+export const { useRecordTestMutation } = recordTestApi;
