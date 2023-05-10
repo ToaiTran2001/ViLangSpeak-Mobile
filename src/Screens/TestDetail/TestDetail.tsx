@@ -71,9 +71,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 							test_id: String(currentTest?.id), 
 							record: {
 								timestamp: Date.now(), 
-								score: testProgress 
-									? score < testProgress ? testProgress : score 
-									: score, 
+								score: score*100/total,
 								account_id: accountId ? accountId : 0
 							}
 						});

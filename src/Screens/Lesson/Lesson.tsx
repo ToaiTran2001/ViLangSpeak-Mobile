@@ -184,17 +184,20 @@ export const Lesson = (props: ILessonProps) => {
 							</Text>
 						</View>
 						{ 
-							id === total 
+							completed 
 							? 
 								<View style={styles.cardContainerFront}>
 									<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
-									You have completed 
+										Congratulation!
 									</Text>
 									<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
-									this lesson.
+										You have completed 
 									</Text>
 									<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
-									Go to test now! 
+										this lesson.
+									</Text>
+									<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
+										Go to test now!
 									</Text>
 								</View>
 							: 
@@ -222,9 +225,11 @@ export const Lesson = (props: ILessonProps) => {
 						{recording ? <LoadingDots dots={3} color={[Colors.PRIMARY, Colors.NEW, Colors.FLASHCARD]} size={IconSize.TINY} bounceHeight={IconSize.TINY} /> : null}
 					</View>
 					<View style={styles.footer}>
-						<TouchableOpacity onPress={() => {
-							setIsChanged(false);
-							setId(id-1 > 0 ? id-1 : 0);
+						<TouchableOpacity 
+							onPress={() => {
+								setIsChanged(false);
+								setId(id-1 > 0 ? id-1 : 0);
+								setCompleted(false);
 						}}>
 							<Ionicons
 								name="chevron-back"
@@ -261,17 +266,17 @@ export const Lesson = (props: ILessonProps) => {
 							onPress={() => {
 								setIsChanged(false);
 								if (id+1 < total) {
-								setId(id+1);
+									setId(id+1);
 								} else {
-								setId(total-1);
-								setCompleted(true);
+									setId(total-1);
+									setCompleted(true);
 								}
 							}}
 						>
 							<Ionicons
 								name="chevron-forward"
 								size={IconSize.LARGE}
-								color={id < total ? Colors.TEXT : Colors.BACKGROUND}
+								color={!completed ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
 					</View>

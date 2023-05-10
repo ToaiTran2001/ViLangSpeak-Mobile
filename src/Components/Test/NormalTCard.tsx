@@ -30,7 +30,7 @@ export const NormalTCard = (props: ITestProps) => {
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
                     <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>{name}</Heading>
-                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{progress ? progress.progress.score : 0}</Text>
+                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{progress ? progress.progress.score : 0}%</Text>
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category?.name}</Text>
