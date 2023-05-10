@@ -31,6 +31,9 @@ export const Question = (props: IQuestionProps) => {
         setSound(sound);
         console.log("Playing Sound");
         setIsLoadingSound(false);
+        await Audio.setAudioModeAsync({
+			playsInSilentModeIOS: true,
+		});
         await sound.playAsync();
     }
 
@@ -94,21 +97,21 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     pContainer: {
+        backgroundColor: Colors.FLASHCARD,
         borderRadius: 10,
         width: "96%",
         height: 120,
+        justifyContent: "center",
+        alignItems: "center",
         margin: 5,
         padding: 10,
-        backgroundColor: Colors.FLASHCARD,
-        justifyContent: "center",
-        alignItems: "center"
     },
     iContainer: {
-        height: 120,
-        margin: 5,
         backgroundColor: Colors.BACKGROUND,
+        height: 120,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        margin: 5,
     },
     iconContainer: {
         width: 50,

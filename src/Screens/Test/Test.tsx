@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading, HStack } from "native-base";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import {
     ListCategory,
     ListTestInfo,
@@ -21,6 +20,7 @@ import {
 } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalTCard, SmallTCard } from "@/Components";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface ITestProps {
     isLoading: boolean;
@@ -91,136 +91,136 @@ export const Test = (props: ITestProps) => {
 
     return (
         <View style={styles.container}>
-        <StatusBar style="auto" />
-        {isLoading ? (
-            <HStack space={2} justifyContent="center">
-            <Spinner accessibilityLabel="Loading posts" />
-            <Heading color={Colors.PRIMARY} fontSize="md">
-                Loading
-            </Heading>
-            </HStack>
-        ) : (
-            <>
-            <View style={styles.header}>
-                <View style={styles.textHeaderContainer}>
-                    <Heading style={styles.textHeader}>
-                        Test
+            <StatusBar style="auto" />
+            {isLoading ? (
+                <HStack space={2} justifyContent="center">
+                    <Spinner accessibilityLabel="Loading posts" />
+                    <Heading color={Colors.PRIMARY} fontSize="md">
+                        Loading
                     </Heading>
-                </View>
-                <View style={styles.logoHeaderContainer}>
-                    <Image
-                        style={styles.logo}
-                        source={require("../../../assets/logo.png")}
-                    />
-                </View>
-            </View>
-            <View style={styles.body}>
-                <View>
-                    <Heading style={styles.textTitle}>
-                        Recommend for you
-                    </Heading>
-                </View>
-                <View>
-                    <FlatList
-                        data={recommendTestsUser}
-                        keyExtractor={(item: TestInfoUser) => String(item.id)}
-                        renderItem={({ item }) => (
-                            <SmallTCard
-                                id={item.id}
-                                name={item.name}
-                                visible={item.visible}
-                                category={item.category}
-                                progress={item.progress}
-                                onPress={() => onNavigateTestDetail(currentAccount?.id, item.id)}
+                </HStack>
+            ) : (
+                <>
+                    <View style={styles.header}>
+                        <View style={styles.textHeaderContainer}>
+                            <Heading style={styles.textHeader}>
+                                Test
+                            </Heading>
+                        </View>
+                        <View style={styles.logoHeaderContainer}>
+                            <Image
+                                style={styles.logo}
+                                source={require("../../../assets/logo.png")}
                             />
-                        )}
-                        horizontal={true}
-                    />
-                </View>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <View>
-                        <Heading style={styles.textTitle}>
-                            All tests
-                        </Heading>
+                        </View>
                     </View>
-                    <TouchableOpacity 
-                        style={{ flexDirection: "row" }}
-                        onPress={() => onNavigateTestMore(currentAccount?.id, allTestsUser)}
-                    >
-                        <Text
-                            style={styles.textNormal}
-                        >
-                            More
-                        </Text>
-                        <Ionicons
-                            name="chevron-forward"
-                            size={IconSize.SMALL}
-                            color={Colors.TEXT}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <FlatList
-                        data={allTestsUser}
-                        keyExtractor={(item: TestInfoUser) => String(item.id)}
-                        renderItem={({ item }) => (
-                            <NormalTCard
-                                id={item.id}
-                                name={item.name}
-                                visible={item.visible}
-                                category={item.category}
-                                progress={item.progress}
-                                onPress={() => onNavigateTestDetail(currentAccount?.id, item.id)}
-                            />
-                        )}
-                        ListFooterComponent={() => {
-                            return loadMore ? (
-                                <View
-                                    style={{
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        padding: 5,
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            fontSize: FontSize.SMALL,
-                                            color: Colors.PRIMARY,
-                                        }}
-                                    >
-                                        Load More
-                                    </Text>
-                                    <Spinner
-                                        accessibilityLabel="Loading posts"
-                                        color={Colors.PRIMARY}
-                                        size={IconSize.REGULAR}
+                    <View style={styles.body}>
+                        <View>
+                            <Heading style={styles.textTitle}>
+                                Recommend for you
+                            </Heading>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <FlatList
+                                data={recommendTestsUser}
+                                keyExtractor={(item: TestInfoUser) => String(item.id)}
+                                renderItem={({ item }) => (
+                                    <SmallTCard
+                                        id={item.id}
+                                        name={item.name}
+                                        visible={item.visible}
+                                        category={item.category}
+                                        progress={item.progress}
+                                        onPress={() => onNavigateTestDetail(currentAccount?.id, item.id)}
                                     />
-                                </View>
-                            ) : null;
-                        }}
-                        onEndReached={() => {
-                            setLoadMore(true);
-                            setTimeout(() => {
-                            setAllTestsUser(
-                                allTests
-                                ? allTests.tests.concat([]).map(mapTestUser as any)
-                                : []
-                            );
-                            setLoadMore(false);
-                            }, 1000);
-                        }}
-                        onEndReachedThreshold={0.1}
-                    />
-                </View>
-            </View>
-            </>
-        )}
+                                )}
+                                horizontal={true}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                            }}
+                        >
+                            <View>
+                                <Heading style={styles.textTitle}>
+                                    All tests
+                                </Heading>
+                            </View>
+                            <TouchableOpacity 
+                                style={{ flexDirection: "row" }}
+                                onPress={() => onNavigateTestMore(currentAccount?.id, allTestsUser)}
+                            >
+                                <Text
+                                    style={styles.textNormal}
+                                >
+                                    More
+                                </Text>
+                                <Ionicons
+                                    name="chevron-forward"
+                                    size={IconSize.SMALL}
+                                    color={Colors.TEXT}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 2 }}>
+                            <FlatList
+                                data={allTestsUser}
+                                keyExtractor={(item: TestInfoUser) => String(item.id)}
+                                renderItem={({ item }) => (
+                                    <NormalTCard
+                                        id={item.id}
+                                        name={item.name}
+                                        visible={item.visible}
+                                        category={item.category}
+                                        progress={item.progress}
+                                        onPress={() => onNavigateTestDetail(currentAccount?.id, item.id)}
+                                    />
+                                )}
+                                ListFooterComponent={() => {
+                                    return loadMore ? (
+                                        <View
+                                            style={{
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                padding: 5,
+                                            }}
+                                        >
+                                            <Text
+                                                style={{
+                                                    fontSize: FontSize.SMALL,
+                                                    color: Colors.PRIMARY,
+                                                }}
+                                            >
+                                                Load More
+                                            </Text>
+                                            <Spinner
+                                                accessibilityLabel="Loading posts"
+                                                color={Colors.PRIMARY}
+                                                size={IconSize.REGULAR}
+                                            />
+                                        </View>
+                                    ) : null;
+                                }}
+                                onEndReached={() => {
+                                    setLoadMore(true);
+                                    setTimeout(() => {
+                                    setAllTestsUser(
+                                        allTests
+                                        ? allTests.tests.concat([]).map(mapTestUser as any)
+                                        : []
+                                    );
+                                    setLoadMore(false);
+                                    }, 1000);
+                                }}
+                                onEndReachedThreshold={0.1}
+                            />
+                        </View>
+                    </View>
+                </>
+            )}
         </View>
     );
 };
@@ -252,7 +252,9 @@ const styles = StyleSheet.create({
     body: {
         flex: 8,
         width: "100%",
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 10,
         overflow: "hidden",
     },
     logo: {

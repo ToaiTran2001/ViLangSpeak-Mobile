@@ -6,16 +6,23 @@ import {
     useLazyGetAllProgressesTestQuery,
     useLazyGetUserProfileQuery,
 } from "@/Services";
-import { RootScreens } from "..";
+import { MainScreens, RootScreens } from "..";
 import { Test, TestInfoUser } from "./Test";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
-import { MainScreenProps } from "../Home";
-import { useIsFocused } from "@react-navigation/native";
+import { CompositeScreenProps, useIsFocused } from "@react-navigation/native";
+import { RootStackParamList } from "@/Navigation";
+import { MainBottomBarParamList } from "@/Navigation/Main";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+type TestScreenProps = CompositeScreenProps<
+    NativeStackScreenProps<MainBottomBarParamList, MainScreens.TEST>,
+    NativeStackScreenProps<RootStackParamList>
+>;
 
 export const TestContainer = ({
     navigation
-}: MainScreenProps) => {
+}: TestScreenProps) => {
     const userId = useSelector(selectAuth()).userId;
 
     // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]

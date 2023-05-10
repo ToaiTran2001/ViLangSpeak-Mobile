@@ -102,7 +102,7 @@ export interface RecordProgressInfo {
   record: {
     timestamp: number;
     value: number;
-    account_id: string;
+    account_id: number;
   };
 }
 

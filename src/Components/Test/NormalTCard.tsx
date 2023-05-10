@@ -78,16 +78,16 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 80,
-        height: 60,
+        width: 64,
+        height: 64,
     },
     button: {
         width: 72,
         height: 36,
         borderRadius: 10,
-        marginRight: 30,
-        padding: 5,
         justifyContent: "center",
         alignItems: "center",
+        marginRight: 30,
+        padding: 5,
     }
 });

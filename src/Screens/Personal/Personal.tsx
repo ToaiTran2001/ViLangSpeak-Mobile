@@ -10,12 +10,12 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading, HStack } from "native-base";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { NormalACard } from "@/Components";
 import { Profile, ListAchievement, Achievement } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { useDispatch } from "react-redux";
 import { logOut } from "@/Store/reducers";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface IPersonalProps {
     profile: Profile | undefined;
@@ -81,232 +81,235 @@ export const Personal = (props: IPersonalProps) => {
 
     return (
         <View style={styles.container}>
-        <StatusBar style="auto" />
-        {isLoading ? (
-            <HStack space={2} justifyContent="center">
-            <Spinner accessibilityLabel="Loading posts" />
-            <Heading color={Colors.PRIMARY} fontSize="md">
-                Loading
-            </Heading>
-            </HStack>
-        ) : (
-            <>
-            <View style={styles.header}>
-                <View style={styles.textHeaderContainer}>
-                    <Heading style={styles.textHeader}>
-                        Personal
+            <StatusBar style="auto" />
+            {isLoading ? (
+                <HStack space={2} justifyContent="center">
+                    <Spinner accessibilityLabel="Loading posts" />
+                    <Heading color={Colors.PRIMARY} fontSize="md">
+                        Loading
                     </Heading>
-                </View>
-                <View style={styles.logoHeaderContainer}>
-                    <Image
-                        style={styles.logo}
-                        source={require("../../../assets/logo.png")}
-                    />
-                </View>
-            </View>
-            <View style={styles.body}>
-                <View>
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}
-                        onPress={() => setShowProfile(!showProfile)}
-                    >
-                        <Heading style={styles.textTitle}>
-                            Profile
-                        </Heading>
-                        <View>
-                            {
-                                showProfile
-                                ?
-                                    <Ionicons
-                                        name="chevron-down"
-                                        size={IconSize.SMALL}
-                                        color={Colors.TEXT}
-                                    />
-                                :
-                                    <Ionicons
-                                        name="chevron-back"
-                                        size={IconSize.SMALL}
-                                        color={Colors.TEXT}
-                                    />
-                            }
+                </HStack>
+            ) : (
+                <>
+                    <View style={styles.header}>
+                        <View style={styles.textHeaderContainer}>
+                            <Heading style={styles.textHeader}>
+                                Personal
+                            </Heading>
                         </View>
-                    </TouchableOpacity>
-                    {
-                        showProfile 
-                        ?
-                            <Text style={styles.textNormal}>
-                                Username: {currentAccount?.name}
-                            </Text>
-                        :
-                            null
-                    }
-                </View>
-                <View style={{ maxHeight: "70%", overflow: "hidden" }}>
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}
-                        onPress={() => setShowAchievements(!showAchievements)}
-                    >
-                        <Heading style={styles.textTitle}>
-                            Achievements
-                        </Heading>
-                        <View>
-                        {
-                                showAchievements
-                                ?
-                                    <Ionicons
-                                        name="chevron-down"
-                                        size={IconSize.SMALL}
-                                        color={Colors.TEXT}
-                                    />
-                                :
-                                    <Ionicons
-                                        name="chevron-back"
-                                        size={IconSize.SMALL}
-                                        color={Colors.TEXT}
-                                    />
-                            }
+                        <View style={styles.logoHeaderContainer}>
+                            <Image
+                                style={styles.logo}
+                                source={require("../../../assets/logo.png")}
+                            />
                         </View>
-                    </TouchableOpacity>
-                    {
-                        showAchievements
-                        ? 
-                            <View>
-                                <FlatList
-                                    data={currentAchievements}
-                                    keyExtractor={(item: Achievement) => String(item.id)}
-                                    renderItem={({ item }) => (
-                                        <NormalACard
-                                            id={item.id}
-                                            name={item.name}
-                                            image={item.image}
-                                            date={item.date}
-                                        />
-                                    )}
-                                    ListFooterComponent={() => {
-                                        return loadMore ? (
-                                        <View
-                                            style={{
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                padding: 5,
-                                            }}
-                                        >
-                                            <Text
-                                                style={{
-                                                    fontSize: FontSize.SMALL,
-                                                    color: Colors.PRIMARY,
-                                                }}
-                                                >
-                                                Load More
-                                            </Text>
-                                            <Spinner
-                                                accessibilityLabel="Loading posts"
-                                                color={Colors.PRIMARY}
-                                                size={IconSize.REGULAR}
+                    </View>
+                    <View style={styles.body}>
+                        <View>
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                }}
+                                onPress={() => setShowProfile(!showProfile)}
+                            >
+                                <Heading style={styles.textTitle}>
+                                    Profile
+                                </Heading>
+                                <View>
+                                    {
+                                        showProfile
+                                        ?
+                                            <Ionicons
+                                                name="chevron-down"
+                                                size={IconSize.SMALL}
+                                                color={Colors.TEXT}
                                             />
-                                        </View>
-                                        ) : null;
-                                    }}
-                                    onEndReached={() => {
-                                        setLoadMore(true);
-                                        setTimeout(() => {
-                                        setCurrentAchievements(
-                                            listAchievement?.achievements.concat([])
-                                        );
-                                        setLoadMore(false);
-                                        }, 1000);
-                                    }}
-                                    onEndReachedThreshold={0.1}
-                                />
-                            </View>
-                        :
-                            null
-                    }
-                </View>
-                <View>
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}
-                        onPress={() => setShowSettings(!showSettings)}
-                    >
-                        <Heading style={styles.textTitle}>
-                            Settings
-                        </Heading>
-                        <View>
-                        {
-                            showSettings
-                            ?
-                                <Ionicons
-                                    name="chevron-down"
-                                    size={IconSize.SMALL}
-                                    color={Colors.TEXT}
-                                />
-                            :
-                                <Ionicons
-                                    name="chevron-back"
-                                    size={IconSize.SMALL}
-                                    color={Colors.TEXT}
-                                />
-                        }
+                                        :
+                                            <Ionicons
+                                                name="chevron-back"
+                                                size={IconSize.SMALL}
+                                                color={Colors.TEXT}
+                                            />
+                                    }
+                                </View>
+                            </TouchableOpacity>
+                            {
+                                showProfile 
+                                ?
+                                    <>
+                                        <Text style={styles.textNormal}>
+                                            Name: {currentAccount?.name}
+                                        </Text>
+                                        <Text style={styles.textNormal}>
+                                            Birthday: {currentAccount?.birthday}
+                                        </Text>
+                                    </>
+                                :
+                                    null
+                            }
                         </View>
-                    </TouchableOpacity>
-                    {
-                        showSettings
-                        ?
-                            <>
-                                <Text style={styles.textNormal}>
-                                    Language: English
-                                </Text>
-                                <Text style={styles.textNormal}>
-                                    Theme: Default
-                                </Text>
-                            </>
-                        :
-                            null
-                    }
-                </View>
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <TouchableOpacity
-                        onPress={createAboutAlert}
-                        style={styles.button}
-                    >
-                        <Text
-                            style={styles.textNormal}
+                        <View style={{ maxHeight: "65%", overflow: "hidden" }}>
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                }}
+                                onPress={() => setShowAchievements(!showAchievements)}
+                            >
+                                <Heading style={styles.textTitle}>
+                                    Achievements
+                                </Heading>
+                                <View>
+                                {
+                                        showAchievements
+                                        ?
+                                            <Ionicons
+                                                name="chevron-down"
+                                                size={IconSize.SMALL}
+                                                color={Colors.TEXT}
+                                            />
+                                        :
+                                            <Ionicons
+                                                name="chevron-back"
+                                                size={IconSize.SMALL}
+                                                color={Colors.TEXT}
+                                            />
+                                    }
+                                </View>
+                            </TouchableOpacity>
+                            {
+                                showAchievements
+                                ? 
+                                    <FlatList
+                                        data={currentAchievements}
+                                        keyExtractor={(item: Achievement) => String(item.id)}
+                                        renderItem={({ item }) => (
+                                            <NormalACard
+                                                id={item.id}
+                                                name={item.name}
+                                                image={item.image}
+                                                date={item.date}
+                                            />
+                                        )}
+                                        ListFooterComponent={() => {
+                                            return loadMore ? (
+                                            <View
+                                                style={{
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    padding: 5,
+                                                }}
+                                            >
+                                                <Text
+                                                    style={{
+                                                        fontSize: FontSize.SMALL,
+                                                        color: Colors.PRIMARY,
+                                                    }}
+                                                    >
+                                                    Load More
+                                                </Text>
+                                                <Spinner
+                                                    accessibilityLabel="Loading posts"
+                                                    color={Colors.PRIMARY}
+                                                    size={IconSize.REGULAR}
+                                                />
+                                            </View>
+                                            ) : null;
+                                        }}
+                                        onEndReached={() => {
+                                            setLoadMore(true);
+                                            setTimeout(() => {
+                                            setCurrentAchievements(
+                                                listAchievement?.achievements.concat([])
+                                            );
+                                            setLoadMore(false);
+                                            }, 1000);
+                                        }}
+                                        onEndReachedThreshold={0.1}
+                                    />
+                                :
+                                    null
+                            }
+                        </View>
+                        <View>
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                }}
+                                onPress={() => setShowSettings(!showSettings)}
+                            >
+                                <Heading style={styles.textTitle}>
+                                    Settings
+                                </Heading>
+                                <View>
+                                {
+                                    showSettings
+                                    ?
+                                        <Ionicons
+                                            name="chevron-down"
+                                            size={IconSize.SMALL}
+                                            color={Colors.TEXT}
+                                        />
+                                    :
+                                        <Ionicons
+                                            name="chevron-back"
+                                            size={IconSize.SMALL}
+                                            color={Colors.TEXT}
+                                        />
+                                }
+                                </View>
+                            </TouchableOpacity>
+                            {
+                                showSettings
+                                ?
+                                    <>
+                                        <Text style={styles.textNormal}>
+                                            Language: English
+                                        </Text>
+                                        <Text style={styles.textNormal}>
+                                            Theme: Default
+                                        </Text>
+                                    </>
+                                :
+                                    null
+                            }
+                        </View>
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                            }}
                         >
-                            About
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={createLogoutAlert}
-                        style={styles.button}
-                    >
-                        <Text
-                            style={styles.textNormal}
-                        >
-                            Log out
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            </>
-        )}
+                            <TouchableOpacity
+                                onPress={createAboutAlert}
+                                style={styles.button}
+                            >
+                                <Text
+                                    style={styles.textNormal}
+                                >
+                                    About
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={createLogoutAlert}
+                                style={styles.button}
+                            >
+                                <Text
+                                    style={styles.textNormal}
+                                >
+                                    Log out
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </>
+            )}
         </View>
     );
 };
@@ -356,10 +359,10 @@ const styles = StyleSheet.create({
         width: 84,
         height: 36,
         borderRadius: 10,
-        marginVertical: 5,
-        padding: 5,
         justifyContent: "center",
         alignItems: "center",
+        marginVertical: 5,
+        padding: 5,
     },
     textHeader: {
         fontSize: FontSize.LARGE,

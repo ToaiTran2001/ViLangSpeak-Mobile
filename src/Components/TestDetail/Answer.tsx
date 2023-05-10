@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Heading } from "native-base";
 import { Colors, FontSize } from "@/Theme";
-import { Category, Progress } from "@/Services";
 import { Config } from "@/Config";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
@@ -43,7 +42,7 @@ export const Answer = (props: IAnswerProps) => {
 
     useEffect(() => {
         if (isSubmitted) {
-            if ((isChoosed && answer === 1) || (!isChoosed && answer === 0)) {
+            if ((isChoosed && answer === 1) || (!isChoosed && answer === 0))  {
                 setIsCorrect(true);
             }
         }

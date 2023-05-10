@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { HStack, Spinner, Heading } from "native-base";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import {
     Profile,
     ListLessonInfo,
@@ -21,6 +20,7 @@ import {
 } from "@/Services";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalLCard, SmallLCard } from "@/Components";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface IHomeProps {
     isLoading: boolean;
@@ -96,134 +96,134 @@ export const Home = (props: IHomeProps) => {
             <StatusBar style="auto" />
             {isLoading ? (
                 <HStack space={2} justifyContent="center">
-                <Spinner accessibilityLabel="Loading posts" />
-                <Heading color={Colors.PRIMARY} fontSize="md">
-                    Loading
-                </Heading>
+                    <Spinner accessibilityLabel="Loading posts" />
+                    <Heading color={Colors.PRIMARY} fontSize="md">
+                        Loading
+                    </Heading>
                 </HStack>
             ) : (
                 <>
-                <View style={styles.header}>
-                    <View style={styles.textHeaderContainer}>
-                        <Heading style={styles.textHeader}>
-                            Hi, {currentAccount?.name}
-                        </Heading>
-                        <Heading style={styles.textHeader}>
-                            Choose a lesson!
-                        </Heading>
-                    </View>
-                    <View style={styles.logoHeaderContainer}>
-                        <Image
-                            style={styles.logo}
-                            source={require("../../../assets/logo.png")}
-                        />
-                    </View>
-                </View>
-                <View style={styles.body}>
-                    <View>
-                        <Heading style={styles.textTitle}>
-                            Recommend for you
-                        </Heading>
-                    </View>
-                    <View>
-                        <FlatList
-                            data={recommendLessonsUser}
-                            keyExtractor={(item: LessonInfoUser) => String(item.id)}
-                            renderItem={({ item }) => (
-                                <SmallLCard
-                                    id={item.id}
-                                    name={item.name}
-                                    visible={item.visible}
-                                    category={item.category}
-                                    progress={item.progress}
-                                    onPress={() => onNavigateLesson(currentAccount?.id, item.id)}
-                                />
-                            )}
-                            horizontal={true}
-                        />
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                        }}
-                    >
-                        <Heading style={styles.textTitle}>
-                            All lessons
-                        </Heading>
-                        <TouchableOpacity 
-                            style={{ flexDirection: "row" }}
-                            onPress={() => onNavigateHomeMore(currentAccount?.id, allLessonsUser)}
-                        >
-                            <Text
-                                style={styles.textNormal}
-                            >
-                                More
-                            </Text>
-                            <Ionicons
-                                name="chevron-forward"
-                                size={IconSize.SMALL}
-                                color={Colors.TEXT}
+                    <View style={styles.header}>
+                        <View style={styles.textHeaderContainer}>
+                            <Heading style={styles.textHeader}>
+                                Hi, {currentAccount?.name}
+                            </Heading>
+                            <Heading style={styles.textHeader}>
+                                Choose a lesson!
+                            </Heading>
+                        </View>
+                        <View style={styles.logoHeaderContainer}>
+                            <Image
+                                style={styles.logo}
+                                source={require("../../../assets/logo.png")}
                             />
-                        </TouchableOpacity>
+                        </View>
                     </View>
-                    <View>
-                        <FlatList
-                            data={allLessonsUser}
-                            keyExtractor={(item: LessonInfoUser) => String(item.id)}
-                            renderItem={({ item }) => (
-                                <NormalLCard
-                                    id={item.id}
-                                    name={item.name}
-                                    visible={item.visible}
-                                    category={item.category}
-                                    progress={item.progress}
-                                    onPress={() => onNavigateLesson(currentAccount?.id, item.id)}
+                    <View style={styles.body}>
+                        <View>
+                            <Heading style={styles.textTitle}>
+                                Recommend for you
+                            </Heading>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <FlatList
+                                data={recommendLessonsUser}
+                                keyExtractor={(item: LessonInfoUser) => String(item.id)}
+                                renderItem={({ item }) => (
+                                    <SmallLCard
+                                        id={item.id}
+                                        name={item.name}
+                                        visible={item.visible}
+                                        category={item.category}
+                                        progress={item.progress}
+                                        onPress={() => onNavigateLesson(currentAccount?.id, item.id)}
+                                    />
+                                )}
+                                horizontal={true}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Heading style={styles.textTitle}>
+                                All lessons
+                            </Heading>
+                            <TouchableOpacity 
+                                style={{ flexDirection: "row" }}
+                                onPress={() => onNavigateHomeMore(currentAccount?.id, allLessonsUser)}
+                            >
+                                <Text
+                                    style={styles.textNormal}
+                                >
+                                    More
+                                </Text>
+                                <Ionicons
+                                    name="chevron-forward"
+                                    size={IconSize.SMALL}
+                                    color={Colors.TEXT}
                                 />
-                            )}
-                            ListFooterComponent={() => {
-                                return loadMore ? (
-                                    <View
-                                        style={{
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                            padding: 5,
-                                        }}
-                                    >
-                                        <Text
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 2 }}>
+                            <FlatList
+                                data={allLessonsUser}
+                                keyExtractor={(item: LessonInfoUser) => String(item.id)}
+                                renderItem={({ item }) => (
+                                    <NormalLCard
+                                        id={item.id}
+                                        name={item.name}
+                                        visible={item.visible}
+                                        category={item.category}
+                                        progress={item.progress}
+                                        onPress={() => onNavigateLesson(currentAccount?.id, item.id)}
+                                    />
+                                )}
+                                ListFooterComponent={() => {
+                                    return loadMore ? (
+                                        <View
                                             style={{
-                                                fontSize: FontSize.SMALL,
-                                                color: Colors.PRIMARY,
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                padding: 5,
                                             }}
                                         >
-                                            Load More
-                                        </Text>
-                                        <Spinner
-                                            accessibilityLabel="Loading posts"
-                                            color={Colors.PRIMARY}
-                                            size={IconSize.REGULAR}
-                                        />
-                                    </View>
-                                ) : null;
-                            }}
-                            onEndReached={() => {
-                                setLoadMore(true);
-                                setTimeout(() => {
-                                setAllLessonsUser(
-                                    allLessons
-                                    ? allLessons.lessons
-                                        .concat([])
-                                        .map(mapLessonUser as any)
-                                    : []
-                                );
-                                setLoadMore(false);
-                                }, 1000);
-                            }}
-                            onEndReachedThreshold={0.1}
-                        />
+                                            <Text
+                                                style={{
+                                                    fontSize: FontSize.SMALL,
+                                                    color: Colors.PRIMARY,
+                                                }}
+                                            >
+                                                Load More
+                                            </Text>
+                                            <Spinner
+                                                accessibilityLabel="Loading posts"
+                                                color={Colors.PRIMARY}
+                                                size={IconSize.REGULAR}
+                                            />
+                                        </View>
+                                    ) : null;
+                                }}
+                                onEndReached={() => {
+                                    setLoadMore(true);
+                                    setTimeout(() => {
+                                    setAllLessonsUser(
+                                        allLessons
+                                        ? allLessons.lessons
+                                            .concat([])
+                                            .map(mapLessonUser as any)
+                                        : []
+                                    );
+                                    setLoadMore(false);
+                                    }, 1000);
+                                }}
+                                onEndReachedThreshold={0.1}
+                            />
+                        </View>
                     </View>
-                </View>
                 </>
             )}
         </View>
@@ -257,7 +257,9 @@ const styles = StyleSheet.create({
     body: {
         flex: 8,
         width: "100%",
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 10,
         overflow: "hidden",
     },
     logo: {

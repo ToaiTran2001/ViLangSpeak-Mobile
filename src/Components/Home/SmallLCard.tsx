@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Heading } from "native-base";
 import { Colors, FontSize } from "@/Theme";
 import { Category, Progress } from "@/Services";

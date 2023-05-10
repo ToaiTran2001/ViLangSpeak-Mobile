@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading } from "native-base";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalLCard } from "@/Components";
 import { LessonInfoUser } from "../Home/Home";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface IHomeMoreProps {
     accountId: number | undefined;
@@ -58,7 +58,7 @@ export const HomeMore = (props: IHomeMoreProps) => {
                 </View>
             </View>
             <View style={styles.body}>
-                <View>
+                <View style={{ flex: 1 }}>
                     <FlatList
                         data={allLessonsUser}
                         keyExtractor={(item: LessonInfoUser) => String(item.id)}
