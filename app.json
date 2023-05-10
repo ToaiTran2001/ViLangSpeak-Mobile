@@ -1,8 +1,10 @@
 {
   "expo": {
     "name": "ViLangSpeak",
-    "slug": "ViLangSpeak",
+    "slug": "vilangspeak",
     "version": "1.0.0",
+    "privacy": "public",
+    "description": "An app help people learn Vietnamses",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,7 +14,8 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/3d225bb0-bbc3-41c8-9f40-a301e79dcc0d"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -29,7 +32,16 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "sdkVersion": "47.0.0"
+    "sdkVersion": "47.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "3d225bb0-bbc3-41c8-9f40-a301e79dcc0d"
+      }
+    },
+    "owner": "wicii",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   },
   "name": "vilangspeak"
 }
