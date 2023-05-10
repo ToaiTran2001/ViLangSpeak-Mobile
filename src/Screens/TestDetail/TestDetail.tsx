@@ -286,6 +286,26 @@ export const TestDetail = (props: ITestDetailProps) => {
 					<View style={styles.footer}>
 						<TouchableOpacity 
 							onPress={() => {
+								if (isSubmitted) {
+									dictResult[id] = {
+										A: {
+											isChoosed: isChoosedA,
+											isCorrect: isCorrectA, 
+										},
+										B: {
+											isChoosed: isChoosedB,
+											isCorrect: isCorrectB, 
+										},
+										C: {
+											isChoosed: isChoosedC,
+											isCorrect: isCorrectC, 
+										},
+										D: {
+											isChoosed: isChoosedD,
+											isCorrect: isCorrectD, 
+										},
+									};
+								}
 								setId(id-1 > 0 ? id-1 : 0);
 								setIsChoosedA(false);
 								setIsChoosedB(false);
