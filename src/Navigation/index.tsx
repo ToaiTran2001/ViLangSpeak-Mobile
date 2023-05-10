@@ -9,22 +9,22 @@ import { LoginContainer } from "@/Screens/Login";
 import { RegisterContainer } from "@/Screens/Register";
 import { LessonContainer } from "@/Screens/Lesson";
 import { TestDetailContainer } from "@/Screens/TestDetail";
+import { HomeMoreContainer } from "@/Screens/HomeMore";
+import { TestMoreContainer } from "@/Screens/TestMore";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
 import { LessonInfoUser } from "@/Screens/Home/Home";
 import { TestInfoUser } from "@/Screens/Test/Test";
-import { HomeMoreContainer } from "@/Screens/HomeMore";
-import { TestMoreContainer } from "@/Screens/TestMore";
 
 export type RootStackParamList = {
-  [RootScreens.WELCOME]: undefined;
-  [RootScreens.LOGIN]: undefined;
-  [RootScreens.REGISTER]: undefined;
-  [RootScreens.MAIN]: undefined;
-  [RootScreens.HOMEMORE]: { accountId: number | undefined, allLessonsUser: LessonInfoUser[] };
-  [RootScreens.TESTMORE]: { accountId: number | undefined, allTestsUser: TestInfoUser[] };
-  [RootScreens.LESSON]: { accountId: number | undefined, lessonId: number };
-  [RootScreens.TESTDETAIL]: { accountId: number | undefined, testId: number };
+	[RootScreens.WELCOME]: undefined;
+	[RootScreens.LOGIN]: undefined;
+	[RootScreens.REGISTER]: undefined;
+	[RootScreens.MAIN]: undefined;
+	[RootScreens.HOMEMORE]: { accountId: number | undefined, allLessonsUser: LessonInfoUser[] };
+	[RootScreens.TESTMORE]: { accountId: number | undefined, allTestsUser: TestInfoUser[] };
+	[RootScreens.LESSON]: { accountId: number | undefined, lessonId: number };
+	[RootScreens.TESTDETAIL]: { accountId: number | undefined, testId: number };
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();

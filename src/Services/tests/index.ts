@@ -97,7 +97,7 @@ export interface RecordProgressTestInfo {
   record: {
     timestamp: number;
     score: number;
-    account_id: string;
+    account_id: number;
   };
 }
 

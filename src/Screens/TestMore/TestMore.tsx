@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading } from "native-base";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalTCard } from "@/Components";
 import { TestInfoUser } from "../Test/Test";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface IHomeMoreProps {
     accountId: number | undefined;

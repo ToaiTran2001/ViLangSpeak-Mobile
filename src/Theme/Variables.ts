@@ -26,6 +26,7 @@ export enum Colors {
   BUTTON_START = "#2C64F6",
   SWITCH_CIRCLE_ON = "#069035",
   PRIMARY_BOLD = "#05BAE1",
+  ICON_GRAY = "#A9A9AC",
 }
 
 export enum NavigationColors {

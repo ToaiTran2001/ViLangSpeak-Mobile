@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/Navigation";
+import { MainBottomBarParamList } from "@/Navigation/Main";
 import {
     useLazyGetRmdLessonsQuery,
     useLazyGetAllLessonsQuery,
@@ -8,20 +9,20 @@ import {
     useLazyGetUserProfileQuery,
     useLazyGetAllCategoriesQuery,
 } from "@/Services";
-import { RootScreens } from "..";
+import { MainScreens, RootScreens } from "..";
 import { Home, LessonInfoUser } from "./Home";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/Store/reducers";
-import { useIsFocused } from '@react-navigation/native';
+import { CompositeScreenProps, useIsFocused } from '@react-navigation/native';
 
-export type MainScreenProps = NativeStackScreenProps<
-    RootStackParamList,
-    RootScreens.MAIN
+type HomeScreenProps = CompositeScreenProps<
+    NativeStackScreenProps<MainBottomBarParamList, MainScreens.HOME>,
+    NativeStackScreenProps<RootStackParamList>
 >;
 
 export const HomeContainer = ({
     navigation
-}: MainScreenProps) => {
+}: HomeScreenProps) => {
     const userId = useSelector(selectAuth()).userId;
 
     // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
@@ -55,15 +56,12 @@ export const HomeContainer = ({
             allLessons[0](userIdString);
             allProgresses[0](userIdString);
         }
-    }, [
-        userId,
-    ]);
+    }, [userId]);
 
     const isFocused = useIsFocused();
 
     useEffect(() => {
         if (isFocused) {
-            // Update the state you want to be updated
             if (userId) {
                 const userIdString = userId.toString();
                 recommendLessons[0](userIdString);
@@ -78,7 +76,7 @@ export const HomeContainer = ({
     };
 
     const onNavigateHomeMore = (accountId: number | undefined, allLessonsUser: LessonInfoUser[]) => {
-        navigation.push(RootScreens.HOMEMORE, {accountId: accountId, allLessonsUser: allLessonsUser });
+        navigation.push(RootScreens.HOMEMORE, { accountId: accountId, allLessonsUser: allLessonsUser });
     }
 
     return (
