@@ -25,12 +25,12 @@ export const NormalTCard = (props: ITestProps) => {
             style={[styles.container, {backgroundColor: containerColor}]}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}}></Image>
+                <Image style={styles.thumbnail} source={{uri: category?.image ? String(new URL((category?.image === "" ? defaultImage : category?.image), Config.API_APP_URL)) : undefined}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
                     <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>{name}</Heading>
-                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{progress ? progress.progress.score : 0}%</Text>
+                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 20}}>{progress ? progress.progress.score : 0}%</Text>
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category?.name}</Text>
@@ -50,9 +50,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "row",
-        borderRadius: 20,
+        borderRadius: 15,
         width: "96%",
-        height: 96,
+        height: 90,
         margin: 5,
     },
     thumbnailContainer: {
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 64,
-        height: 64,
+        width: 60,
+        height: 60,
     },
     button: {
         width: 72,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
-        marginRight: 30,
+        marginRight: 20,
         padding: 5,
     }
 });

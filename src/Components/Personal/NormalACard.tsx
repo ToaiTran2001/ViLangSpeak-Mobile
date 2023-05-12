@@ -16,7 +16,7 @@ export const NormalACard = (props: Achievement) => {
             onPress={() => {return null;}}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (image === "" ? defaultImage : image)}}></Image>
+                <Image style={styles.thumbnail} source={{uri: String(new URL((image === "" ? defaultImage : image), Config.API_APP_URL))}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>{name}</Heading>
@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         backgroundColor: Colors.SUCCESS,
-        borderRadius: 20,
+        borderRadius: 15,
         width: "96%",
-        height: 96,
+        height: 90,
         margin: 5,
     },
     thumbnailContainer: {
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 64,
-        height: 64,
+        width: 60,
+        height: 60,
     }
 });

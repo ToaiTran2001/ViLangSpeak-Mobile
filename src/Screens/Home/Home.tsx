@@ -125,7 +125,7 @@ export const Home = (props: IHomeProps) => {
                                 Recommend for you
                             </Heading>
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 4 }}>
                             <FlatList
                                 data={recommendLessonsUser}
                                 keyExtractor={(item: LessonInfoUser) => String(item.id)}
@@ -168,7 +168,7 @@ export const Home = (props: IHomeProps) => {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <View style={{ flex: 2 }}>
+                        <View style={{ flex: 9 }}>
                             <FlatList
                                 data={allLessonsUser}
                                 keyExtractor={(item: LessonInfoUser) => String(item.id)}

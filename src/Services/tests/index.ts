@@ -67,6 +67,7 @@ export interface AnswerInfo {
 export interface QuestionInfo {
   id: number;
   question_type: string;
+  description: string;
   type: string;
   content: string;
   items: AnswerInfo[];

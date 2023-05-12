@@ -10,7 +10,7 @@ import {
 	TouchableOpacity,
 	Dimensions,
 } from 'react-native';
-import { Colors } from '@/Theme';
+import { Colors, FontSize } from '@/Theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,19 +18,19 @@ const slides = [
 	{
 		id: '1',
 		image: require('../../../assets/welcome_1.png'),
-		title: 'Best Vietnamese Pronunciation',
+		title: 'Perfecting your Vietnamese pronunciation',
 		subtitle: '',
 	},
 	{
 		id: '2',
 		image: require('../../../assets/welcome_2.png'),
-		title: 'Achieve Your Goals',
+		title: 'Enculturation through vocabulary',
 		subtitle: '',
 	},
 	{
 		id: '3',
 		image: require('../../../assets/welcome_3.png'),
-		title: 'Increase Your Value',
+		title: 'Travel with ease',
 		subtitle: '',
 	},
 ];
@@ -199,7 +199,7 @@ export const Welcome = (props: IWelcomeProps) => {
 const styles = StyleSheet.create({
 	subtitle: {
 		color: Colors.TEXT,
-		fontSize: 13,
+		fontSize: FontSize.TINY,
 		marginTop: 10,
 		maxWidth: '70%',
 		textAlign: 'center',
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		color: Colors.TEXT,
-		fontSize: 22,
+		fontSize: FontSize.REGULAR,
 		fontWeight: 'bold',
 		marginTop: 20,
 		textAlign: 'center',

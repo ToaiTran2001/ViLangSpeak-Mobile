@@ -19,16 +19,16 @@ import { Result } from "./TestDetailContainer";
 
 export interface ITestDetailProps {
 	isLoading: boolean;
+	accountId: number | undefined;
 	test: TestDetailData | undefined;
 	testProgress: number | undefined;
-	accountId: number | undefined;
 	dictResult: {[id: number]: Result;};
 	onNavigateTest: () => void;
 };
 
 export const TestDetail = (props: ITestDetailProps) => {
-	const { isLoading, test, testProgress, accountId, dictResult, onNavigateTest } = props;
-
+	const { isLoading, accountId, test, testProgress, dictResult, onNavigateTest } = props;
+	
 	const [currentTest, setCurrentTest] = useState(test);
 
 	const [id, setId] = useState(0);
@@ -169,12 +169,27 @@ export const TestDetail = (props: ITestDetailProps) => {
 								questionType={currentTest?.questions.value[id].question_type}
 								type={currentTest?.questions.value[id].type}
 								content={currentTest?.questions.value[id].content}
+								description={currentTest?.questions.value[id].description}
 							/>
 						</View>
 						<View style={{ flex: 3 }}>
 							<View>
 								<Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
-									Choose the correct answers
+									{
+										currentTest?.questions.value[id].type === "a"
+										?
+											currentTest?.questions.value[id].question_type === "sc"
+											?
+												"Listen and Choose the correct answer"
+											:
+												"Listen and Choose the correct answers"
+										:
+											currentTest?.questions.value[id].question_type === "sc"
+											?
+												"Choose the correct answer"
+											:
+												"Choose the correct answers"
+									}
 								</Heading>
 							</View>
 							<View style={{ height: "90%", marginVertical: 10 }}>
@@ -318,7 +333,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 						>
 							<Ionicons
 								name="chevron-back"
-								size={IconSize.LARGE}
+								size={IconSize.HUGE}
 								color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -370,7 +385,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 						>
 							<Ionicons
 								name="chevron-forward"
-								size={IconSize.LARGE}
+								size={IconSize.HUGE}
 								color={id < total ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -422,7 +437,7 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
         paddingVertical: 5,
     },
     thumbnail: {

@@ -50,9 +50,8 @@ const renderFront = (props: IFrontFlashProps) => {
 	async function playSound() {
 		console.log("Loading Sound");
 		setIsLoadingSound(true);
-		console.log(audioSpeed);
 		const { sound } = await Audio.Sound.createAsync(
-			{ uri: props.audio_url ? Config.API_APP_URL.slice(0, -1) + props.audio_url : "" },
+			{ uri: props.audio_url ? String(new URL(props.audio_url, Config.API_APP_URL)) : "" },
 			{ shouldPlay: true, rate: audioSpeed }
 		);
 		setSound(sound);
@@ -79,7 +78,7 @@ const renderFront = (props: IFrontFlashProps) => {
 			<Text style={{ fontSize: FontSize.LARGE, color: Colors.TEXT }}>
 				{props.content}{"\n"}
 			</Text>
-			<TouchableOpacity style={[styles.iconContainer, {backgroundColor: Colors.NEW}]} onPress={playSound}>
+			<TouchableOpacity style={styles.iconContainer} onPress={playSound}>
 				<Ionicons
 					name="volume-high-outline"
 					size={IconSize.HUGE}
@@ -160,16 +159,18 @@ const renderBack = (props: IBackFlashProps) => {
 					element.type === "h"
 					?
 						<Text style={{ fontSize: FontSize.REGULAR, fontWeight: "700", fontStyle: "italic" }}>
-						{element.content}
+							{element.content}
 						</Text>
 					:
 						<Text>
-						{getSmartBold(element.content)}
+							{getSmartBold(element.content)}
 						</Text>
 				}
 			</View>
 		)
 	};
+
+	let itemsSort = props.items?.map((item) => item);
 	
 	return (
 		<View style={styles.cardContainerBack}>
@@ -180,9 +181,9 @@ const renderBack = (props: IBackFlashProps) => {
 				{props.translation}
 			</Text>
 			<View style={styles.detailContainer}>
-				{ 
-					props.items?.map(mapText as any)
-				}
+			{ 
+				itemsSort?.sort((a, b) => a.order - b.order).map(mapText as any)
+			}
 			</View>
 		</View>
 	);
@@ -235,11 +236,13 @@ const styles = StyleSheet.create({
 		width: screenWidth - 40,
 		height: 320,
 		marginVertical: 5,
-		padding: 10,
+		paddingHorizontal: 10,
+		paddingVertical: 20,
 		justifyContent: "flex-start",
 		alignItems: "center",
 	},
 	iconContainer: {
+		backgroundColor: Colors.NEW,
 		width: 80,
 		height: 80,
 		borderRadius: 100,

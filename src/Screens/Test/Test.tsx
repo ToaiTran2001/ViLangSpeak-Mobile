@@ -120,7 +120,7 @@ export const Test = (props: ITestProps) => {
                                 Recommend for you
                             </Heading>
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 4 }}>
                             <FlatList
                                 data={recommendTestsUser}
                                 keyExtractor={(item: TestInfoUser) => String(item.id)}
@@ -165,7 +165,7 @@ export const Test = (props: ITestProps) => {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <View style={{ flex: 2 }}>
+                        <View style={{ flex: 9 }}>
                             <FlatList
                                 data={allTestsUser}
                                 keyExtractor={(item: TestInfoUser) => String(item.id)}

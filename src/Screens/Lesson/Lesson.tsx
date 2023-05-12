@@ -25,15 +25,15 @@ const screenHeight: number = Dimensions.get("window").height;
 
 export interface ILessonProps {
 	isLoading: boolean;
+	accountId: number | undefined;
 	lesson: LessonDetail | undefined;
 	lessonProgress: number | undefined;
-	accountId: number | undefined;
 	onNavigateTestDetail: (accountId: number | undefined, testId: number) => void;
 	onNavigateMain: () => void;
 };
 
 export const Lesson = (props: ILessonProps) => {
-	const { isLoading, lesson, lessonProgress, accountId, onNavigateTestDetail, onNavigateMain } = props;
+	const { isLoading, accountId, lesson, lessonProgress, onNavigateTestDetail, onNavigateMain } = props;
 
 	const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
@@ -233,7 +233,7 @@ export const Lesson = (props: ILessonProps) => {
 						}}>
 							<Ionicons
 								name="chevron-back"
-								size={IconSize.LARGE}
+								size={IconSize.HUGE}
 								color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -275,7 +275,7 @@ export const Lesson = (props: ILessonProps) => {
 						>
 							<Ionicons
 								name="chevron-forward"
-								size={IconSize.LARGE}
+								size={IconSize.HUGE}
 								color={!completed ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingHorizontal: 10,
+		paddingHorizontal: 20,
 		paddingVertical: 5,
 	},
 	thumbnail: {

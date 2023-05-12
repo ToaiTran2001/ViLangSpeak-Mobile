@@ -45,5 +45,5 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
 		navigation.navigate(MainScreens.TEST);
 	};
 
-  	return <TestDetail isLoading={test[1].isLoading} testProgress={testProgress[1].data?.data.progress.score.highest} accountId={accountId} test={test[1].data?.data.test} dictResult={dictResult} onNavigateTest={onNavigateTest} />;
+  	return <TestDetail isLoading={test[1].isLoading} accountId={accountId} test={test[1].data?.data.test} testProgress={testProgress[1].data?.data.progress.score.highest} dictResult={dictResult} onNavigateTest={onNavigateTest} />;
 };
