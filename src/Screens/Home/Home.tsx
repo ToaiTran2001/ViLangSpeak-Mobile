@@ -68,7 +68,9 @@ export const Home = (props: IHomeProps) => {
             id: lesson.id,
             name: lesson.name,
             visible: lesson.visible,
-            category: allCategories?.categories[lesson.category - 1],
+            category: allCategories?.categories.find(
+                (category) => category.id === lesson.category
+            ),
             progress: allProgresses?.progresses.find(
                 (progress) => progress.lesson === lesson.id
             ),
