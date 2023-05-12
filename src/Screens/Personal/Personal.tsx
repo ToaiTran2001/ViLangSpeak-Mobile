@@ -150,7 +150,7 @@ export const Personal = (props: IPersonalProps) => {
                                     null
                             }
                         </View>
-                        <View style={{ maxHeight: "65%", overflow: "hidden" }}>
+                        {/* <View style={{ maxHeight: "65%", overflow: "hidden" }}>
                             <TouchableOpacity
                                 style={{
                                     flexDirection: "row",
@@ -233,7 +233,7 @@ export const Personal = (props: IPersonalProps) => {
                                 :
                                     null
                             }
-                        </View>
+                        </View> */}
                         <View>
                             <TouchableOpacity
                                 style={{

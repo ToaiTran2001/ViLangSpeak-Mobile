@@ -76,26 +76,28 @@ const renderFront = (props: IFrontFlashProps) => {
 
 	return (
 		<View style={styles.cardContainerFront}>
-			<Text style={{ fontSize: FontSize.LARGE, color: Colors.TEXT }}>
-				{props.content}{"\n"}
+			<Text style={{ fontSize: FontSize.LARGE, color: Colors.TEXT, textAlign: "center" }}>
+				{props.content}
 			</Text>
-			<TouchableOpacity style={styles.iconContainer} onPress={playSound}>
-				<Ionicons
-					name="volume-high-outline"
-					size={IconSize.HUGE}
-					color={Colors.TEXT}
-				/>
-			</TouchableOpacity>
-			{isLoadingSound ? (
-				<HStack space={2} justifyContent="center">
-					<Spinner accessibilityLabel="Loading posts" />
-					<Heading color={Colors.PRIMARY} fontSize="md">
-						Loading
-					</Heading>
-				</HStack>
-			) : (
-				<Text></Text>
-			)}
+			<View>
+				<TouchableOpacity style={styles.iconContainer} onPress={playSound}>
+					<Ionicons
+						name="volume-high-outline"
+						size={IconSize.HUGE}
+						color={Colors.TEXT}
+					/>
+				</TouchableOpacity>
+				{isLoadingSound ? (
+					<HStack space={2} justifyContent="center">
+						<Spinner accessibilityLabel="Loading posts" />
+						<Heading color={Colors.PRIMARY} fontSize={FontSize.SMALL}>
+							Loading
+						</Heading>
+					</HStack>
+				) : (
+					<Text></Text>
+				)}
+			</View>
 			<SelectDropdown
 				data={speedList}
 				onSelect={(selectItem, index) => {
@@ -175,10 +177,10 @@ const renderBack = (props: IBackFlashProps) => {
 	
 	return (
 		<View style={styles.cardContainerBack}>
-			<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
+			<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT, textAlign: "center" }}>
 				{props.content}
 			</Text>
-			<Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
+			<Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT, textAlign: "center" }}>
 				{props.translation}
 			</Text>
 			<ScrollView style={{width: "100%"}}>
@@ -251,6 +253,7 @@ const styles = StyleSheet.create({
 		borderRadius: 100,
 		justifyContent: "center",
 		alignItems: "center",
+		marginVertical: 10,
 	},
 	detailContainer: {
 		padding: 10,
