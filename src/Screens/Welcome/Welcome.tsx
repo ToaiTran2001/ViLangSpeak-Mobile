@@ -18,19 +18,22 @@ const slides = [
 	{
 		id: '1',
 		image: require('../../../assets/welcome_1.png'),
-		title: 'Perfecting your Vietnamese pronunciation',
+		title: 'Perfecting your',
+		titleBold: 'Vietnamese Pronunciation',
 		subtitle: '',
 	},
 	{
 		id: '2',
 		image: require('../../../assets/welcome_2.png'),
-		title: 'Enculturation through vocabulary',
+		title: 'Enculturation through',
+		titleBold: 'Vocabulary',
 		subtitle: '',
 	},
 	{
 		id: '3',
 		image: require('../../../assets/welcome_3.png'),
-		title: 'Travel with ease',
+		title: 'Travel with',
+		titleBold: 'Ease',
 		subtitle: '',
 	},
 ];
@@ -39,6 +42,7 @@ interface ISlideProps {
 	id: string;
 	image: number;
 	title: string;
+	titleBold: string;
 	subtitle: string;
 }
 
@@ -51,6 +55,7 @@ const Slide = (item: ISlideProps) => {
 			/>
 			<View>
 				<Text style={styles.title}>{item.title}</Text>
+				<Text style={styles.titleBold}>{item.titleBold}</Text>
 				<Text style={styles.subtitle}>{item.subtitle}</Text>
 			</View>
 		</View>
@@ -189,7 +194,7 @@ export const Welcome = (props: IWelcomeProps) => {
 				horizontal
 				data={slides}
 				pagingEnabled
-				renderItem={({item}) => <Slide id={item.id} image={item.image} title={item.title} subtitle={item.subtitle} />}
+				renderItem={({item}) => <Slide id={item.id} image={item.image} title={item.title} titleBold={item.titleBold} subtitle={item.subtitle} />}
 			/>
 			<Footer />
 		</SafeAreaView>
@@ -207,6 +212,13 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		color: Colors.TEXT,
+		fontSize: FontSize.REGULAR,
+		fontWeight: 'bold',
+		marginTop: 20,
+		textAlign: 'center',
+	},
+	titleBold: {
+		color: Colors.PRIMARY_BOLD,
 		fontSize: FontSize.REGULAR,
 		fontWeight: 'bold',
 		marginTop: 20,

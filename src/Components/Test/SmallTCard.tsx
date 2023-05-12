@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
     },
 });

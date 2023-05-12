@@ -21,7 +21,7 @@ export const NormalTCard = (props: ITestProps) => {
     const defaultImage: string = "/public/image/test-default.png";
 
     return (
-        <TouchableOpacity
+        <View
             style={[styles.container, {backgroundColor: containerColor}]}
         >
             <View style={styles.thumbnailContainer}>
@@ -38,11 +38,11 @@ export const NormalTCard = (props: ITestProps) => {
                         style={[styles.button, {backgroundColor: buttonColor}]}
                         onPress={onPress}
                     >
-                        <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{buttonTitle}</Text>
+                        <Text style={{fontSize: FontSize.SMALL, color: Colors.WHITE}}>{buttonTitle}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-        </TouchableOpacity>
+        </View>
     )
 };
 
@@ -56,12 +56,12 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     thumbnailContainer: {
-        flex: 3,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
     },
     contentContainer: {
-        flex: 7,
+        flex: 3,
         marginVertical: 5,
     },
     titleContainer: {
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
     },
     button: {
         width: 72,

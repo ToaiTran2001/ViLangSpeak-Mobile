@@ -164,7 +164,7 @@ export const Lesson = (props: ILessonProps) => {
 						<View style={styles.thumbnailHeaderContainer}>
 							<Image
 								style={styles.thumbnail}
-								source={{uri: Config.API_APP_URL.slice(0, -1) + (currentLesson?.category.image === "" ? defaultImage : currentLesson?.category.image)}}
+								source={{uri: currentLesson?.category.image ? String(new URL(currentLesson.category.image === "" ? defaultImage : currentLesson?.category.image, Config.API_APP_URL)) : undefined}}
 							/>
 						</View>
 					</View>
@@ -332,8 +332,8 @@ const styles = StyleSheet.create({
 	},
 	thumbnail: {
 		resizeMode: "contain",
-		width: 80,
-		height: 80,
+		width: 60,
+		height: 60,
 	},
 	iconContainer: {
 		width: 80,

@@ -6,6 +6,7 @@ import {
 	Image,
 	TouchableOpacity,
 	Alert,
+	ScrollView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading, HStack } from "native-base";
@@ -50,6 +51,14 @@ export const TestDetail = (props: ITestDetailProps) => {
 	const [isCorrectC, setIsCorrectC] = useState(false);
 
 	const [isCorrectD, setIsCorrectD] = useState(false);
+
+	const [scoreA, setScoreA] = useState(0);
+
+	const [scoreB, setScoreB] = useState(0);
+
+	const [scoreC, setScoreC] = useState(0);
+
+	const [scoreD, setScoreD] = useState(0);
 
 	const [score, setScore] = useState(0);
 
@@ -114,10 +123,32 @@ export const TestDetail = (props: ITestDetailProps) => {
 	}, [test]);
 
 	useEffect(() => {
-		if (isCorrectA && isCorrectB && isCorrectC && isCorrectD) {
-			setScore(score+1);
+		if (isCorrectA) {
+			setScoreA(0.25);
 		}
-	}, [isCorrectA, isCorrectB, isCorrectC, isCorrectD])
+	}, [isCorrectA])
+
+	useEffect(() => {
+		if (isCorrectB) {
+			setScoreB(0.25);
+		}
+	}, [isCorrectB])
+
+	useEffect(() => {
+		if (isCorrectC) {
+			setScoreC(0.25);
+		}
+	}, [isCorrectC])
+
+	useEffect(() => {
+		if (isCorrectD) {
+			setScoreD(0.25);
+		}
+	}, [isCorrectD])
+
+	useEffect(() => {
+		setScore(score + scoreA + scoreB + scoreC + scoreD);
+	}, [scoreA, scoreB, scoreC, scoreD])
 
 	return (
 		<View style={styles.container}>
@@ -153,12 +184,12 @@ export const TestDetail = (props: ITestDetailProps) => {
 						<View style={styles.thumbnailHeaderContainer}>
 							<Image
 								style={styles.thumbnail}
-								source={{uri: Config.API_APP_URL.slice(0, -1) + (currentTest?.category.image === "" ? defaultImage : currentTest?.category.image)}}
+								source={{uri: currentTest?.category.image ? String(new URL(currentTest?.category.image === "" ? defaultImage : currentTest?.category.image, Config.API_APP_URL)) : undefined}}
 							/>
 						</View>
 					</View>
 					<View style={styles.body}>
-						<View style={{ flex: 2 }}>
+						<View style={{ flex: 1 }}>
 							<View>
 								<Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
 									Question {id+1}/{currentTest?.questions.total}
@@ -172,7 +203,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 								description={currentTest?.questions.value[id].description}
 							/>
 						</View>
-						<View style={{ flex: 3 }}>
+						<View style={{ flex: 2 }}>
 							<View>
 								<Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
 									{

@@ -36,19 +36,19 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     thumbnailContainer: {
-        flex: 3,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
     },
     contentContainer: {
-        flex: 7,
+        flex: 3,
         marginVertical: 5,
         justifyContent: "center",
         alignItems: "flex-start",
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
     }
 });
