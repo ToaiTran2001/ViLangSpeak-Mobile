@@ -75,7 +75,7 @@ export const Login = (props: ILoginProps) => {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={Platform.OS === "ios" ? headerHeight + Constants.statusBarHeight : -Constants.statusBarHeight}
         >
-            <ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 <TouchableWithoutFeedback
                     onPress={Keyboard.dismiss}
                 >

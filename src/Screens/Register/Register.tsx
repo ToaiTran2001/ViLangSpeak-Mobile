@@ -98,7 +98,7 @@ export const Register = (props: IRegisterProps) => {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={Platform.OS === "ios" ? headerHeight + Constants.statusBarHeight : 0}
         >
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 <TouchableWithoutFeedback
                     onPress={Keyboard.dismiss}
                 >

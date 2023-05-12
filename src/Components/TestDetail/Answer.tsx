@@ -21,8 +21,8 @@ export interface IAnswerProps {
 
 export const Answer = (props: IAnswerProps) => {
     const { id, questionType, type, content, answer, text, isChoosed, isSubmitted, isCorrect, setIsCorrect, onPress } = props;
-    var backgroundColor = Colors.FLASHCARD;
-    var textColor = Colors.TEXT;
+    let backgroundColor = Colors.FLASHCARD;
+    let textColor = Colors.TEXT;
     if (!isSubmitted) {
         if (isChoosed) {
             backgroundColor = Colors.PRIMARY;

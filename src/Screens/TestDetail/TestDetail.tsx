@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -52,15 +52,9 @@ export const TestDetail = (props: ITestDetailProps) => {
 
 	const [isCorrectD, setIsCorrectD] = useState(false);
 
-	const [scoreA, setScoreA] = useState(0);
-
-	const [scoreB, setScoreB] = useState(0);
-
-	const [scoreC, setScoreC] = useState(0);
-
-	const [scoreD, setScoreD] = useState(0);
-
 	const [score, setScore] = useState(0);
+
+	const [completed, setCompleted] = useState(false);
 
 	const defaultImage: string = "/public/image/test-default.png";
 
@@ -123,32 +117,14 @@ export const TestDetail = (props: ITestDetailProps) => {
 	}, [test]);
 
 	useEffect(() => {
-		if (isCorrectA) {
-			setScoreA(0.25);
-		}
-	}, [isCorrectA])
+		setScore(score);
+	}, [id]);
 
 	useEffect(() => {
-		if (isCorrectB) {
-			setScoreB(0.25);
+		if (completed) {
+			createCompletedAlert();
 		}
-	}, [isCorrectB])
-
-	useEffect(() => {
-		if (isCorrectC) {
-			setScoreC(0.25);
-		}
-	}, [isCorrectC])
-
-	useEffect(() => {
-		if (isCorrectD) {
-			setScoreD(0.25);
-		}
-	}, [isCorrectD])
-
-	useEffect(() => {
-		setScore(score + scoreA + scoreB + scoreC + scoreD);
-	}, [scoreA, scoreB, scoreC, scoreD])
+	}, [completed])
 
 	return (
 		<View style={styles.container}>
@@ -191,7 +167,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 					<View style={styles.body}>
 						<View style={{ flex: 1 }}>
 							<View>
-								<Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
+								<Heading fontSize={FontSize.STANDARD} color={Colors.TEXT}>
 									Question {id+1}/{currentTest?.questions.total}
 								</Heading>
 							</View>
@@ -205,7 +181,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 						</View>
 						<View style={{ flex: 2 }}>
 							<View>
-								<Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
+								<Heading fontSize={FontSize.STANDARD} color={Colors.TEXT}>
 									{
 										currentTest?.questions.value[id].type === "a"
 										?
@@ -330,25 +306,37 @@ export const TestDetail = (props: ITestDetailProps) => {
 					<View style={styles.footer}>
 						<TouchableOpacity 
 							onPress={() => {
-								if (isSubmitted) {
-									dictResult[id] = {
-										A: {
-											isChoosed: isChoosedA,
-											isCorrect: isCorrectA, 
-										},
-										B: {
-											isChoosed: isChoosedB,
-											isCorrect: isCorrectB, 
-										},
-										C: {
-											isChoosed: isChoosedC,
-											isCorrect: isCorrectC, 
-										},
-										D: {
-											isChoosed: isChoosedD,
-											isCorrect: isCorrectD, 
-										},
-									};
+								if (isSubmitted && !dictResult[id]) {
+									if (!dictResult[id]) {
+										dictResult[id] = {
+											A: {
+												isChoosed: isChoosedA,
+												isCorrect: isCorrectA, 
+											},
+											B: {
+												isChoosed: isChoosedB,
+												isCorrect: isCorrectB, 
+											},
+											C: {
+												isChoosed: isChoosedC,
+												isCorrect: isCorrectC, 
+											},
+											D: {
+												isChoosed: isChoosedD,
+												isCorrect: isCorrectD, 
+											},
+										};
+									}
+									if (isChoosedA || isChoosedB || isChoosedC || isChoosedD) {
+										if (currentTest?.questions.value[id].question_type === "sc") {
+											if (isCorrectA && isCorrectB && isCorrectC && isCorrectD) {
+												setScore(score+1);
+											}
+										} else {
+											let scoreTemp = [isCorrectA, isCorrectB, isCorrectC, isCorrectD].filter(Boolean).length * 0.25;
+											setScore(score+scoreTemp);
+										}
+									}
 								}
 								setId(id-1 > 0 ? id-1 : 0);
 								setIsChoosedA(false);
@@ -371,7 +359,9 @@ export const TestDetail = (props: ITestDetailProps) => {
 						<TouchableOpacity 
 							style={styles.button}
 							onPress={() => {
-								setIsSubmitted(true);
+								if (!isSubmitted) {
+									setIsSubmitted(true);
+								}
 							}}
 						>
 							<Text style={{ fontSize: FontSize.REGULAR, color: Colors.WHITE }}>Submit</Text>
@@ -379,39 +369,50 @@ export const TestDetail = (props: ITestDetailProps) => {
 						<TouchableOpacity 
 							onPress={() => {
 								if (isSubmitted) {
-									dictResult[id] = {
-										A: {
-											isChoosed: isChoosedA,
-											isCorrect: isCorrectA, 
-										},
-										B: {
-											isChoosed: isChoosedB,
-											isCorrect: isCorrectB, 
-										},
-										C: {
-											isChoosed: isChoosedC,
-											isCorrect: isCorrectC, 
-										},
-										D: {
-											isChoosed: isChoosedD,
-											isCorrect: isCorrectD, 
-										},
-									};
+									if (!dictResult[id]) {
+										dictResult[id] = {
+											A: {
+												isChoosed: isChoosedA,
+												isCorrect: isCorrectA, 
+											},
+											B: {
+												isChoosed: isChoosedB,
+												isCorrect: isCorrectB, 
+											},
+											C: {
+												isChoosed: isChoosedC,
+												isCorrect: isCorrectC, 
+											},
+											D: {
+												isChoosed: isChoosedD,
+												isCorrect: isCorrectD, 
+											},
+										};
+									}
+									if (isChoosedA || isChoosedB || isChoosedC || isChoosedD) {
+										if (currentTest?.questions.value[id].question_type === "sc") {
+											if (isCorrectA && isCorrectB && isCorrectC && isCorrectD) {
+												setScore(score+1);
+											}
+										} else {
+											let scoreTemp = [isCorrectA, isCorrectB, isCorrectC, isCorrectD].filter(Boolean).length * 0.25;
+											setScore(score+scoreTemp);
+										}
+									}
 								}
 								setId(id+1 < total ? id+1 : total-1);
 								if (id+1 === total) {
-									createCompletedAlert();
-								} else {
-									setIsChoosedA(false);
-									setIsChoosedB(false);
-									setIsChoosedC(false);
-									setIsChoosedD(false);
-									setIsCorrectA(false);
-									setIsCorrectB(false);
-									setIsCorrectC(false);
-									setIsCorrectD(false);
-									setIsSubmitted(false);
+									setCompleted(true);
 								}
+								setIsChoosedA(false);
+								setIsChoosedB(false);
+								setIsChoosedC(false);
+								setIsChoosedD(false);
+								setIsCorrectA(false);
+								setIsCorrectB(false);
+								setIsCorrectC(false);
+								setIsCorrectD(false);
+								setIsSubmitted(false);
 							}}
 						>
 							<Ionicons
