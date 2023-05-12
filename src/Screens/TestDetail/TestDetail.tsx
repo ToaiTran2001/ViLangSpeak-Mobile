@@ -6,6 +6,7 @@ import {
 	Image,
 	TouchableOpacity,
 	Alert,
+	ScrollView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Spinner, Heading, HStack } from "native-base";
@@ -19,16 +20,16 @@ import { Result } from "./TestDetailContainer";
 
 export interface ITestDetailProps {
 	isLoading: boolean;
+	accountId: number | undefined;
 	test: TestDetailData | undefined;
 	testProgress: number | undefined;
-	accountId: number | undefined;
 	dictResult: {[id: number]: Result;};
 	onNavigateTest: () => void;
 };
 
 export const TestDetail = (props: ITestDetailProps) => {
-	const { isLoading, test, testProgress, accountId, dictResult, onNavigateTest } = props;
-
+	const { isLoading, accountId, test, testProgress, dictResult, onNavigateTest } = props;
+	
 	const [currentTest, setCurrentTest] = useState(test);
 
 	const [id, setId] = useState(0);
@@ -51,11 +52,19 @@ export const TestDetail = (props: ITestDetailProps) => {
 
 	const [isCorrectD, setIsCorrectD] = useState(false);
 
+	const [scoreA, setScoreA] = useState(0);
+
+	const [scoreB, setScoreB] = useState(0);
+
+	const [scoreC, setScoreC] = useState(0);
+
+	const [scoreD, setScoreD] = useState(0);
+
 	const [score, setScore] = useState(0);
 
 	const defaultImage: string = "/public/image/test-default.png";
 
-	const total = currentTest ? currentTest?.questions.total : 10;
+	const total = currentTest ? currentTest?.questions.total : 1;
 
 	const recordTest = useRecordTestMutation();
 
@@ -114,10 +123,32 @@ export const TestDetail = (props: ITestDetailProps) => {
 	}, [test]);
 
 	useEffect(() => {
-		if (isCorrectA && isCorrectB && isCorrectC && isCorrectD) {
-			setScore(score+1);
+		if (isCorrectA) {
+			setScoreA(0.25);
 		}
-	}, [isCorrectA, isCorrectB, isCorrectC, isCorrectD])
+	}, [isCorrectA])
+
+	useEffect(() => {
+		if (isCorrectB) {
+			setScoreB(0.25);
+		}
+	}, [isCorrectB])
+
+	useEffect(() => {
+		if (isCorrectC) {
+			setScoreC(0.25);
+		}
+	}, [isCorrectC])
+
+	useEffect(() => {
+		if (isCorrectD) {
+			setScoreD(0.25);
+		}
+	}, [isCorrectD])
+
+	useEffect(() => {
+		setScore(score + scoreA + scoreB + scoreC + scoreD);
+	}, [scoreA, scoreB, scoreC, scoreD])
 
 	return (
 		<View style={styles.container}>
@@ -153,12 +184,12 @@ export const TestDetail = (props: ITestDetailProps) => {
 						<View style={styles.thumbnailHeaderContainer}>
 							<Image
 								style={styles.thumbnail}
-								source={{uri: Config.API_APP_URL.slice(0, -1) + (currentTest?.category.image === "" ? defaultImage : currentTest?.category.image)}}
+								source={{uri: currentTest?.category.image ? String(new URL(currentTest?.category.image === "" ? defaultImage : currentTest?.category.image, Config.API_APP_URL)) : undefined}}
 							/>
 						</View>
 					</View>
 					<View style={styles.body}>
-						<View style={{ flex: 2 }}>
+						<View style={{ flex: 1 }}>
 							<View>
 								<Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
 									Question {id+1}/{currentTest?.questions.total}
@@ -169,12 +200,27 @@ export const TestDetail = (props: ITestDetailProps) => {
 								questionType={currentTest?.questions.value[id].question_type}
 								type={currentTest?.questions.value[id].type}
 								content={currentTest?.questions.value[id].content}
+								description={currentTest?.questions.value[id].description}
 							/>
 						</View>
-						<View style={{ flex: 3 }}>
+						<View style={{ flex: 2 }}>
 							<View>
 								<Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>
-									Choose the correct answers
+									{
+										currentTest?.questions.value[id].type === "a"
+										?
+											currentTest?.questions.value[id].question_type === "sc"
+											?
+												"Listen and Choose the correct answer"
+											:
+												"Listen and Choose the correct answers"
+										:
+											currentTest?.questions.value[id].question_type === "sc"
+											?
+												"Choose the correct answer"
+											:
+												"Choose the correct answers"
+									}
 								</Heading>
 							</View>
 							<View style={{ height: "90%", marginVertical: 10 }}>
@@ -318,7 +364,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 						>
 							<Ionicons
 								name="chevron-back"
-								size={IconSize.LARGE}
+								size={IconSize.HUGE}
 								color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -370,7 +416,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 						>
 							<Ionicons
 								name="chevron-forward"
-								size={IconSize.LARGE}
+								size={IconSize.HUGE}
 								color={id < total ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -422,7 +468,7 @@ const styles = StyleSheet.create({
         width: "100%",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
         paddingVertical: 5,
     },
     thumbnail: {

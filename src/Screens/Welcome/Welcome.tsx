@@ -10,7 +10,7 @@ import {
 	TouchableOpacity,
 	Dimensions,
 } from 'react-native';
-import { Colors } from '@/Theme';
+import { Colors, FontSize } from '@/Theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,20 +18,23 @@ const slides = [
 	{
 		id: '1',
 		image: require('../../../assets/welcome_1.png'),
-		title: 'Best Vietnamese Pronunciation',
-		subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		title: 'Perfecting your',
+		titleBold: 'Vietnamese Pronunciation',
+		subtitle: '',
 	},
 	{
 		id: '2',
 		image: require('../../../assets/welcome_2.png'),
-		title: 'Achieve Your Goals',
-		subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		title: 'Enculturation through',
+		titleBold: 'Vocabulary',
+		subtitle: '',
 	},
 	{
 		id: '3',
 		image: require('../../../assets/welcome_3.png'),
-		title: 'Increase Your Value',
-		subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		title: 'Travel with',
+		titleBold: 'Ease',
+		subtitle: '',
 	},
 ];
 
@@ -39,6 +42,7 @@ interface ISlideProps {
 	id: string;
 	image: number;
 	title: string;
+	titleBold: string;
 	subtitle: string;
 }
 
@@ -51,6 +55,7 @@ const Slide = (item: ISlideProps) => {
 			/>
 			<View>
 				<Text style={styles.title}>{item.title}</Text>
+				<Text style={styles.titleBold}>{item.titleBold}</Text>
 				<Text style={styles.subtitle}>{item.subtitle}</Text>
 			</View>
 		</View>
@@ -189,7 +194,7 @@ export const Welcome = (props: IWelcomeProps) => {
 				horizontal
 				data={slides}
 				pagingEnabled
-				renderItem={({item}) => <Slide id={item.id} image={item.image} title={item.title} subtitle={item.subtitle} />}
+				renderItem={({item}) => <Slide id={item.id} image={item.image} title={item.title} titleBold={item.titleBold} subtitle={item.subtitle} />}
 			/>
 			<Footer />
 		</SafeAreaView>
@@ -199,7 +204,7 @@ export const Welcome = (props: IWelcomeProps) => {
 const styles = StyleSheet.create({
 	subtitle: {
 		color: Colors.TEXT,
-		fontSize: 13,
+		fontSize: FontSize.TINY,
 		marginTop: 10,
 		maxWidth: '70%',
 		textAlign: 'center',
@@ -207,7 +212,14 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		color: Colors.TEXT,
-		fontSize: 22,
+		fontSize: FontSize.REGULAR,
+		fontWeight: 'bold',
+		marginTop: 20,
+		textAlign: 'center',
+	},
+	titleBold: {
+		color: Colors.PRIMARY_BOLD,
+		fontSize: FontSize.REGULAR,
 		fontWeight: 'bold',
 		marginTop: 20,
 		textAlign: 'center',

@@ -33,7 +33,7 @@ export const SmallLCard = (props: ILCardProps) => {
             onPress={onPress}
         >
             <View style={[styles.thumbnailContainer, {backgroundColor: thumbnailContainerColor}]}>
-                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}} />
+                <Image style={styles.thumbnail} source={{uri: category?.image ? String(new URL((category?.image === "" ? defaultImage : category?.image), Config.API_APP_URL)) : undefined}} />
             </View>
             <View style={styles.titleContainer}>
                 <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>{name}</Heading>
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: 120,
-        height: 160,
+        height: 150,
     },
     thumbnailContainer: {
         flex: 3,
         backgroundColor: Colors.PRIMARY,
-        borderRadius: 20,
+        borderRadius: 15,
         justifyContent: "center",
         alignItems: "center",
         margin: 5,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 64,
-        height: 64,
+        width: 50,
+        height: 50,
     },
 });

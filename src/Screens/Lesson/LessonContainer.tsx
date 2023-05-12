@@ -37,9 +37,9 @@ export const LessonContainer = ({ navigation, route }: LessonScreenProps) => {
     return (
         <Lesson
             isLoading={lesson[1].isLoading}
+            accountId={accountId}
             lesson={lesson[1].data?.data.lesson}
             lessonProgress={lessonProgress[1].data?.data.progress.value}
-            accountId={accountId}
             onNavigateTestDetail={onNavigateTestDetail}
             onNavigateMain={onNavigateMain}
         />

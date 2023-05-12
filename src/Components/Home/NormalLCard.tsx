@@ -25,12 +25,12 @@ export const NormalLCard = (props: ILCardProps) => {
             onPress={onPress}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}}></Image>
+                <Image style={styles.thumbnail} source={{uri: category?.image ? String(new URL((category?.image === "" ? defaultImage : category?.image), Config.API_APP_URL)) : undefined}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
                     <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>{name}</Heading>
-                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{progress ? progress.progress.value : 0}%</Text>
+                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 20}}>{progress ? progress.progress.value : 0}%</Text>
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category?.name}</Text>
@@ -45,17 +45,17 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         width: "96%",
-        height: 96,
-        borderRadius: 20,
+        height: 90,
+        borderRadius: 15,
         margin: 5,
     },
     thumbnailContainer: {
-        flex: 3,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
     },
     contentContainer: {
-        flex: 7,
+        flex: 3,
         marginVertical: 5,
     },
     titleContainer: {
@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 64,
-        height: 64,
+        width: 50,
+        height: 50,
     },
     switch: {
-        marginRight: 30,
+        marginRight: 20,
     }
 });

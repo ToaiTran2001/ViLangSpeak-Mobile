@@ -125,7 +125,7 @@ export const Home = (props: IHomeProps) => {
                                 Recommend for you
                             </Heading>
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <View>
                             <FlatList
                                 data={recommendLessonsUser}
                                 keyExtractor={(item: LessonInfoUser) => String(item.id)}
@@ -168,7 +168,7 @@ export const Home = (props: IHomeProps) => {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <View style={{ flex: 2 }}>
+                        <View style={{ flex: 1 }}>
                             <FlatList
                                 data={allLessonsUser}
                                 keyExtractor={(item: LessonInfoUser) => String(item.id)}
@@ -264,8 +264,8 @@ const styles = StyleSheet.create({
     },
     logo: {
         resizeMode: "contain",
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
     },
     textHeader: {
         fontSize: FontSize.LARGE,

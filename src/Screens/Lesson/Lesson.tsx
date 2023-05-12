@@ -25,15 +25,15 @@ const screenHeight: number = Dimensions.get("window").height;
 
 export interface ILessonProps {
 	isLoading: boolean;
+	accountId: number | undefined;
 	lesson: LessonDetail | undefined;
 	lessonProgress: number | undefined;
-	accountId: number | undefined;
 	onNavigateTestDetail: (accountId: number | undefined, testId: number) => void;
 	onNavigateMain: () => void;
 };
 
 export const Lesson = (props: ILessonProps) => {
-	const { isLoading, lesson, lessonProgress, accountId, onNavigateTestDetail, onNavigateMain } = props;
+	const { isLoading, accountId, lesson, lessonProgress, onNavigateTestDetail, onNavigateMain } = props;
 
 	const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
@@ -164,7 +164,7 @@ export const Lesson = (props: ILessonProps) => {
 						<View style={styles.thumbnailHeaderContainer}>
 							<Image
 								style={styles.thumbnail}
-								source={{uri: Config.API_APP_URL.slice(0, -1) + (currentLesson?.category.image === "" ? defaultImage : currentLesson?.category.image)}}
+								source={{uri: currentLesson?.category.image ? String(new URL(currentLesson.category.image === "" ? defaultImage : currentLesson?.category.image, Config.API_APP_URL)) : undefined}}
 							/>
 						</View>
 					</View>
@@ -233,7 +233,7 @@ export const Lesson = (props: ILessonProps) => {
 						}}>
 							<Ionicons
 								name="chevron-back"
-								size={IconSize.LARGE}
+								size={IconSize.HUGE}
 								color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -275,7 +275,7 @@ export const Lesson = (props: ILessonProps) => {
 						>
 							<Ionicons
 								name="chevron-forward"
-								size={IconSize.LARGE}
+								size={IconSize.HUGE}
 								color={!completed ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -327,13 +327,13 @@ const styles = StyleSheet.create({
 		width: "100%",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingHorizontal: 10,
+		paddingHorizontal: 20,
 		paddingVertical: 5,
 	},
 	thumbnail: {
 		resizeMode: "contain",
-		width: 80,
-		height: 80,
+		width: 60,
+		height: 60,
 	},
 	iconContainer: {
 		width: 80,

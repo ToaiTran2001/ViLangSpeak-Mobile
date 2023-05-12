@@ -15,6 +15,7 @@ export enum Colors {
   GRAY = "#D9D9D9",
   BLACK = "#000000",
   PRIMARY = "#86D3FF",
+  PRIMARY_BOLD = "#05BAE1",
   SUCCESS = "#83FFB4",
   NEW = "#C4F4FE",
   FLASHCARD = "#DCFDFF",
@@ -25,7 +26,6 @@ export enum Colors {
   BUTTON_REVIEW = "#00B73E",
   BUTTON_START = "#2C64F6",
   SWITCH_CIRCLE_ON = "#069035",
-  PRIMARY_BOLD = "#05BAE1",
   ICON_GRAY = "#A9A9AC",
 }
 
@@ -37,12 +37,12 @@ export enum NavigationColors {
  * FontSize
  */
 export enum FontSize {
-  TINY = 12,
-  SMALL = 16,
-  REGULAR = 20,
-  MEDIUM = 24,
-  LARGE = 28,
-  HUGE = 36,
+  TINY = 10,
+  SMALL = 14,
+  REGULAR = 18,
+  MEDIUM = 22,
+  LARGE = 26,
+  HUGE = 30,
 }
 
 /**
@@ -65,9 +65,9 @@ export enum MetricsSizes {
  */
  export enum IconSize {
   TINY = 10,
-  SMALL = 16,
-  REGULAR = 20,
-  MEDIUM = 24,
-  LARGE = 28,
-  HUGE = 36,
+  SMALL = 14,
+  REGULAR = 18,
+  MEDIUM = 22,
+  LARGE = 26,
+  HUGE = 30,
 }
