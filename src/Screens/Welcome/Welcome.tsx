@@ -19,19 +19,19 @@ const slides = [
 		id: '1',
 		image: require('../../../assets/welcome_1.png'),
 		title: 'Best Vietnamese Pronunciation',
-		subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		subtitle: '',
 	},
 	{
 		id: '2',
 		image: require('../../../assets/welcome_2.png'),
 		title: 'Achieve Your Goals',
-		subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		subtitle: '',
 	},
 	{
 		id: '3',
 		image: require('../../../assets/welcome_3.png'),
 		title: 'Increase Your Value',
-		subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+		subtitle: '',
 	},
 ];
 

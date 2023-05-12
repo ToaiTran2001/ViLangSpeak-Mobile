@@ -55,7 +55,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 
 	const defaultImage: string = "/public/image/test-default.png";
 
-	const total = currentTest ? currentTest?.questions.total : 10;
+	const total = currentTest ? currentTest?.questions.total : 1;
 
 	const recordTest = useRecordTestMutation();
 
