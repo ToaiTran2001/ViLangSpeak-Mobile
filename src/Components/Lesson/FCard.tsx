@@ -5,6 +5,7 @@ import {
 	View,
 	TouchableOpacity,
 	Dimensions,
+	ScrollView,
 } from "react-native";
 import { Audio } from 'expo-av';
 import { Heading, HStack, Spinner } from "native-base";
@@ -133,7 +134,7 @@ const renderBack = (props: IBackFlashProps) => {
 		const arr = text.split("*");
 
 		// Here we will store an array of Text components
-		var newTextArr: any[] = [];
+		let newTextArr: any[] = [];
 
 		// Loop over split text
 		arr.forEach((element, index) => {
@@ -180,11 +181,13 @@ const renderBack = (props: IBackFlashProps) => {
 			<Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }}>
 				{props.translation}
 			</Text>
-			<View style={styles.detailContainer}>
-			{ 
-				itemsSort?.sort((a, b) => a.order - b.order).map(mapText as any)
-			}
-			</View>
+			<ScrollView style={{width: "100%"}}>
+				<View style={styles.detailContainer}>
+				{ 
+					itemsSort?.sort((a, b) => a.order - b.order).map(mapText as any)
+				}
+				</View>
+			</ScrollView>
 		</View>
 	);
 };
@@ -251,7 +254,6 @@ const styles = StyleSheet.create({
 	},
 	detailContainer: {
 		padding: 10,
-		width: "100%",
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
 	},
