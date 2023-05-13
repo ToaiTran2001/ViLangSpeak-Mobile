@@ -118,6 +118,8 @@ export const Lesson = (props: ILessonProps) => {
 		setCurrentLesson(lesson);
 	}, [lesson]);
 
+	console.log(currentLesson?.test);
+
 	return (
 		<View style={styles.container}>
 			<StatusBar style="auto" />
@@ -197,7 +199,13 @@ export const Lesson = (props: ILessonProps) => {
 										this lesson.
 									</Text>
 									<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
-										Go to test now!
+										{
+											currentLesson?.test
+											?
+												"Go to test now!"
+											: 
+												"Go to home now!"
+										}
 									</Text>
 								</View>
 							: 
@@ -246,7 +254,22 @@ export const Lesson = (props: ILessonProps) => {
 							? 
 								<TouchableOpacity 
 									style={styles.button}
-									onPress={() => {recordLesson[0]({lesson_id: String(currentLesson?.id), record: {timestamp: Date.now(), value: 100, account_id: accountId ? accountId : 0}});onNavigateTestDetail(accountId, currentLesson ? currentLesson.test : 0)}}
+									onPress={() => {
+										recordLesson[0]({
+											lesson_id: String(currentLesson?.id), 
+											record: {
+												timestamp: Date.now(), 
+												value: 100, 
+												account_id: accountId ? accountId : 0
+											}
+										});
+										if (currentLesson?.test) {
+											onNavigateTestDetail(accountId, currentLesson ? currentLesson.test : 0)
+										} else {
+											onNavigateMain();
+										}
+									}} 
+										
 								>
 									<Text style={{ fontSize: FontSize.REGULAR, color: Colors.WHITE }}>Go</Text>
 								</TouchableOpacity>
