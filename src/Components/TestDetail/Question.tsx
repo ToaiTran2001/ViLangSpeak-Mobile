@@ -28,8 +28,6 @@ export const Question = (props: IQuestionProps) => {
         audioUrl = description;
     }
 
-    console.log(content);
-
     async function playSound() {
         console.log("Loading Sound");
         setIsLoadingSound(true);
