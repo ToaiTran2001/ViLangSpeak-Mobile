@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
-import { Heading } from "native-base";
+import { HStack, Heading, Spinner } from "native-base";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { Config } from "@/Config";
 import { Audio } from "expo-av";
@@ -93,14 +93,25 @@ export const Answer = (props: IAnswerProps) => {
                     :
                         type === "a"
                         ?
-                            <TouchableOpacity 
-                                style={styles.smallIconContainer} onPress={playSound}>
-                                <Ionicons
-                                    name="volume-high-outline"
-                                    size={IconSize.MEDIUM}
-                                    color={Colors.TEXT}
-                                />
-                            </TouchableOpacity>
+                            <>
+                                <TouchableOpacity 
+                                    style={styles.smallIconContainer} onPress={playSound}>
+                                    <Ionicons
+                                        name="volume-high-outline"
+                                        size={IconSize.MEDIUM}
+                                        color={Colors.TEXT}
+                                    />
+                                </TouchableOpacity>
+                                {
+                                    isLoadingSound 
+                                    ? 
+                                        <HStack space={2} justifyContent="center">
+                                            <Spinner accessibilityLabel="Loading posts" />
+                                        </HStack>
+                                    : 
+                                        null
+                                }
+                            </>
                         :
                             <Image style={styles.image} source={{uri: String(new URL(content ? content : "", Config.API_APP_URL))}}/>
                 }

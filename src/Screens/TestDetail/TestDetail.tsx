@@ -62,10 +62,22 @@ export const TestDetail = (props: ITestDetailProps) => {
 
 	const recordTest = useRecordTestMutation();
 
+	const messageNotification = () => {
+		let done: number = Object.keys(dictResult).length;
+		let title: string = "Congratulation!";
+		let message: string = "You have completed this test.";
+		if (done < total) {
+			let missQuestions: number = total - done;
+			title = "Notification!";
+			message = "You have " + (missQuestions === 1 ? "1 question" : String(missQuestions) + " questions") + " left to finish.\nAre you sure you want to exit?";
+		}
+		return [title, message];
+	}
+
 	const createCompletedAlert = () => {
 		Alert.alert(
-			"Congratulation",
-			"You have completed this test!",
+			messageNotification()[0],
+			messageNotification()[1],
 			[
 				{
 					text: "OK",
@@ -105,7 +117,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 				{
 					text: "Cancel",
 					onPress: () => {
-
+						
 					},
 				},
 			]
@@ -123,6 +135,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 	useEffect(() => {
 		if (completed) {
 			createCompletedAlert();
+			setCompleted(false);
 		}
 	}, [completed])
 

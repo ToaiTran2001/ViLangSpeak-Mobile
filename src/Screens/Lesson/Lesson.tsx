@@ -118,8 +118,6 @@ export const Lesson = (props: ILessonProps) => {
 		setCurrentLesson(lesson);
 	}, [lesson]);
 
-	console.log(currentLesson?.test);
-
 	return (
 		<View style={styles.container}>
 			<StatusBar style="auto" />
@@ -259,7 +257,7 @@ export const Lesson = (props: ILessonProps) => {
 											lesson_id: String(currentLesson?.id), 
 											record: {
 												timestamp: Date.now(), 
-												value: 100, 
+												value: 100,
 												account_id: accountId ? accountId : 0
 											}
 										});
