@@ -228,8 +228,12 @@ export const Lesson = (props: ILessonProps) => {
 						<TouchableOpacity 
 							onPress={() => {
 								setIsChanged(false);
-								setId(id-1 > 0 ? id-1 : 0);
-								setCompleted(false);
+								if (completed) {
+									setId(id);
+									setCompleted(false);
+								} else {
+									setId(id-1 > 0 ? id-1 : 0);
+								}
 						}}>
 							<Ionicons
 								name="chevron-back"

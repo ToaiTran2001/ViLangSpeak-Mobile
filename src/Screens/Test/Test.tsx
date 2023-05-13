@@ -68,7 +68,9 @@ export const Test = (props: ITestProps) => {
             id: test.id,
             name: test.name,
             visible: test.visible,
-            category: allCategories?.categories[test.category - 1],
+            category: allCategories?.categories.find(
+                (category) => category.id === test.category
+            ),
             progress: allProgressesTest?.progresses.find(
                 (progress) => progress.test === test.id
             ),

@@ -45,7 +45,7 @@ export const Personal = (props: IPersonalProps) => {
     const createAboutAlert = () => {
         Alert.alert(
             "ViLangSpeak",
-            "Authors: Hòa - Toại - Tuấn\nImages: storyset.com",
+            "Authors: Hòa - Toại - Tuấn\nImages: storyset.com, flaticon.com",
             [
                 {
                     text: "OK",
@@ -150,7 +150,7 @@ export const Personal = (props: IPersonalProps) => {
                                     null
                             }
                         </View>
-                        <View style={{ maxHeight: "65%", overflow: "hidden" }}>
+                        {/* <View style={{ maxHeight: "65%", overflow: "hidden" }}>
                             <TouchableOpacity
                                 style={{
                                     flexDirection: "row",
@@ -233,7 +233,7 @@ export const Personal = (props: IPersonalProps) => {
                                 :
                                     null
                             }
-                        </View>
+                        </View> */}
                         <View>
                             <TouchableOpacity
                                 style={{
