@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Heading } from "native-base";
-import { Colors, FontSize } from "@/Theme";
+import { Colors, FontSize, IconSize } from "@/Theme";
 import { Config } from "@/Config";
+import { Audio } from "expo-av";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface IAnswerProps {
     id: number | undefined;
@@ -40,6 +42,35 @@ export const Answer = (props: IAnswerProps) => {
         }
     }
 
+    const [sound, setSound] = useState<Audio.Sound | undefined>(undefined);
+
+    const [isLoadingSound, setIsLoadingSound] = useState(false);
+
+    async function playSound() {
+        console.log("Loading Sound");
+        setIsLoadingSound(true);
+        const { sound } = await Audio.Sound.createAsync(
+            { uri: content ? String(new URL(content, Config.API_APP_URL)) : "" }
+        );
+        setSound(sound);
+        console.log("Playing Sound");
+        setIsLoadingSound(false);
+        await Audio.setAudioModeAsync({
+			playsInSilentModeIOS: true,
+		});
+        await sound.playAsync();
+    }
+
+    useEffect(() => {
+        // return () => { sound && sound.unloadAsync(); }
+        return sound
+        ? () => {
+            console.log('Unloading Sound');
+            sound.unloadAsync();
+        }
+        : undefined;
+    }, [sound]);
+
     useEffect(() => {
         if (isSubmitted) {
             if ((isChoosed && answer === 1) || (!isChoosed && answer === 0))  {
@@ -50,17 +81,30 @@ export const Answer = (props: IAnswerProps) => {
 
     return (
         <TouchableOpacity onPress={onPress}>
-            {
-                type === "p"
-                ?
-                    <View
-                        style={[styles.container, { backgroundColor: backgroundColor }]}
-                    >
+            <View
+                style={[styles.container, { backgroundColor: backgroundColor }]}
+            >
+                {
+                    type === "p"
+                    ?
+                        
                         <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }}>{content}</Text>
-                    </View>
-                :
-                    <Image style={styles.image} source={{uri: Config.API_APP_URL.slice(0, -1) + content}}/>
-            }
+                        
+                    :
+                        type === "a"
+                        ?
+                            <TouchableOpacity 
+                                style={styles.smallIconContainer} onPress={playSound}>
+                                <Ionicons
+                                    name="volume-high-outline"
+                                    size={IconSize.MEDIUM}
+                                    color={Colors.TEXT}
+                                />
+                            </TouchableOpacity>
+                        :
+                            <Image style={styles.image} source={{uri: String(new URL(content ? content : "", Config.API_APP_URL))}}/>
+                }
+            </View>
             
             <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 2 }}>
                 {
@@ -94,8 +138,17 @@ const styles = StyleSheet.create({
     },
     image: {
         resizeMode: "contain",
-        width: 120,
-        height: 100,
+        width: 64,
+        height: 64,
         marginVertical: 5,
-    }
+    },
+    smallIconContainer: {
+        backgroundColor: Colors.NEW,
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+        justifyContent: "center",
+        alignItems: "center",
+        marginHorizontal: 5,
+    },
 });

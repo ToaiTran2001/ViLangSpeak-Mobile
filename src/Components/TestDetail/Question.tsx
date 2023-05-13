@@ -23,11 +23,18 @@ export const Question = (props: IQuestionProps) => {
 
     const [isLoadingSound, setIsLoadingSound] = useState(false);
 
+    let audioUrl: string | undefined = content;
+    if (type === "p" && description !== "") {
+        audioUrl = description;
+    }
+
+    console.log(content);
+
     async function playSound() {
         console.log("Loading Sound");
         setIsLoadingSound(true);
         const { sound } = await Audio.Sound.createAsync(
-            { uri: content ? String(new URL(content, Config.API_APP_URL)) : "" }
+            { uri: audioUrl ? String(new URL(audioUrl, Config.API_APP_URL)) : "" }
         );
         setSound(sound);
         console.log("Playing Sound");
@@ -105,6 +112,7 @@ export const Question = (props: IQuestionProps) => {
                             :   type === "i"
                             ?
                                 <Image style={styles.image} source={{uri: content ? String(new URL(content, Config.API_APP_URL)) : undefined}} />
+                                
                             :    
                                 <Video resizeMode={ResizeMode.CONTAIN} source={{uri: String(new URL(content ? content : "", Config.API_APP_URL))}} />
                         }
@@ -133,6 +141,7 @@ const styles = StyleSheet.create({
     },
     iContainer: {
         backgroundColor: Colors.BACKGROUND,
+        width: "96%",
         height: 120,
         justifyContent: "center",
         alignItems: "center",
@@ -157,10 +166,12 @@ const styles = StyleSheet.create({
     },
     image: {
         resizeMode: "contain",
-        height: 120,
+        width: 64,
+        height: 64,
     },
     video: {
         resizeMode: "contain",
-        height: 120,
+        width: 128,
+        height: 128,
     },
 });
