@@ -45,7 +45,7 @@ export const Personal = (props: IPersonalProps) => {
     const createAboutAlert = () => {
         Alert.alert(
             "ViLangSpeak",
-            "Authors: Hòa - Toại - Tuấn\nImages: storyset.com",
+            "Authors: Hòa - Toại - Tuấn\nImages: storyset.com, flaticon.com",
             [
                 {
                     text: "OK",
