@@ -20,18 +20,20 @@ export const LessonContainer = ({ navigation, route }: LessonScreenProps) => {
     const lessonProgress = useLazyGetProgressQuery();
 
     useEffect(() => {
-        const accountIdString = String(accountId);
-        const lessonIdString = String(lessonId);
-        lesson[0](lessonIdString);
-        lessonProgress[0]({lesson_id: lessonIdString, account_id: accountIdString});
+        if (lessonId && accountId) {
+            const accountIdString = accountId.toString();
+            const lessonIdString = lessonId.toString();
+            lesson[0](lessonIdString);
+            lessonProgress[0]({lesson_id: lessonIdString, account_id: accountIdString});
+        }
     }, [lessonId, accountId]);
 
     const onNavigateTestDetail = (accountId: number | undefined, testId: number) => {
         navigation.navigate(RootScreens.TESTDETAIL, { accountId: accountId, testId: testId });
     };
 
-    const onNavigateMain = () => {
-        navigation.navigate(RootScreens.MAIN);
+    const goBack = () => {
+        navigation.goBack();
     };
 
     return (
@@ -41,7 +43,7 @@ export const LessonContainer = ({ navigation, route }: LessonScreenProps) => {
             lesson={lesson[1].data?.data.lesson}
             lessonProgress={lessonProgress[1].data?.data.progress.value}
             onNavigateTestDetail={onNavigateTestDetail}
-            onNavigateMain={onNavigateMain}
+            goBack={goBack}
         />
     );
 };

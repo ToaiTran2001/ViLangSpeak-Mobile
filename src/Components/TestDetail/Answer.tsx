@@ -121,7 +121,8 @@ export const Answer = (props: IAnswerProps) => {
                 {
                     questionType === "mc"
                     ?
-                        <BouncyCheckbox 
+                        <BouncyCheckbox
+                            size={IconSize.SMALL}
                             isChecked={isChoosed} 
                             disableBuiltInState 
                             onPress={onPress}
@@ -140,12 +141,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
-        width: 120,
+        width: 160,
         height: 100,
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 10,
+        borderRadius: 15,
         marginVertical: 5,
+        padding: 2,
     },
     image: {
         resizeMode: "contain",

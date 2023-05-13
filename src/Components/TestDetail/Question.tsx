@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     pContainer: {
         flexDirection: "row",
         backgroundColor: Colors.FLASHCARD,
-        borderRadius: 10,
+        borderRadius: 15,
         width: "96%",
         height: 120,
         justifyContent: "center",

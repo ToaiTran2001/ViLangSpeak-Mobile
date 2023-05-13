@@ -36,7 +36,7 @@ export const SmallLCard = (props: ILCardProps) => {
                 <Image style={styles.thumbnail} source={{uri: category?.image ? String(new URL((category?.image === "" ? defaultImage : category?.image), Config.API_APP_URL)) : undefined}} />
             </View>
             <View style={styles.titleContainer}>
-                <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>{name}</Heading>
+                <Heading fontSize={FontSize.STANDARD} color={Colors.TEXT}>{name}</Heading>
             </View>
         </TouchableOpacity>
     );

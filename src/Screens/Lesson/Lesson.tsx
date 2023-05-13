@@ -29,11 +29,11 @@ export interface ILessonProps {
 	lesson: LessonDetail | undefined;
 	lessonProgress: number | undefined;
 	onNavigateTestDetail: (accountId: number | undefined, testId: number) => void;
-	onNavigateMain: () => void;
+	goBack: () => void;
 };
 
 export const Lesson = (props: ILessonProps) => {
-	const { isLoading, accountId, lesson, lessonProgress, onNavigateTestDetail, onNavigateMain } = props;
+	const { isLoading, accountId, lesson, lessonProgress, onNavigateTestDetail, goBack } = props;
 
 	const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
@@ -80,10 +80,17 @@ export const Lesson = (props: ILessonProps) => {
 		},
 	};
 
-	async function startRecording() {
+	async function requestPermissions() {
 		try {
 			console.log('Requesting permissions..');
 			await Audio.requestPermissionsAsync();
+		} catch (err) {
+			console.error('Failed to request permissions', err);
+		}
+	}
+
+	async function startRecording() {
+		try {
 			await Audio.setAudioModeAsync({
 				allowsRecordingIOS: true,
 				playsInSilentModeIOS: true,
@@ -138,13 +145,15 @@ export const Lesson = (props: ILessonProps) => {
 									lesson_id: String(currentLesson?.id), 
 									record: {
 										timestamp: Date.now(), 
-										value: lessonProgress 
+										value: Math.round(lessonProgress 
 										? (id+1)*100/total < lessonProgress ? lessonProgress : (id+1)*100/total
-										: (id+1)*100/total,
+										: (id+1)*100/total),
 										account_id: accountId ? accountId : 0
 									}
 								});
-								onNavigateMain();
+								if (!recordLesson[1].isLoading) {
+									goBack();
+								}
 							}}
 						>
 							<Ionicons
@@ -261,10 +270,12 @@ export const Lesson = (props: ILessonProps) => {
 												account_id: accountId ? accountId : 0
 											}
 										});
-										if (currentLesson?.test) {
-											onNavigateTestDetail(accountId, currentLesson ? currentLesson.test : 0)
-										} else {
-											onNavigateMain();
+										if (!recordLesson[1].isLoading) {
+											if (currentLesson?.test) {
+												onNavigateTestDetail(accountId, currentLesson ? currentLesson.test : 0)
+											} else {
+												goBack();
+											}
 										}
 									}} 
 										
@@ -275,6 +286,7 @@ export const Lesson = (props: ILessonProps) => {
 								<View style={{flexDirection: "column"}}>
 									<Pressable 
 									style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]}
+									onPressIn={requestPermissions}
 									onLongPress={startRecording}
 									onPressOut={stopRecording}
 									delayLongPress={100}

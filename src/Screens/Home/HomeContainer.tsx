@@ -64,20 +64,18 @@ export const HomeContainer = ({
         if (isFocused) {
             if (userId) {
                 const userIdString = userId.toString();
-                recommendLessons[0](userIdString);
-                allLessons[0](userIdString);
                 allProgresses[0](userIdString);
             }
         }
-    }, [isFocused])
+    }, [isFocused]);
 
     const onNavigateLesson = (accountId: number | undefined, lessonId: number) => {
         navigation.push(RootScreens.LESSON, { accountId: accountId, lessonId: lessonId });
     };
 
-    const onNavigateHomeMore = (accountId: number | undefined, allLessonsUser: LessonInfoUser[]) => {
-        navigation.push(RootScreens.HOMEMORE, { accountId: accountId, allLessonsUser: allLessonsUser });
-    }
+    const onNavigateHomeMore = (accountId: number | undefined) => {
+        navigation.push(RootScreens.HOMEMORE, { accountId: accountId });
+    };
 
     return (
         <Home

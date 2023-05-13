@@ -13,10 +13,13 @@ import { Colors, FontSize, IconSize } from "@/Theme";
 import { NormalTCard } from "@/Components";
 import { TestInfoUser } from "../Test/Test";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { ListCategory, ListProgressTest, ListTestInfo, TestInfo } from "@/Services";
 
 export interface IHomeMoreProps {
     accountId: number | undefined;
-    allTestsUser: TestInfoUser[];
+    allCategories: ListCategory | undefined;
+    allTests: ListTestInfo | undefined;
+    allProgressesTest: ListProgressTest | undefined;
     onNavigateTestDetail: (accountId: number | undefined, testId: number) => void;
     goBack: () => void;
 }
@@ -24,12 +27,38 @@ export interface IHomeMoreProps {
 export const TestMore = (props: IHomeMoreProps) => {
     const {
         accountId,
-        allTestsUser,
+        allCategories,
+        allTests,
+        allProgressesTest,
         onNavigateTestDetail,
         goBack
     } = props;
 
+    const [allTestsUser, setAllTestsUser] = useState<TestInfoUser[]>([]);
+
     const [loadMore, setLoadMore] = useState(false);
+
+    const mapTestUser = (test: TestInfo) => {
+        return {
+            id: test.id,
+            name: test.name,
+            visible: test.visible,
+            category: allCategories?.categories.find(
+                (category) => category.id === test.category
+            ),
+            progress: allProgressesTest?.progresses.find(
+                (progress) => progress.test === test.id
+            ),
+        };
+    };
+
+    useEffect(() => {
+        setAllTestsUser(allTests ? allTests.tests.map(mapTestUser as any) : []);
+    }, [
+        allTests?.tests,
+        allCategories?.categories,
+        allProgressesTest?.progresses,
+    ]);
 
     return (
         <View style={styles.container}>

@@ -30,7 +30,7 @@ export interface IHomeProps {
     allLessons: ListLessonInfo | undefined;
     allProgresses: ListProgress | undefined;
     onNavigateLesson: (accountId: number | undefined, lessonId: number) => void;
-    onNavigateHomeMore: (accountId: number | undefined, allLessonsUser: LessonInfoUser[]) => void;
+    onNavigateHomeMore: (accountId: number | undefined) => void;
 }
 
 export interface LessonInfoUser {
@@ -156,7 +156,7 @@ export const Home = (props: IHomeProps) => {
                             </Heading>
                             <TouchableOpacity 
                                 style={{ flexDirection: "row" }}
-                                onPress={() => onNavigateHomeMore(currentAccount?.id, allLessonsUser)}
+                                onPress={() => onNavigateHomeMore(currentAccount?.id)}
                             >
                                 <Text
                                     style={styles.textNormal}

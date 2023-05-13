@@ -21,8 +21,8 @@ export type RootStackParamList = {
 	[RootScreens.LOGIN]: undefined;
 	[RootScreens.REGISTER]: undefined;
 	[RootScreens.MAIN]: undefined;
-	[RootScreens.HOMEMORE]: { accountId: number | undefined, allLessonsUser: LessonInfoUser[] };
-	[RootScreens.TESTMORE]: { accountId: number | undefined, allTestsUser: TestInfoUser[] };
+	[RootScreens.HOMEMORE]: { accountId: number | undefined };
+	[RootScreens.TESTMORE]: { accountId: number | undefined };
 	[RootScreens.LESSON]: { accountId: number | undefined, lessonId: number };
 	[RootScreens.TESTDETAIL]: { accountId: number | undefined, testId: number };
 };

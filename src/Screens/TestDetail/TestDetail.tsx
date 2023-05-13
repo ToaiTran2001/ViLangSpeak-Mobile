@@ -24,11 +24,11 @@ export interface ITestDetailProps {
 	test: TestDetailData | undefined;
 	testProgress: number | undefined;
 	dictResult: {[id: number]: Result;};
-	onNavigateTest: () => void;
+	goBack: () => void;
 };
 
 export const TestDetail = (props: ITestDetailProps) => {
-	const { isLoading, accountId, test, testProgress, dictResult, onNavigateTest } = props;
+	const { isLoading, accountId, test, testProgress, dictResult, goBack } = props;
 	
 	const [currentTest, setCurrentTest] = useState(test);
 
@@ -86,11 +86,13 @@ export const TestDetail = (props: ITestDetailProps) => {
 							test_id: String(currentTest?.id), 
 							record: {
 								timestamp: Date.now(), 
-								score: score*100/total,
+								score: Math.round(score*100/total),
 								account_id: accountId ? accountId : 0
 							}
 						});
-						onNavigateTest();
+						if (!recordTest[1].isLoading) {
+							goBack();
+						}
 					},
 				},
 				{
@@ -111,7 +113,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 				{
 					text: "OK",
 					onPress: () => {
-						onNavigateTest();
+						goBack();
 					},
 				},
 				{

@@ -7,9 +7,9 @@ import { TestDetail } from "./TestDetail";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { MainBottomBarParamList } from "@/Navigation/Main";
 
-type TestDetailScreenNavigatorProps = CompositeScreenProps<
-	NativeStackScreenProps<RootStackParamList, RootScreens.TESTDETAIL>,
-	NativeStackScreenProps<MainBottomBarParamList>
+type TestDetailScreenNavigatorProps = NativeStackScreenProps<
+	RootStackParamList,
+	RootScreens.TESTDETAIL
 >;
 
 interface SingleResult {
@@ -35,15 +35,26 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
 	var dictResult: {[id: number]: Result;} = {};
 
 	useEffect(() => {
-		const accountIdString = String(accountId);
-		const testIdString = String(testId);
-		test[0](testIdString);
-		testProgress[0]({test_id: testIdString, account_id: accountIdString});
+		if (testId && accountId) {
+			const accountIdString = accountId.toString();
+			const testIdString = testId.toString();
+			test[0](testIdString);
+			testProgress[0]({test_id: testIdString, account_id: accountIdString});
+		}
 	}, [testId, accountId]);
 
-	const onNavigateTest = () => {
-		navigation.navigate(MainScreens.TEST);
+	const goBack = () => {
+		navigation.goBack();
 	};
 
-  	return <TestDetail isLoading={test[1].isLoading} accountId={accountId} test={test[1].data?.data.test} testProgress={testProgress[1].data?.data.progress.score.highest} dictResult={dictResult} onNavigateTest={onNavigateTest} />;
+  	return (
+		<TestDetail 
+			isLoading={test[1].isLoading} 
+			accountId={accountId} 
+			test={test[1].data?.data.test} 
+			testProgress={testProgress[1].data?.data.progress.score.highest} 
+			dictResult={dictResult}
+			goBack={goBack} 
+		/>
+	);
 };

@@ -55,9 +55,7 @@ export const TestContainer = ({
             allTests[0](userIdString);
             allProgressesTest[0](userIdString);
         }
-    }, [
-        userId,
-    ]);
+    }, [userId]);
 
     const isFocused = useIsFocused();
 
@@ -71,15 +69,15 @@ export const TestContainer = ({
                 allProgressesTest[0](userIdString);
             }
         }
-    }, [isFocused])
+    }, [isFocused]);
 
     const onNavigateTestDetail = (accountId: number | undefined, testId: number) => {
         navigation.push(RootScreens.TESTDETAIL, { accountId: accountId, testId: testId });
     };
 
-    const onNavigateTestMore = (accountId: number | undefined, allTestsUser: TestInfoUser[]) => {
-        navigation.push(RootScreens.TESTMORE, { accountId: accountId, allTestsUser: allTestsUser });
-    }
+    const onNavigateTestMore = (accountId: number | undefined) => {
+        navigation.push(RootScreens.TESTMORE, { accountId: accountId });
+    };
 
     return (
         <Test
