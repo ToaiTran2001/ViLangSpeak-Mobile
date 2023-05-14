@@ -107,7 +107,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 
 	const createNotSaveAlert = () => {
 		Alert.alert(
-			"Your score will be not saved!",
+			"Your score will not be saved!",
 			"Are you sure?",
 			[
 				{
