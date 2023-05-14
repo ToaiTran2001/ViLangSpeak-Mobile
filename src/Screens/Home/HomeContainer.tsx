@@ -64,6 +64,7 @@ export const HomeContainer = ({
         if (isFocused) {
             if (userId) {
                 const userIdString = userId.toString();
+                recommendLessons[0](userIdString);
                 allProgresses[0](userIdString);
             }
         }

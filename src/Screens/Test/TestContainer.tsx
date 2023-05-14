@@ -65,7 +65,6 @@ export const TestContainer = ({
             if (userId) {
                 const userIdString = userId.toString();
                 recommendTests[0](userIdString);
-                allTests[0](userIdString);
                 allProgressesTest[0](userIdString);
             }
         }
