@@ -92,8 +92,6 @@ export const Lesson = (props: ILessonProps) => {
 		}
 	}
 
-	console.log(permissions);
-
 	async function startRecording() {
 		try {
 			if (permissions && permissions.granted) {
