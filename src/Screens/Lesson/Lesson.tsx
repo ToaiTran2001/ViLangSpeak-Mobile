@@ -11,7 +11,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { Audio } from 'expo-av';
 import { Heading, HStack, Spinner } from "native-base";
-import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat } from "expo-av/build/Audio";
+import { AndroidAudioEncoder, AndroidOutputFormat, IOSAudioQuality, IOSOutputFormat, PermissionResponse } from "expo-av/build/Audio";
 import { Colors, FontSize, IconSize } from "@/Theme";
 import { AiResult, FCard } from "@/Components";
 import { LessonDetail } from "@/Services";
@@ -35,7 +35,7 @@ export interface ILessonProps {
 export const Lesson = (props: ILessonProps) => {
 	const { isLoading, accountId, lesson, lessonProgress, onNavigateTestDetail, goBack } = props;
 
-	const [permission, setPermission] = useState(false);
+	const [permissions, setPermissions] = useState<PermissionResponse>();
 
 	const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
@@ -85,16 +85,18 @@ export const Lesson = (props: ILessonProps) => {
 	async function requestPermissions() {
 		try {
 			console.log('Requesting permissions..');
-			await Audio.requestPermissionsAsync();
-			setPermission(true);
+			const response = await Audio.requestPermissionsAsync();
+			setPermissions(response);
 		} catch (err) {
 			console.error('Failed to request permissions', err);
 		}
 	}
 
+	console.log(permissions);
+
 	async function startRecording() {
 		try {
-			if (permission) {
+			if (permissions && permissions.granted) {
 				await Audio.setAudioModeAsync({
 					allowsRecordingIOS: true,
 					playsInSilentModeIOS: true,
@@ -290,11 +292,11 @@ export const Lesson = (props: ILessonProps) => {
 							:
 								<View style={{flexDirection: "column"}}>
 									<Pressable 
-									style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]}
-									onPressIn={requestPermissions}
-									onLongPress={startRecording}
-									onPressOut={stopRecording}
-									delayLongPress={100}
+										style={[styles.iconContainer, {backgroundColor: recording ? Colors.PRIMARY : Colors.NEW}]}
+										onPressIn={requestPermissions}
+										onLongPress={startRecording}
+										onPressOut={stopRecording}
+										delayLongPress={100}
 									>
 									<Ionicons
 										name="mic-outline"
