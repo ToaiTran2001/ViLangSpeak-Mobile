@@ -15,8 +15,11 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Colors, FontSize, IconSize } from "@/Theme";
-import { useRegisterMutation } from "@/Services";
+import { useLogInMutation, useRegisterMutation } from "@/Services";
+import { useDispatch } from "react-redux";
+import { logIn } from "@/Store/reducers";
 import { useHeaderHeight } from "@react-navigation/elements";
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Constants from 'expo-constants';
 
@@ -32,7 +35,13 @@ export const Register = (props: IRegisterProps) => {
 
     const [name, onChangeName] = useState("");
 
-    const [birthday, onChangeBirthday] = useState("");
+    const [birthday, onChangeBirthday] = useState<Date>(new Date());
+
+    const [birthdayText, onChangeBirthdayText] = useState("");
+
+    const [chooseDate, setChooseDate] = useState(false);
+
+    const [dateModal, setDateModal] = useState(false);
 
     const [username, onChangeUsername] = useState("");
 
@@ -46,7 +55,11 @@ export const Register = (props: IRegisterProps) => {
 
     const [checkConfirmPassword, setCheckConfirmPassword] = useState(false);
 
-    const [uploadRegister, { data, isSuccess, isLoading, error }] = useRegisterMutation();
+    const register = useRegisterMutation();
+
+    const dispatch = useDispatch();
+
+    const login = useLogInMutation();
 
     const headerHeight = useHeaderHeight();
 
@@ -58,7 +71,7 @@ export const Register = (props: IRegisterProps) => {
                 {
                     text: "OK",
                     onPress: () => {
-                        onNavigateLogin();
+                        login[0]({ username: username, password: password });
                     },
                 },
             ]
@@ -81,16 +94,24 @@ export const Register = (props: IRegisterProps) => {
     };
 
     useEffect(() => {
-        if (data) {
+        if (register[1].data) {
             createSuccessfulAlert();
         }
-    }, [data]);
+    }, [register[1].data]);
 
     useEffect(() => {
-        if (!data && !isLoading && pressRegister) {
+        dispatch(logIn({
+            userId: login[1].data?.id,
+            token: login[1].data?.access_token,
+            refreshToken: login[1].data?.refresh_token,
+        }));
+    }, [login[1].data]);
+
+    useEffect(() => {
+        if (!register[1].data && !register[1].isLoading && pressRegister) {
             createFailedAlert();
         }
-    }, [isLoading])
+    }, [register[1].isLoading]);
 
     return (
         <KeyboardAvoidingView
@@ -138,13 +159,27 @@ export const Register = (props: IRegisterProps) => {
                                     placeholder="Name"
                                 />
                                 <TextInput
-                                    editable
                                     maxLength={40}
-                                    onChangeText={text => onChangeBirthday(text)}
-                                    value={birthday}
+                                    value={!chooseDate ? birthdayText : birthday.toISOString().split('T')[0]}
+                                    onChangeText={text => {setChooseDate(false);onChangeBirthdayText(text)}}
                                     style={styles.input}
                                     placeholder="Birthday (YYYY-MM-DD)"
+                                    onFocus={() => setDateModal(true)}
+                                    onBlur={() => setDateModal(false)}
                                 />
+                                {
+                                    dateModal 
+                                    ?
+                                        <RNDateTimePicker 
+                                            mode="date"
+                                            onChange={(event: DateTimePickerEvent, date: Date | undefined) => {setChooseDate(true);setDateModal(false);onChangeBirthday(date ? date: new Date());}}
+                                            value={birthday}
+                                            minimumDate={new Date("1900-01-01")}
+                                            maximumDate={new Date("2023-12-30")}
+                                        />
+                                    :
+                                        null
+                                }   
                                 <TextInput
                                     editable
                                     maxLength={40}
@@ -206,7 +241,7 @@ export const Register = (props: IRegisterProps) => {
                                             setCheckConfirmPassword(true);
                                         } else {
                                             setCheckConfirmPassword(false);
-                                            uploadRegister({ name: name, birthday: birthday, username: username, password: password });
+                                            register[0]({ name: name, birthday: !chooseDate ? birthdayText : birthday.toISOString().split('T')[0], username: username, password: password });
                                             setPressRegister(true);
                                         }
                                     }}

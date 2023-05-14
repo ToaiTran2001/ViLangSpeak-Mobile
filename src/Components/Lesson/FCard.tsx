@@ -161,7 +161,7 @@ const renderBack = (props: IBackFlashProps) => {
 				{
 					element.type === "h"
 					?
-						<Text style={{ fontSize: FontSize.REGULAR, fontWeight: "700", fontStyle: "italic" }}>
+						<Text style={{ fontSize: FontSize.REGULAR, fontWeight: "bold", fontStyle: "italic" }}>
 							{element.content}
 						</Text>
 					:

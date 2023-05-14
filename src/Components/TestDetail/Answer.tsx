@@ -131,7 +131,7 @@ export const Answer = (props: IAnswerProps) => {
                     :
                         null 
                 }
-                <Text style={{ fontSize: FontSize.SMALL, color: textColor }}>{text}</Text>
+                <Text style={{ fontSize: FontSize.SMALL, color: textColor, fontWeight: textColor === Colors.TEXT_CORRECT ? "bold" : "normal"}}>{text}</Text>
             </View>
         </TouchableOpacity>
     );
