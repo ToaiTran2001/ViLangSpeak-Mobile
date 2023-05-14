@@ -44,10 +44,8 @@ export const TestMoreContainer = ({
 
     useEffect(() => {
         if (isFocused) {
-            // Update the state you want to be updated
             if (accountId) {
                 const accountIdString = accountId.toString();
-                allTests[0](accountIdString);
                 allProgressesTest[0](accountIdString);
             }
         }

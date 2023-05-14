@@ -61,7 +61,6 @@ export const TestContainer = ({
 
     useEffect(() => {
         if (isFocused) {
-            // Update the state you want to be updated
             if (userId) {
                 const userIdString = userId.toString();
                 recommendTests[0](userIdString);
