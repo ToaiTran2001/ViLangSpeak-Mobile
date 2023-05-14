@@ -35,6 +35,8 @@ export interface ILessonProps {
 export const Lesson = (props: ILessonProps) => {
 	const { isLoading, accountId, lesson, lessonProgress, onNavigateTestDetail, goBack } = props;
 
+	const [permission, setPermission] = useState(false);
+
 	const [recording, setRecording] = useState<Audio.Recording | undefined>();
 
 	const [uri, setUri] = useState<string>("");
@@ -84,6 +86,7 @@ export const Lesson = (props: ILessonProps) => {
 		try {
 			console.log('Requesting permissions..');
 			await Audio.requestPermissionsAsync();
+			setPermission(true);
 		} catch (err) {
 			console.error('Failed to request permissions', err);
 		}
@@ -91,16 +94,18 @@ export const Lesson = (props: ILessonProps) => {
 
 	async function startRecording() {
 		try {
-			await Audio.setAudioModeAsync({
-				allowsRecordingIOS: true,
-				playsInSilentModeIOS: true,
-			});
-			console.log('Starting recording..');
-			const recording = new Audio.Recording();
-			await recording.prepareToRecordAsync(recordingSettings);
-			await recording.startAsync();
-			setRecording(recording);
-			console.log('Recording started');
+			if (permission) {
+				await Audio.setAudioModeAsync({
+					allowsRecordingIOS: true,
+					playsInSilentModeIOS: true,
+				});
+				console.log('Starting recording..');
+				const recording = new Audio.Recording();
+				await recording.prepareToRecordAsync(recordingSettings);
+				await recording.startAsync();
+				setRecording(recording);
+				console.log('Recording started');
+			}
 		} catch (err) {
 			console.error('Failed to start recording', err);
 		}
