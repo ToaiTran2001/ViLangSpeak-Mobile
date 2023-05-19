@@ -1,4 +1,5 @@
 export * from "./Home";
 export * from "./Test";
-export * from "./Lesson";
 export * from "./Personal";
+export * from "./Lesson";
+export * from "./TestDetail";

@@ -35,6 +35,13 @@ export interface ListAchievementResponse {
   timestamp: number;
 };
 
+export interface RegisterInfo {
+  name: string;
+  birthday: string;
+  username: string;
+  password: string;
+};
+
 const userProfileApi = API_APP.injectEndpoints({
   endpoints: (build) => ({
     getUserProfile: build.query<ProfileResponse, string>({
@@ -53,6 +60,21 @@ const userAchievementsApi = API_APP.injectEndpoints({
   overrideExisting: true,
 });
 
+const registerApi = API_APP.injectEndpoints({
+  endpoints: (build) => ({
+    register: build.mutation<ProfileResponse, RegisterInfo>({
+      query: (registerInfo) => ({
+        url: "app/account/register",
+        method: "POST",
+        body: registerInfo,
+      }),
+    }),
+  }),
+  overrideExisting: true,
+});
+
 export const { useLazyGetUserProfileQuery } = userProfileApi;
 
 export const { useLazyGetUserAchievementsQuery } = userAchievementsApi;
+
+export const { useRegisterMutation } = registerApi;

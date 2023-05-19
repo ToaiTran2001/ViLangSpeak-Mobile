@@ -1,42 +1,92 @@
-import React, { useState, useEffect } from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, { useEffect } from "react";
+import {
+    useLazyGetAllCategoriesQuery,
+    useLazyGetAllTestsQuery,
+    useLazyGetRmdTestsQuery,
+    useLazyGetAllProgressesTestQuery,
+    useLazyGetUserProfileQuery,
+} from "@/Services";
+import { MainScreens, RootScreens } from "..";
+import { Test, TestInfoUser } from "./Test";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/Store/reducers";
+import { CompositeScreenProps, useIsFocused } from "@react-navigation/native";
+import { RootStackParamList } from "@/Navigation";
 import { MainBottomBarParamList } from "@/Navigation/Main";
-import { useLazyGetAllCategoriesQuery, useLazyGetAllTestsQuery, useLazyGetRmdTestsQuery, useLazyGetAllProgressesTestQuery } from "@/Services";
-import { MainScreens } from "..";
-import { Test } from "./Test";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-type TestScreenNavigatorProps = NativeStackScreenProps<
-  MainBottomBarParamList,
-  MainScreens.TEST
+type TestScreenProps = CompositeScreenProps<
+    NativeStackScreenProps<MainBottomBarParamList, MainScreens.TEST>,
+    NativeStackScreenProps<RootStackParamList>
 >;
 
-export const TestContainer = ({ navigation }: TestScreenNavigatorProps) => {
-  const [userId, setUserId] = useState("1");
+export const TestContainer = ({
+    navigation
+}: TestScreenProps) => {
+    const userId = useSelector(selectAuth()).userId;
 
-  // allCategories = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const allCategories = useLazyGetAllCategoriesQuery();
+    // profile = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const profile = useLazyGetUserProfileQuery();
 
-  // recommendTests = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const recommendTests = useLazyGetRmdTestsQuery();
+    // allCategories = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const allCategories = useLazyGetAllCategoriesQuery();
 
-  // allLessons = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const allTests = useLazyGetAllTestsQuery();
+    // recommendTests = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const recommendTests = useLazyGetRmdTestsQuery();
 
-  // allProgresses = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const allProgressesTest = useLazyGetAllProgressesTestQuery();
+    // allLessons = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const allTests = useLazyGetAllTestsQuery();
 
-  const isLoading = allCategories[1].isLoading || recommendTests[1].isLoading || allTests[1].isLoading || allProgressesTest[1].isLoading;
+    // allProgresses = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const allProgressesTest = useLazyGetAllProgressesTestQuery();
 
-  useEffect(() => {
-    allCategories[0](userId)
-    recommendTests[0](userId);
-    allTests[0](userId);
-    allProgressesTest[0](userId);
-  }, [allCategories[0], recommendTests[0], allTests[0], allProgressesTest[0], userId]);
+    const isLoading =
+        allCategories[1].isLoading ||
+        recommendTests[1].isLoading ||
+        allTests[1].isLoading ||
+        allProgressesTest[1].isLoading;
 
-  const onNavigate = (screen: MainScreens) => {
-      navigation.navigate(screen);
-  };
+    useEffect(() => {
+        if (userId) {
+            const userIdString = userId.toString();
+            profile[0](userIdString);
+            allCategories[0](userIdString);
+            recommendTests[0](userIdString);
+            allTests[0](userIdString);
+            allProgressesTest[0](userIdString);
+        }
+    }, [userId]);
 
-  return <Test isLoading={isLoading} allCategories={allCategories[1].data?.data} recommendTests={recommendTests[1].data?.data} allTests={allTests[1].data?.data} allProgressesTest={allProgressesTest[1].data?.data} onNavigate={onNavigate} />;
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            if (userId) {
+                const userIdString = userId.toString();
+                recommendTests[0](userIdString);
+                allProgressesTest[0](userIdString);
+            }
+        }
+    }, [isFocused]);
+
+    const onNavigateTestDetail = (accountId: number | undefined, testId: number) => {
+        navigation.push(RootScreens.TESTDETAIL, { accountId: accountId, testId: testId });
+    };
+
+    const onNavigateTestMore = (accountId: number | undefined) => {
+        navigation.push(RootScreens.TESTMORE, { accountId: accountId });
+    };
+
+    return (
+        <Test
+            isLoading={isLoading}
+            profile={profile[1].data?.data}
+            allCategories={allCategories[1].data?.data}
+            recommendTests={recommendTests[1].data?.data}
+            allTests={allTests[1].data?.data}
+            allProgressesTest={allProgressesTest[1].data?.data}
+            onNavigateTestDetail={onNavigateTestDetail}
+            onNavigateTestMore={onNavigateTestMore}
+        />
+    );
 };

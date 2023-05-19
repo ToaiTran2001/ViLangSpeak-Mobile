@@ -7,6 +7,7 @@ export interface LoginInfo {
 }
 
 export interface CredentialResponse {
+    id: number;
     access_token: string;
     refresh_token: string;
 }
@@ -43,3 +44,5 @@ export const logOutApi = API_APP.injectEndpoints({
   }),
   overrideExisting: true,
 });
+
+export const { useLogInMutation } = authApi;

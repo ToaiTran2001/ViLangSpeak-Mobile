@@ -1,20 +1,20 @@
 import React from "react";
-import { Welcome } from "./Welcome";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/Navigation";
 import { RootScreens } from "..";
+import { Welcome } from "./Welcome";
 
 type WelcomeScreenNavigatorProps = NativeStackScreenProps<
-  RootStackParamList,
-  RootScreens.WELCOME
+	RootStackParamList,
+	RootScreens.WELCOME
 >;
 
 export const WelcomeContainer = ({
-  navigation,
+  	navigation,
 }: WelcomeScreenNavigatorProps) => {
-  const onNavigate = (screen: RootScreens) => {
-    navigation.navigate(screen);
-  };
+	const onNavigateLogin = () => {
+		navigation.navigate(RootScreens.LOGIN);
+	};
 
-  return <Welcome onNavigate={onNavigate} />;
+	return <Welcome onNavigateLogin={onNavigateLogin} />;
 };

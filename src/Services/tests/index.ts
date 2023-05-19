@@ -1,5 +1,5 @@
 import { API_APP } from "../baseApp";
-
+import { Category } from "../lessons";
 export interface TestInfo {
   id: number;
   name: string;
@@ -27,7 +27,18 @@ export interface ProgressTest {
 };
 
 export interface ProgressTestResponse {
-  data: ProgressTest;
+  data: {
+    test: number;
+    progress: {
+      score: {
+        average: number;
+        highest: number;
+        lowest: number;
+      };
+      times: number;
+      last_date: number;
+    };
+  };
   timestamp: number;
 };
 
@@ -45,6 +56,56 @@ type TestIds = {
   test_id: string;
   account_id: string;
 };
+
+export interface AnswerInfo {
+  id: number;
+  type: string;
+  content: string;
+  answer: number;
+};
+
+export interface QuestionInfo {
+  id: number;
+  question_type: string;
+  description: string;
+  type: string;
+  content: string;
+  items: AnswerInfo[];
+};
+
+export interface ListQuestionInfo {
+  value: QuestionInfo[];
+  total: number;
+};
+
+export interface TestDetailData {
+  id: number;
+  name: string;
+  visible: boolean;
+  category: Category;
+  questions: ListQuestionInfo;
+};
+
+export interface TestDetailDataResponse {
+  data: {
+    test: TestDetailData;
+  };
+  timestamp: number;
+};
+
+export interface RecordProgressTestInfo {
+  test_id: string;
+  record: {
+    timestamp: number;
+    score: number;
+    account_id: number;
+  };
+}
+
+export interface RecordProgressTestResponse {
+  timestamp: number;
+  status: string;
+}
 
 const allTestsApi = API_APP.injectEndpoints({
   endpoints: (build) => ({
@@ -82,6 +143,28 @@ const progressTestApi = API_APP.injectEndpoints({
   overrideExisting: true,
 });
 
+const testDetailApi = API_APP.injectEndpoints({
+  endpoints: (build) => ({
+    getTestDetail: build.query<TestDetailDataResponse, string>({
+      query: (id) => `app/test/${id}`,
+    }),
+  }),
+  overrideExisting: true,
+});
+
+const recordTestApi = API_APP.injectEndpoints({
+  endpoints: (build) => ({
+    recordTest: build.mutation<RecordProgressTestResponse, RecordProgressTestInfo>({
+      query: ({ test_id, record }) => ({
+        url: `app/test/${test_id}/progress`,
+        method: "POST",
+        body: record,
+      }),
+    }),
+  }),
+  overrideExisting: true,
+});
+
 export const { useLazyGetRmdTestsQuery } = recommendTestsApi;
 
 export const { useLazyGetAllTestsQuery } = allTestsApi;
@@ -89,3 +172,7 @@ export const { useLazyGetAllTestsQuery } = allTestsApi;
 export const { useLazyGetAllProgressesTestQuery } = allProgressesTestApi;
 
 export const { useLazyGetProgressTestQuery } = progressTestApi;
+
+export const { useLazyGetTestDetailQuery } = testDetailApi;
+
+export const { useRecordTestMutation } = recordTestApi;

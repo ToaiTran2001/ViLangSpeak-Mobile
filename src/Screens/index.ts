@@ -1,12 +1,16 @@
 export enum RootScreens {
-  MAIN = "Main",
   WELCOME = "Welcome",
+  LOGIN = "Login",
+  REGISTER = "Register",
+  MAIN = "Main",
+  HOMEMORE = "HomeMore",
+  TESTMORE = "TestMore",
   LESSON = "Lesson",
+  TESTDETAIL = "TestDetail"
 }
 
 export enum MainScreens {
   HOME = "Home",
-  LESSON = "Lesson",
   TEST = "Test",
   PERSONAL = "Personal",
 }

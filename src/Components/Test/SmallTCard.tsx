@@ -31,10 +31,10 @@ export const SmallTCard = (props: ITestProps) => {
             onPress={onPress}
         >
             <View style={[styles.thumbnailContainer, {backgroundColor: thumbnailContainerColor}]}>
-                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}}></Image>
+                <Image style={styles.thumbnail} source={{uri: category?.image ? String(new URL((category?.image === "" ? defaultImage : category?.image), Config.API_APP_URL)) : undefined}}></Image>
             </View>
             <View style={styles.titleContainer}>
-                <Heading fontSize={FontSize.REGULAR} color={Colors.TEXT}>{name}</Heading>
+                <Heading fontSize={FontSize.STANDARD} color={Colors.TEXT}>{name}</Heading>
             </View>
         </TouchableOpacity>
     )
@@ -45,12 +45,12 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         width: 120,
-        height: 160,
+        height: 150,
     },
     thumbnailContainer: {
         flex: 3,
         backgroundColor: Colors.PRIMARY,
-        borderRadius: 20,
+        borderRadius: 15,
         justifyContent: "center",
         alignItems: "center",
         margin: 5,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 80,
-        height: 60,
+        width: 50,
+        height: 50,
     },
 });

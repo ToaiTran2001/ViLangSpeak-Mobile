@@ -21,26 +21,28 @@ export const NormalTCard = (props: ITestProps) => {
     const defaultImage: string = "/public/image/test-default.png";
 
     return (
-        <TouchableOpacity
+        <View
             style={[styles.container, {backgroundColor: containerColor}]}
-            onPress={onPress}
         >
             <View style={styles.thumbnailContainer}>
-                <Image style={styles.thumbnail} source={{uri: Config.API_APP_URL.slice(0, -1) + (category?.image === "" ? defaultImage : category?.image)}}></Image>
+                <Image style={styles.thumbnail} source={{uri: category?.image ? String(new URL((category?.image === "" ? defaultImage : category?.image), Config.API_APP_URL)) : undefined}}></Image>
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
                     <Heading fontSize={FontSize.MEDIUM} color={Colors.TEXT}>{name}</Heading>
-                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 30}}>{progress ? progress.progress.score : 0}</Text>
+                    <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT, marginRight: 20}}>{progress ? progress.progress.score : 0}%</Text>
                 </View>
                 <View style={styles.categoryContainer}>
                     <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{category?.name}</Text>
-                    <TouchableOpacity style={[styles.button, {backgroundColor: buttonColor}]}>
-                        <Text style={{fontSize: FontSize.SMALL, color: Colors.TEXT}}>{buttonTitle}</Text>
+                    <TouchableOpacity 
+                        style={[styles.button, {backgroundColor: buttonColor}]}
+                        onPress={onPress}
+                    >
+                        <Text style={{fontSize: FontSize.SMALL, color: Colors.WHITE}}>{buttonTitle}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-        </TouchableOpacity>
+        </View>
     )
 };
 
@@ -48,18 +50,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "row",
-        borderRadius: 20,
+        borderRadius: 15,
         width: "96%",
-        height: 96,
+        height: 90,
         margin: 5,
     },
     thumbnailContainer: {
-        flex: 3,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
     },
     contentContainer: {
-        flex: 7,
+        flex: 3,
         marginVertical: 5,
     },
     titleContainer: {
@@ -76,16 +78,16 @@ const styles = StyleSheet.create({
     },
     thumbnail: {
         resizeMode: "contain",
-        width: 80,
-        height: 60,
+        width: 50,
+        height: 50,
     },
     button: {
         width: 72,
         height: 36,
         borderRadius: 10,
-        marginRight: 30,
-        padding: 5,
         justifyContent: "center",
         alignItems: "center",
+        marginRight: 20,
+        padding: 5,
     }
 });

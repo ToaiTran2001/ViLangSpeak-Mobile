@@ -45,6 +45,7 @@ export const refreshToken = async (getState: any, dispatch: any) => {
       },
     }).then((result) => {
       const tokens: AuthState = {
+        userId: result.data.id,
         token: result.data.access_token,
         refreshToken: result.data.refresh_token,
       };
@@ -55,7 +56,7 @@ export const refreshToken = async (getState: any, dispatch: any) => {
       return tokens.token ? Promise.resolve(tokens) : Promise.reject('failed to refresh token');
     }).catch(e => {
       console.log('error refreshing token');
-      if (axios.isAxiosError(e) && e.response?.status == 401) {
+      if (axios.isAxiosError(e) && e.response?.status  != 200) {
         // refresh token is expired
         dispatch(logOut());
       }

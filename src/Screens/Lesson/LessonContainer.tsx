@@ -1,30 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { CompositeScreenProps } from '@react-navigation/native';
-import { MainBottomBarParamList } from "@/Navigation/Main";
 import { RootStackParamList } from "@/Navigation";
-import { useLazyGetLessonQuery } from "@/Services";
-import { MainScreens, RootScreens } from "..";
+import { useLazyGetLessonQuery, useLazyGetProgressQuery } from "@/Services";
+import { RootScreens } from "..";
 import { Lesson } from "./Lesson";
 
-type LessonScreenNavigatorProps = CompositeScreenProps<
-  NativeStackScreenProps<RootStackParamList, RootScreens.LESSON>,
-  NativeStackScreenProps<MainBottomBarParamList>
+type LessonScreenProps = NativeStackScreenProps<
+    RootStackParamList,
+    RootScreens.LESSON
 >;
 
-export const LessonContainer = ({ navigation }: LessonScreenNavigatorProps) => {
-  const [lessonId, setLessonId] = useState("1");
+export const LessonContainer = ({ navigation, route }: LessonScreenProps) => {
+    const [accountId, setAccountId] = useState(route.params.accountId)
+    const [lessonId, setLessonId] = useState(route.params.lessonId);
 
-  // lesson = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
-  const lesson = useLazyGetLessonQuery();
+    // lesson = [fetchOne, { data, isSuccess, isLoading, isFetching, error }]
+    const lesson = useLazyGetLessonQuery();
 
-  useEffect(() => {
-    lesson[0](lessonId);
-  }, [lesson[0], lessonId]);
+    const lessonProgress = useLazyGetProgressQuery();
 
-  const onNavigate = (screen: MainScreens) => {
-    navigation.navigate(screen);
-  };
+    useEffect(() => {
+        if (lessonId && accountId) {
+            const accountIdString = accountId.toString();
+            const lessonIdString = lessonId.toString();
+            lesson[0](lessonIdString);
+            lessonProgress[0]({lesson_id: lessonIdString, account_id: accountIdString});
+        }
+    }, [lessonId, accountId]);
 
-  return <Lesson isLoading={lesson[1].isLoading} lesson={lesson[1].data?.data.lesson} onNavigate={onNavigate} />;
+    const onNavigateTestDetail = (accountId: number | undefined, testId: number) => {
+        navigation.navigate(RootScreens.TESTDETAIL, { accountId: accountId, testId: testId });
+    };
+
+    const goBack = () => {
+        navigation.goBack();
+    };
+
+    return (
+        <Lesson
+            isLoading={lesson[1].isLoading}
+            accountId={accountId}
+            lesson={lesson[1].data?.data.lesson}
+            lessonProgress={lessonProgress[1].data?.data.progress.value}
+            onNavigateTestDetail={onNavigateTestDetail}
+            goBack={goBack}
+        />
+    );
 };
