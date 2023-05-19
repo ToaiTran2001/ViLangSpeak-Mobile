@@ -277,7 +277,7 @@ export const Lesson = (props: ILessonProps) => {
 										});
 										if (!recordLesson[1].isLoading) {
 											if (currentLesson?.test) {
-												onNavigateTestDetail(accountId, currentLesson ? currentLesson.test : 0)
+												onNavigateTestDetail(accountId, currentLesson.test)
 											} else {
 												goBack();
 											}
