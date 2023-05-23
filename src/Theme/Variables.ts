@@ -12,7 +12,7 @@ export enum Colors {
   TRANSPARENT = "rgba(0,0,0,0)",
   BACKGROUND = "#FFFFFF",
   WHITE = "#FFFFFF",
-  GRAY = "#D9D9D9",
+  GRAY = "#EFEFEF",
   BLACK = "#000000",
   PRIMARY = "#86D3FF",
   PRIMARY_BOLD = "#05BAE1",

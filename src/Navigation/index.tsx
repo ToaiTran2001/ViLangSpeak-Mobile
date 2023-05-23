@@ -7,6 +7,7 @@ import { RootScreens } from "@/Screens";
 import { WelcomeContainer } from "@/Screens/Welcome";
 import { LoginContainer } from "@/Screens/Login";
 import { RegisterContainer } from "@/Screens/Register";
+import { GuestContainer } from "@/Screens/Guest";
 import { LessonContainer } from "@/Screens/Lesson";
 import { TestDetailContainer } from "@/Screens/TestDetail";
 import { HomeMoreContainer } from "@/Screens/HomeMore";
@@ -20,6 +21,7 @@ export type RootStackParamList = {
 	[RootScreens.WELCOME]: undefined;
 	[RootScreens.LOGIN]: undefined;
 	[RootScreens.REGISTER]: undefined;
+  [RootScreens.GUEST]: undefined;
 	[RootScreens.MAIN]: undefined;
 	[RootScreens.HOMEMORE]: { accountId: number | undefined };
 	[RootScreens.TESTMORE]: { accountId: number | undefined };
@@ -52,6 +54,11 @@ const ApplicationNavigator = () => {
             <RootStack.Screen
               name={RootScreens.REGISTER}
               component={RegisterContainer}
+              options={{}}
+            />
+            <RootStack.Screen
+              name={RootScreens.GUEST}
+              component={GuestContainer}
               options={{}}
             />
           </RootStack.Navigator>

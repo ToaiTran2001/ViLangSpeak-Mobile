@@ -14,5 +14,9 @@ export const LoginContainer = ({ navigation }: LoginScreenNavigatorProps) => {
 		navigation.replace(RootScreens.REGISTER);
 	};
 
-  	return <Login onNavigateRegister={onNavigateRegister} />;
+	const onNavigateGuest = () => {
+		navigation.push(RootScreens.GUEST);
+	}
+
+  	return <Login onNavigateRegister={onNavigateRegister} onNavigateGuest={onNavigateGuest} />;
 };

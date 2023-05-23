@@ -23,42 +23,42 @@ export const MainNavigator = () => {
 				name={MainScreens.HOME}
 				component={HomeContainer}
 				options={{
-				headerShown: false,
-				tabBarIcon: ({ color, size }) => (
-					<Ionicons name="home-outline" color={color} size={size} />
-				),
-				tabBarLabelPosition: "below-icon",
-				tabBarShowLabel: false,
-				tabBarActiveBackgroundColor: Colors.PRIMARY,
-				tabBarInactiveBackgroundColor: Colors.WHITE,
+					headerShown: false,
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name="home-outline" color={color} size={size} />
+					),
+					tabBarLabelPosition: "below-icon",
+					tabBarShowLabel: false,
+					tabBarActiveBackgroundColor: Colors.PRIMARY,
+					tabBarInactiveBackgroundColor: Colors.WHITE,
 				}}
 			/>
 			<Tab.Screen
 				name={MainScreens.TEST}
 				component={TestContainer}
 				options={{
-				headerShown: false,
-				tabBarIcon: ({ color, size }) => (
-					<Ionicons name="rocket-outline" color={color} size={size} />
-				),
-				tabBarLabelPosition: "below-icon",
-				tabBarShowLabel: false,
-				tabBarActiveBackgroundColor: Colors.PRIMARY,
-				tabBarInactiveBackgroundColor: Colors.WHITE,
+					headerShown: false,
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name="rocket-outline" color={color} size={size} />
+					),
+					tabBarLabelPosition: "below-icon",
+					tabBarShowLabel: false,
+					tabBarActiveBackgroundColor: Colors.PRIMARY,
+					tabBarInactiveBackgroundColor: Colors.WHITE,
 				}}
 			/>
 			<Tab.Screen
 				name={MainScreens.PERSONAL}
 				component={PersonalContainer}
 				options={{
-				headerShown: false,
-				tabBarIcon: ({ color, size }) => (
-					<Ionicons name="person-circle-outline" color={color} size={size} />
-				),
-				tabBarLabelPosition: "below-icon",
-				tabBarShowLabel: false,
-				tabBarActiveBackgroundColor: Colors.PRIMARY,
-				tabBarInactiveBackgroundColor: Colors.WHITE,
+					headerShown: false,
+					tabBarIcon: ({ color, size }) => (
+						<Ionicons name="person-circle-outline" color={color} size={size} />
+					),
+					tabBarLabelPosition: "below-icon",
+					tabBarShowLabel: false,
+					tabBarActiveBackgroundColor: Colors.PRIMARY,
+					tabBarInactiveBackgroundColor: Colors.WHITE,
 				}}
 			/>
 		</Tab.Navigator>

@@ -15,6 +15,7 @@ import { Colors, FontSize, IconSize } from "@/Theme";
 import { Config } from "@/Config";
 import { Question, Answer } from "@/Components/TestDetail";
 import { useRecordTestMutation } from "@/Services";
+import { Audio } from "expo-av";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Result } from "./TestDetailContainer";
 
@@ -44,13 +45,13 @@ export const TestDetail = (props: ITestDetailProps) => {
 
 	const [isChoosedD, setIsChoosedD] = useState(false);
 
-	const [isCorrectA, setIsCorrectA] = useState(false);
+	const [isCorrectA, setIsCorrectA] = useState(0);
 
-	const [isCorrectB, setIsCorrectB] = useState(false);
+	const [isCorrectB, setIsCorrectB] = useState(0);
 
-	const [isCorrectC, setIsCorrectC] = useState(false);
+	const [isCorrectC, setIsCorrectC] = useState(0);
 
-	const [isCorrectD, setIsCorrectD] = useState(false);
+	const [isCorrectD, setIsCorrectD] = useState(0);
 
 	const [score, setScore] = useState(0);
 
@@ -64,7 +65,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 
 	const messageNotification = () => {
 		let done: number = Object.keys(dictResult).length;
-		let title: string = "Congratulation!";
+		let title: string = "Congratulations!";
 		let message: string = "You have completed this test.";
 		if (done < total) {
 			let missQuestions: number = total - done;
@@ -126,6 +127,34 @@ export const TestDetail = (props: ITestDetailProps) => {
 		);
 	};
 
+	const [sound, setSound] = useState<Audio.Sound | undefined>(undefined);
+
+	async function playTrueSound() {
+        console.log("Loading Sound");
+        const { sound } = await Audio.Sound.createAsync(
+            require("../../../assets/answer_true.mp3")
+        );
+        setSound(sound);
+        console.log("Playing Sound");
+        await Audio.setAudioModeAsync({
+			playsInSilentModeIOS: true,
+		});
+        await sound.playAsync();
+    }
+
+	async function playFalseSound() {
+        console.log("Loading Sound");
+        const { sound } = await Audio.Sound.createAsync(
+            require("../../../assets/answer_false.mp3")
+        );
+        setSound(sound);
+        console.log("Playing Sound");
+        await Audio.setAudioModeAsync({
+			playsInSilentModeIOS: true,
+		});
+        await sound.playAsync();
+    }
+
 	useEffect(() => {
 		setCurrentTest(test);
 	}, [test]);
@@ -140,6 +169,14 @@ export const TestDetail = (props: ITestDetailProps) => {
 			setCompleted(false);
 		}
 	}, [completed])
+
+	useEffect(() => {
+		if (isCorrectA === 1 && isCorrectB === 1 && isCorrectC === 1 && isCorrectD === 1) {
+			playTrueSound();
+		} else if (isCorrectA === -1 || isCorrectB === -1 || isCorrectC === -1 || isCorrectD === -1) {
+			playFalseSound();
+		}
+	}, [isCorrectA, isCorrectB, isCorrectC, isCorrectD])
 
 	return (
 		<View style={styles.container}>
@@ -320,6 +357,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 					</View>
 					<View style={styles.footer}>
 						<TouchableOpacity 
+						style={[styles.iconSmallContainer, { backgroundColor: id > 0 ? Colors.GRAY : Colors.BACKGROUND }]}
 							onPress={() => {
 								if (isSubmitted && !dictResult[id]) {
 									if (!dictResult[id]) {
@@ -344,11 +382,11 @@ export const TestDetail = (props: ITestDetailProps) => {
 									}
 									if (isChoosedA || isChoosedB || isChoosedC || isChoosedD) {
 										if (currentTest?.questions.value[id].question_type === "sc") {
-											if (isCorrectA && isCorrectB && isCorrectC && isCorrectD) {
+											if (isCorrectA === 1 && isCorrectB === 1 && isCorrectC === 1 && isCorrectD === 1) {
 												setScore(score+1);
 											}
 										} else {
-											let scoreTemp = [isCorrectA, isCorrectB, isCorrectC, isCorrectD].filter(Boolean).length * 0.25;
+											let scoreTemp = [isCorrectA, isCorrectB, isCorrectC, isCorrectD].filter((corrected) => {return corrected === 1;}).length * 0.25;
 											setScore(score+scoreTemp);
 										}
 									}
@@ -358,16 +396,16 @@ export const TestDetail = (props: ITestDetailProps) => {
 								setIsChoosedB(false);
 								setIsChoosedC(false);
 								setIsChoosedD(false);
-								setIsCorrectA(false);
-								setIsCorrectB(false);
-								setIsCorrectC(false);
-								setIsCorrectD(false);
+								setIsCorrectA(0);
+								setIsCorrectB(0);
+								setIsCorrectC(0);
+								setIsCorrectD(0);
 								setIsSubmitted(false);
 							}}
 						>
 							<Ionicons
 								name="chevron-back"
-								size={IconSize.HUGE}
+								size={IconSize.LARGE}
 								color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -382,6 +420,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 							<Text style={{ fontSize: FontSize.REGULAR, color: Colors.WHITE }}>Submit</Text>
 						</TouchableOpacity>
 						<TouchableOpacity 
+							style={[styles.iconSmallContainer, { backgroundColor: !completed ? Colors.GRAY : Colors.BACKGROUND }]}
 							onPress={() => {
 								if (isSubmitted) {
 									if (!dictResult[id]) {
@@ -406,11 +445,11 @@ export const TestDetail = (props: ITestDetailProps) => {
 									}
 									if (isChoosedA || isChoosedB || isChoosedC || isChoosedD) {
 										if (currentTest?.questions.value[id].question_type === "sc") {
-											if (isCorrectA && isCorrectB && isCorrectC && isCorrectD) {
+											if (isCorrectA === 1 && isCorrectB === 1 && isCorrectC === 1 && isCorrectD === 1) {
 												setScore(score+1);
 											}
 										} else {
-											let scoreTemp = [isCorrectA, isCorrectB, isCorrectC, isCorrectD].filter(Boolean).length * 0.25;
+											let scoreTemp = [isCorrectA, isCorrectB, isCorrectC, isCorrectD].filter((corrected) => {return corrected === 1;}).length * 0.25;
 											setScore(score+scoreTemp);
 										}
 									}
@@ -423,16 +462,16 @@ export const TestDetail = (props: ITestDetailProps) => {
 								setIsChoosedB(false);
 								setIsChoosedC(false);
 								setIsChoosedD(false);
-								setIsCorrectA(false);
-								setIsCorrectB(false);
-								setIsCorrectC(false);
-								setIsCorrectD(false);
+								setIsCorrectA(0);
+								setIsCorrectB(0);
+								setIsCorrectC(0);
+								setIsCorrectD(0);
 								setIsSubmitted(false);
 							}}
 						>
 							<Ionicons
 								name="chevron-forward"
-								size={IconSize.HUGE}
+								size={IconSize.LARGE}
 								color={id < total ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -499,6 +538,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
+	iconSmallContainer: {
+		width: 40,
+		height: 40,
+		borderRadius: 100,
+		justifyContent: "center",
+		alignItems: "center",
+	},
     button: {
         backgroundColor: Colors.BUTTON_START,
         width: 100,

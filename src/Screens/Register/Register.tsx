@@ -12,6 +12,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  Pressable,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Colors, FontSize, IconSize } from "@/Theme";
@@ -19,7 +22,7 @@ import { useLogInMutation, useRegisterMutation } from "@/Services";
 import { useDispatch } from "react-redux";
 import { logIn } from "@/Store/reducers";
 import { useHeaderHeight } from "@react-navigation/elements";
-import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Constants from 'expo-constants';
 
@@ -39,9 +42,7 @@ export const Register = (props: IRegisterProps) => {
 
     const [birthdayText, onChangeBirthdayText] = useState("");
 
-    const [chooseDate, setChooseDate] = useState(false);
-
-    const [dateModal, setDateModal] = useState(false);
+    const [showPicker, setShowPicker] = useState(false);
 
     const [username, onChangeUsername] = useState("");
 
@@ -63,6 +64,33 @@ export const Register = (props: IRegisterProps) => {
 
     const headerHeight = useHeaderHeight();
 
+    const handleChangeName = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+        const result = e.nativeEvent.text.replace(/[^a-z]/gi, '');;
+        onChangeName(result);
+    };
+
+    const toggleDatePicker = () => {
+        setShowPicker(!showPicker);
+    };
+
+    const onChange = (e: DateTimePickerEvent, date: Date | undefined) => {
+        if (e.type === "set") {
+            const currentDate = date ? date : new Date();
+            onChangeBirthday(currentDate);
+            if (Platform.OS === "android") {
+                toggleDatePicker();
+                onChangeBirthdayText(currentDate.toISOString().split('T')[0]);
+            }
+        } else {
+            toggleDatePicker();
+        }
+    }
+
+    const confirmIOSDate = () => {
+        toggleDatePicker();
+        onChangeBirthdayText(birthday.toISOString().split('T')[0])
+    };
+
     const createSuccessfulAlert = () => {
         Alert.alert(
             "Register",
@@ -78,10 +106,18 @@ export const Register = (props: IRegisterProps) => {
         );
     };
 
+    const failMessage = () => {
+        let message = "Your username has been existed, please try another one!"
+        if (!name || !birthdayText || !username || !password) {
+            message = "Please fill in your information fully!"
+        }
+        return message;
+    };
+
     const createFailedAlert = () => {
         Alert.alert(
             "Register",
-            "Fail!",
+            failMessage(),
             [
                 {
                     text: "OK",
@@ -117,7 +153,7 @@ export const Register = (props: IRegisterProps) => {
         <KeyboardAvoidingView
             style={{ backgroundColor: Colors.BACKGROUND, flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={Platform.OS === "ios" ? headerHeight + Constants.statusBarHeight : 0}
+            keyboardVerticalOffset={Platform.OS === "ios" ? headerHeight + Constants.statusBarHeight : -Constants.statusBarHeight}
         >
             <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 <TouchableWithoutFeedback
@@ -142,10 +178,10 @@ export const Register = (props: IRegisterProps) => {
                             <TouchableOpacity
                                 onPress={() => onNavigateLogin()}
                             >
-                                <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }} >Login</Text>
+                                <Text style={{ fontSize: FontSize.STANDARD, color: Colors.TEXT }} >Login</Text>
                             </TouchableOpacity>
                             <TouchableOpacity>
-                                <Text style={{ fontSize: FontSize.SMALL, color: Colors.PRIMARY, textDecorationLine: "underline" }} >Register</Text>
+                                <Text style={{ fontSize: FontSize.STANDARD, color: Colors.PRIMARY, textDecorationLine: "underline" }} >Register</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.bodyContainer}>
@@ -153,33 +189,55 @@ export const Register = (props: IRegisterProps) => {
                                 <TextInput
                                     editable
                                     maxLength={40}
-                                    onChangeText={text => onChangeName(text)}
+                                    onChange={handleChangeName}
                                     value={name}
                                     style={styles.input}
                                     placeholder="Name"
                                 />
-                                <TextInput
-                                    maxLength={40}
-                                    value={!chooseDate ? birthdayText : birthday.toISOString().split('T')[0]}
-                                    onChangeText={text => {setChooseDate(false);onChangeBirthdayText(text)}}
-                                    style={styles.input}
-                                    placeholder="Birthday (YYYY-MM-DD)"
-                                    onFocus={() => setDateModal(true)}
-                                    onBlur={() => setDateModal(false)}
-                                />
+                                <Pressable
+                                    onPress={toggleDatePicker}
+                                >
+                                    <TextInput
+                                        maxLength={40}
+                                        value={birthdayText}
+                                        onChangeText={text => {onChangeBirthdayText(text)}}
+                                        style={styles.input}
+                                        placeholder="Birthday"
+                                        editable={false}
+                                    />
+                                </Pressable>  
                                 {
-                                    dateModal 
-                                    ?
-                                        <RNDateTimePicker 
+                                    showPicker &&
+                                    (
+                                        <DateTimePicker 
                                             mode="date"
-                                            onChange={(event: DateTimePickerEvent, date: Date | undefined) => {setChooseDate(true);setDateModal(false);onChangeBirthday(date ? date: new Date());}}
+                                            onChange={onChange}
                                             value={birthday}
                                             minimumDate={new Date("1900-01-01")}
                                             maximumDate={new Date("2023-12-30")}
+                                            style={styles.picker}
                                         />
-                                    :
-                                        null
-                                }   
+                                    )
+                                }
+                                {
+                                    showPicker && Platform.OS === "ios" &&
+                                    (
+                                        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+                                            <TouchableOpacity
+                                                style={styles.smallButton}
+                                                onPress={toggleDatePicker}
+                                            >
+                                                <Text>Cancel</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.smallButton}
+                                                onPress={confirmIOSDate}
+                                            >
+                                                <Text>Confirm</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
+                                }
                                 <TextInput
                                     editable
                                     maxLength={40}
@@ -226,12 +284,10 @@ export const Register = (props: IRegisterProps) => {
                                         }
                                     </TouchableOpacity>
                                 </View>
-                                
                             </View>
                             {
-                                checkConfirmPassword
-                                ? <Text style={{ fontSize: FontSize.TINY, color: Colors.TEXT_ERROR }}>Check confirm password!</Text>
-                                : null
+                                checkConfirmPassword &&
+                                <Text style={{ fontSize: FontSize.TINY, color: Colors.TEXT_ERROR }}>Check confirm password!</Text>
                             }
                             <View style={styles.buttonContainer}>
                                 <TouchableOpacity
@@ -241,12 +297,12 @@ export const Register = (props: IRegisterProps) => {
                                             setCheckConfirmPassword(true);
                                         } else {
                                             setCheckConfirmPassword(false);
-                                            register[0]({ name: name, birthday: !chooseDate ? birthdayText : birthday.toISOString().split('T')[0], username: username, password: password });
+                                            register[0]({ name: name, birthday: birthdayText, username: username, password: password });
                                             setPressRegister(true);
                                         }
                                     }}
                                 >
-                                    <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >Register</Text>
+                                    <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >REGISTER</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -275,39 +331,49 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     bodyContainer: {
-        height: "50%",
+        height: "55%",
         width: "80%",
         backgroundColor: Colors.FLASHCARD,
         justifyContent: "space-between",
         borderRadius: 20,
-        marginTop: 20,
-        marginBottom: 20,
+        marginVertical: 20,
         paddingHorizontal: 50,
-        paddingVertical: 30,
+        paddingVertical: 20,
     },
     inputContainer: {
         justifyContent: "flex-start",
     },
     buttonContainer: {
         justifyContent: "center",
-        marginTop: 20,
+        marginVertical: 20,
     },
     input: {
         backgroundColor: Colors.TRANSPARENT,
         borderBottomColor: Colors.BLACK,
         borderBottomWidth: 1,
-        marginVertical: 10,
+        marginVertical: 15,
         fontSize: FontSize.SMALL,
+        color: Colors.BLACK,
     },
     textBodyContainer: {
         alignItems: "flex-end",
     },
     button: {
-        height: 40,
         backgroundColor: Colors.PRIMARY,
+        height: 40,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 10,
+    },
+    smallButton: {
+        backgroundColor: Colors.PRIMARY,
+        width: 84,
+        height: 36,
+        borderRadius: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 5,
+        padding: 5,
     },
     triangleLeftCorner: {
         width: 0,
@@ -342,5 +408,8 @@ const styles = StyleSheet.create({
     },
     textHeaderContainer: {
         paddingLeft: "15%",
+    },
+    picker: {
+        marginTop: 5,
     },
 })

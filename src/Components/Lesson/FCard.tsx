@@ -22,6 +22,7 @@ const screenHeight: number = Dimensions.get("window").height;
 export interface IFrontFlashProps {
 	audio_url: string | undefined;
 	content: string | undefined;
+	translation: string | undefined;
 };
 
 export interface IBackFlashProps {
@@ -46,7 +47,7 @@ const renderFront = (props: IFrontFlashProps) => {
 
 	const [audioSpeed, setAudioSpeed] = useState(1);
 
-	const speedList: string[] = ["Normal", "Slow 0.9"];
+	const speedList: string[] = ["Normal", "Slow 0.9", "Slow 0.8"];
 
 	async function playSound() {
 		console.log("Loading Sound");
@@ -76,9 +77,14 @@ const renderFront = (props: IFrontFlashProps) => {
 
 	return (
 		<View style={styles.cardContainerFront}>
-			<Text style={{ fontSize: FontSize.LARGE, color: Colors.TEXT, textAlign: "center" }}>
-				{props.content}
-			</Text>
+			<View>
+				<Text style={{ fontSize: FontSize.LARGE, color: Colors.TEXT, textAlign: "center" }}>
+					{props.content}
+				</Text>
+				<Text style={{ fontSize: FontSize.STANDARD, color: Colors.TEXT, textAlign: "center" }}>
+					{props.translation}
+				</Text>
+			</View>
 			<View>
 				<TouchableOpacity style={styles.iconContainer} onPress={playSound}>
 					<Ionicons
@@ -103,8 +109,10 @@ const renderFront = (props: IFrontFlashProps) => {
 				onSelect={(selectItem, index) => {
 					if (selectItem === "Normal") {
 						setAudioSpeed(1);
-					} else {
+					} else if (selectItem === "Slow 0.9") {
 						setAudioSpeed(0.9);
+					} else {
+						setAudioSpeed(0.8);
 					}
 				}}
 				buttonTextAfterSelection={(selectItem, index) => {
@@ -199,6 +207,7 @@ export const FCard = (props: IFlashProps) => {
 	const frontProps: IFrontFlashProps = {
 		audio_url: props.audio_url,
 		content: props.content,
+		translation: props.translation,
 	}
 
 	const backProps: IBackFlashProps = {

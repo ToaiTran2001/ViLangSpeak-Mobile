@@ -136,18 +136,20 @@ export const Personal = (props: IPersonalProps) => {
                                 </View>
                             </TouchableOpacity>
                             {
-                                showProfile 
-                                ?
+                                showProfile &&
+                                (
                                     <>
                                         <Text style={styles.textNormal}>
                                             Name: {currentAccount?.name}
                                         </Text>
-                                        <Text style={styles.textNormal}>
-                                            Birthday: {currentAccount?.birthday}
-                                        </Text>
+                                        {
+                                            currentAccount?.birthday !== "1000-01-01" &&
+                                            <Text style={styles.textNormal}>
+                                                Birthday: {currentAccount?.birthday}
+                                            </Text>
+                                        }   
                                     </>
-                                :
-                                    null
+                                )
                             }
                         </View>
                         {/* <View style={{ maxHeight: "65%", overflow: "hidden" }}>
@@ -181,8 +183,8 @@ export const Personal = (props: IPersonalProps) => {
                                 </View>
                             </TouchableOpacity>
                             {
-                                showAchievements
-                                ? 
+                                showAchievements &&
+                                (
                                     <FlatList
                                         data={currentAchievements}
                                         keyExtractor={(item: Achievement) => String(item.id)}
@@ -230,8 +232,7 @@ export const Personal = (props: IPersonalProps) => {
                                         }}
                                         onEndReachedThreshold={0.1}
                                     />
-                                :
-                                    null
+                                )
                             }
                         </View> */}
                         <View>
@@ -265,8 +266,8 @@ export const Personal = (props: IPersonalProps) => {
                                 </View>
                             </TouchableOpacity>
                             {
-                                showSettings
-                                ?
+                                showSettings &&
+                                (
                                     <>
                                         <Text style={styles.textNormal}>
                                             Language: English
@@ -275,8 +276,7 @@ export const Personal = (props: IPersonalProps) => {
                                             Theme: Default
                                         </Text>
                                     </>
-                                :
-                                    null
+                                )
                             }
                         </View>
                         <View

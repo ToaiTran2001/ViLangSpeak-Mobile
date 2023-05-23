@@ -16,15 +16,15 @@ export interface IAnswerProps {
     text: string;
     isChoosed: boolean;
     isSubmitted: boolean;
-    isCorrect: boolean;
-    setIsCorrect: (correct: boolean) => void;
+    isCorrect: number;
+    setIsCorrect: (correct: number) => void;
     onPress: () => void;
 };
 
 export const Answer = (props: IAnswerProps) => {
     const { id, questionType, type, content, answer, text, isChoosed, isSubmitted, isCorrect, setIsCorrect, onPress } = props;
-    let backgroundColor = Colors.FLASHCARD;
-    let textColor = Colors.TEXT;
+    let backgroundColor: string = Colors.FLASHCARD;
+    let textColor: string = Colors.TEXT;
     if (!isSubmitted) {
         if (isChoosed) {
             backgroundColor = Colors.PRIMARY;
@@ -74,7 +74,9 @@ export const Answer = (props: IAnswerProps) => {
     useEffect(() => {
         if (isSubmitted) {
             if ((isChoosed && answer === 1) || (!isChoosed && answer === 0))  {
-                setIsCorrect(true);
+                setIsCorrect(1);
+            } else {
+                setIsCorrect(-1);
             }
         }
     }, [isCorrect, isSubmitted, isChoosed])
@@ -103,13 +105,12 @@ export const Answer = (props: IAnswerProps) => {
                                     />
                                 </TouchableOpacity>
                                 {
-                                    isLoadingSound 
-                                    ? 
+                                    isLoadingSound &&
+                                    (
                                         <HStack space={2} justifyContent="center">
                                             <Spinner accessibilityLabel="Loading posts" />
                                         </HStack>
-                                    : 
-                                        null
+                                    )
                                 }
                             </>
                         :
@@ -119,8 +120,8 @@ export const Answer = (props: IAnswerProps) => {
             
             <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 2 }}>
                 {
-                    questionType === "mc"
-                    ?
+                    questionType === "mc" &&
+                    (
                         <BouncyCheckbox
                             size={IconSize.SMALL}
                             isChecked={isChoosed} 
@@ -128,8 +129,7 @@ export const Answer = (props: IAnswerProps) => {
                             onPress={onPress}
                             fillColor={Colors.PRIMARY}
                         />
-                    :
-                        null 
+                    )
                 }
                 <Text style={{ fontSize: FontSize.SMALL, color: textColor, fontWeight: textColor === Colors.TEXT_CORRECT ? "bold" : "normal"}}>{text}</Text>
             </View>

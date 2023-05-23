@@ -202,7 +202,7 @@ export const Lesson = (props: ILessonProps) => {
 							? 
 								<View style={styles.cardContainerFront}>
 									<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
-										Congratulation!
+										Congratulations!
 									</Text>
 									<Text style={{ fontSize: FontSize.MEDIUM, color: Colors.TEXT }}>
 										You have completed 
@@ -246,6 +246,7 @@ export const Lesson = (props: ILessonProps) => {
 					</View>
 					<View style={styles.footer}>
 						<TouchableOpacity 
+							style={[styles.iconSmallContainer, { backgroundColor: id > 0 ? Colors.GRAY : Colors.BACKGROUND }]}
 							onPress={() => {
 								setIsChanged(false);
 								if (completed) {
@@ -257,7 +258,7 @@ export const Lesson = (props: ILessonProps) => {
 						}}>
 							<Ionicons
 								name="chevron-back"
-								size={IconSize.HUGE}
+								size={IconSize.LARGE}
 								color={id > 0 ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -305,6 +306,7 @@ export const Lesson = (props: ILessonProps) => {
 								</View>
 						}
 						<TouchableOpacity 
+							style={[styles.iconSmallContainer, { backgroundColor: !completed ? Colors.GRAY : Colors.BACKGROUND }]}
 							onPress={() => {
 								setIsChanged(false);
 								if (id+1 < total) {
@@ -317,7 +319,7 @@ export const Lesson = (props: ILessonProps) => {
 						>
 							<Ionicons
 								name="chevron-forward"
-								size={IconSize.HUGE}
+								size={IconSize.LARGE}
 								color={!completed ? Colors.TEXT : Colors.BACKGROUND}
 							/>
 						</TouchableOpacity>
@@ -380,6 +382,13 @@ const styles = StyleSheet.create({
 	iconContainer: {
 		width: 80,
 		height: 80,
+		borderRadius: 100,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	iconSmallContainer: {
+		width: 40,
+		height: 40,
 		borderRadius: 100,
 		justifyContent: "center",
 		alignItems: "center",

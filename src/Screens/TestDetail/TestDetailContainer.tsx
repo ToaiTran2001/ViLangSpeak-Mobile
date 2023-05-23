@@ -14,7 +14,7 @@ type TestDetailScreenNavigatorProps = NativeStackScreenProps<
 
 interface SingleResult {
 	isChoosed: boolean;
-	isCorrect: boolean;
+	isCorrect: number;
 }
 export interface Result {
 	A: SingleResult;

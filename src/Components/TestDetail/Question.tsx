@@ -61,8 +61,8 @@ export const Question = (props: IQuestionProps) => {
                     <View style={styles.pContainer}>
                         <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }}>{content}</Text>
                         {
-                            description !== ""
-                            ?
+                            description !== "" &&
+                            (
                                 <TouchableOpacity 
                                     style={styles.smallIconContainer} onPress={playSound}>
                                     <Ionicons
@@ -71,17 +71,15 @@ export const Question = (props: IQuestionProps) => {
                                         color={Colors.TEXT}
                                     />
                                 </TouchableOpacity>
-                            :
-                                null
+                            )
                         }
                         {
-                            isLoadingSound 
-                            ? 
+                            isLoadingSound &&
+                            ( 
                                 <HStack space={2} justifyContent="center">
                                     <Spinner accessibilityLabel="Loading posts" />
                                 </HStack>
-                            : 
-                                null
+                            )
                         }
                     </View>
                 :   
@@ -98,13 +96,12 @@ export const Question = (props: IQuestionProps) => {
                                         />
                                     </TouchableOpacity>
                                     {
-                                        isLoadingSound 
-                                        ? 
+                                        isLoadingSound &&
+                                        ( 
                                             <HStack space={2} justifyContent="center">
                                                 <Spinner accessibilityLabel="Loading posts" />
                                             </HStack>
-                                        : 
-                                            null
+                                        )
                                     }
                                 </View>
                             :   type === "i"

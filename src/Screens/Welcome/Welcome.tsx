@@ -96,7 +96,7 @@ export const Welcome = (props: IWelcomeProps) => {
 		return (
 			<View
 				style={{
-				height: height * 0.25,
+				height: height * 0.2,
 				justifyContent: 'space-between',
 				paddingHorizontal: 20,
 				}}
@@ -146,15 +146,15 @@ export const Welcome = (props: IWelcomeProps) => {
 								{
 									borderColor: Colors.BLACK,
 									borderWidth: 1,
-									backgroundColor: 'transparent',
+									backgroundColor: Colors.TRANSPARENT,
 								},
 								]}
 								onPress={skip}
 							>
 								<Text
 									style={{
-										fontWeight: 'bold',
-										fontSize: 15,
+										fontWeight: "bold",
+										fontSize: FontSize.STANDARD,
 										color: Colors.TEXT,
 									}}
 								>
@@ -169,8 +169,8 @@ export const Welcome = (props: IWelcomeProps) => {
 							>
 								<Text
 									style={{
-										fontWeight: 'bold',
-										fontSize: 15,
+										fontWeight: "bold",
+										fontSize: FontSize.STANDARD,
 									}}
 								>
 									NEXT

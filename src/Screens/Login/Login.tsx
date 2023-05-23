@@ -27,10 +27,11 @@ const screenHeight: number = Dimensions.get("window").height;
 
 export interface ILoginProps {
     onNavigateRegister: () => void;
+    onNavigateGuest: () => void;
 }
 
 export const Login = (props: ILoginProps) => {
-    const { onNavigateRegister } = props;
+    const { onNavigateRegister, onNavigateGuest } = props;
 
     const dispatch = useDispatch();
 
@@ -96,12 +97,12 @@ export const Login = (props: ILoginProps) => {
                             </View>
                             <View style={styles.titleContainer}>
                                 <TouchableOpacity>
-                                    <Text style={{ fontSize: FontSize.SMALL, color: Colors.PRIMARY, textDecorationLine: "underline" }} >Login</Text>
+                                    <Text style={{ fontSize: FontSize.STANDARD, color: Colors.PRIMARY, textDecorationLine: "underline" }} >Login</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => onNavigateRegister()}
                                 >
-                                    <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT }} >Register</Text>
+                                    <Text style={{ fontSize: FontSize.STANDARD, color: Colors.TEXT }} >Register</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.bodyContainer}>
@@ -134,9 +135,8 @@ export const Login = (props: ILoginProps) => {
                                         </TouchableOpacity>
                                     </View>
                                     {
-                                        !data && !isLoading && pressLogin
-                                        ? <Text style={{ fontSize: FontSize.TINY, color: Colors.TEXT_ERROR }}>Invalid username or password!</Text>
-                                        : null
+                                        !data && !isLoading && pressLogin &&
+                                        <Text style={{ fontSize: FontSize.TINY, color: Colors.TEXT_ERROR }}>Invalid username or password!</Text>
                                     }
                                     <TouchableOpacity 
                                         style={styles.textBodyContainer}
@@ -147,10 +147,16 @@ export const Login = (props: ILoginProps) => {
                                 </View>
                                 <View style={styles.buttonContainer}>
                                     <TouchableOpacity
-                                        style={styles.button}
+                                        style={[styles.button, { backgroundColor: Colors.PRIMARY }]}
                                         onPress={() => {uploadLogin({ username: username, password: password });setPressLogin(true);}}
                                     >
-                                        <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >Login</Text>
+                                        <Text style={{ fontSize: FontSize.STANDARD, color: Colors.TEXT, fontWeight: "bold" }} >LOGIN</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[styles.button, { backgroundColor: Colors.TRANSPARENT, borderWidth: 1, borderColor: Colors.BLACK }]}
+                                        onPress={() => {onNavigateGuest();}}
+                                    >
+                                        <Text style={{ fontSize: FontSize.STANDARD, color: Colors.TEXT, fontWeight: "bold" }} >USE AS GUEST</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -179,28 +185,27 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     bodyContainer: {
-        height: "50%",
+        height: "55%",
         width: "80%",
         backgroundColor: Colors.FLASHCARD,
         justifyContent: "space-between",
         borderRadius: 20,
-        marginTop: 20,
-        marginBottom: 20,
+        marginVertical: 20,
         paddingHorizontal: 50,
-        paddingVertical: 30,
+        paddingVertical: 20,
     },
     inputContainer: {
         justifyContent: "flex-start",
     },
     buttonContainer: {
         justifyContent: "center",
-        marginTop: 20,
+        marginVertical: 20,
     },
     input: {
         backgroundColor: Colors.TRANSPARENT,
         borderBottomColor: Colors.BLACK,
         borderBottomWidth: 1,
-        marginVertical: 10,
+        marginVertical: 15,
         fontSize: FontSize.SMALL,
     },
     textBodyContainer: {
@@ -209,10 +214,10 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 40,
-        backgroundColor: Colors.PRIMARY,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 5,
+        marginVertical: 5,
     },
     triangleLeftCorner: {
         width: 0,
