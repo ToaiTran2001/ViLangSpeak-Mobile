@@ -132,7 +132,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 	async function playTrueSound() {
         console.log("Loading Sound");
         const { sound } = await Audio.Sound.createAsync(
-            require("../../../assets/answer_true.mp3")
+            require("../../../assets/answer_true.wav")
         );
         setSound(sound);
         console.log("Playing Sound");
@@ -145,7 +145,7 @@ export const TestDetail = (props: ITestDetailProps) => {
 	async function playFalseSound() {
         console.log("Loading Sound");
         const { sound } = await Audio.Sound.createAsync(
-            require("../../../assets/answer_false.mp3")
+            require("../../../assets/answer_false.wav")
         );
         setSound(sound);
         console.log("Playing Sound");
