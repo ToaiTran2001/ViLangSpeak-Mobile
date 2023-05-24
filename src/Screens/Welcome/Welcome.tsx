@@ -189,7 +189,7 @@ export const Welcome = (props: IWelcomeProps) => {
 			<FlatList
 				ref={ref}
 				onMomentumScrollEnd={updateCurrentSlideIndex}
-				contentContainerStyle={{height: height * 0.75}}
+				contentContainerStyle={{height: height * 0.8}}
 				showsHorizontalScrollIndicator={false}
 				horizontal
 				data={slides}
