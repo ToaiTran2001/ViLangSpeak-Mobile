@@ -302,7 +302,7 @@ export const Register = (props: IRegisterProps) => {
                                         }
                                     }}
                                 >
-                                    <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT }} >REGISTER</Text>
+                                    <Text style={{ fontSize: FontSize.REGULAR, color: Colors.TEXT, fontWeight: "bold" }} >REGISTER</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
