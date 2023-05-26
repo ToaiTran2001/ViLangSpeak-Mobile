@@ -7,9 +7,9 @@ import { TestDetail } from "./TestDetail";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { MainBottomBarParamList } from "@/Navigation/Main";
 
-type TestDetailScreenNavigatorProps = NativeStackScreenProps<
-	RootStackParamList,
-	RootScreens.TESTDETAIL
+type TestDetailScreenNavigatorProps = CompositeScreenProps<
+	NativeStackScreenProps<RootStackParamList, RootScreens.TESTDETAIL>,
+	NativeStackScreenProps<MainBottomBarParamList>
 >;
 
 interface SingleResult {
@@ -43,6 +43,10 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
 		}
 	}, [testId, accountId]);
 
+	const onNavigateTest = () => {
+		navigation.navigate(MainScreens.TEST);
+	};
+
 	const goBack = () => {
 		navigation.goBack();
 	};
@@ -54,6 +58,7 @@ export const TestDetailContainer = ({ navigation, route }: TestDetailScreenNavig
 			test={test[1].data?.data.test} 
 			testProgress={testProgress[1].data?.data.progress.score.highest} 
 			dictResult={dictResult}
+			onNavigateTest={onNavigateTest}
 			goBack={goBack} 
 		/>
 	);
