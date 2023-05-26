@@ -33,6 +33,8 @@ export const Guest = (props: IGuestProps) => {
 
     const [name, onChangeName] = useState("");
 
+    const [pressOk, setPressOk] = useState(false);
+
     const register = useRegisterMutation();
 
     const login = useLogInMutation();
@@ -47,9 +49,6 @@ export const Guest = (props: IGuestProps) => {
             login[0]({ username: name + randomString, password: "123456" });
         }
     }, [register[1].data]);
-
-    console.log(register[1].data);
-    console.log(login[1].data)
 
     useEffect(() => {
         dispatch(logIn({
@@ -70,14 +69,19 @@ export const Guest = (props: IGuestProps) => {
                 style={styles.input}
                 placeholder="Name"
             />
-            <Text style={{ fontSize: FontSize.SMALL, color: Colors.TEXT_ERROR, alignSelf: "flex-start" }}>If you uses as guest, your data will be disappeared when you logout our app!</Text>
+            {
+                name === "" && pressOk &&
+                <Text style={{ fontSize: FontSize.TINY, color: Colors.TEXT_ERROR, alignSelf: "flex-start", marginBottom: 10 }}>Please type your name!</Text>
+            }
+            <Text style={{ fontSize: FontSize.SMALL, color: Colors.ICON_GRAY, alignSelf: "flex-start" }}>If you uses as guest, your data will be disappeared when you logout our app!</Text>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: Colors.PRIMARY }]}
                     onPress={() => {
-                        console.log(name);
-                        console.log(name + randomString);
-                        register[0]({ name: name, birthday: "1000-01-01", username: name + randomString, password: "123456" });
+                        setPressOk(true);
+                        if (name !== "") {
+                            register[0]({ name: name, birthday: "1000-01-01", username: name + randomString, password: "123456" });
+                        }
                     }}
                 >
                     <Text style={{ fontSize: FontSize.STANDARD, color: Colors.TEXT, fontWeight: "bold" }} >OK</Text>

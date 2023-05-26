@@ -287,7 +287,7 @@ export const Register = (props: IRegisterProps) => {
                             </View>
                             {
                                 checkConfirmPassword &&
-                                <Text style={{ fontSize: FontSize.TINY, color: Colors.TEXT_ERROR }}>Check confirm password!</Text>
+                                <Text style={{ fontSize: FontSize.TINY, color: Colors.TEXT_ERROR }}>Please check confirm password!</Text>
                             }
                             <View style={styles.buttonContainer}>
                                 <TouchableOpacity
