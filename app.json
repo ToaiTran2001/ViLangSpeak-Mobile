@@ -15,7 +15,7 @@
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/3d225bb0-bbc3-41c8-9f40-a301e79dcc0d"
+      "url": ""
     },
     "assetBundlePatterns": [
       "**/*"
@@ -39,10 +39,6 @@
       "eas": {
         "projectId": "3d225bb0-bbc3-41c8-9f40-a301e79dcc0d"
       }
-    },
-    "owner": "wicii",
-    "runtimeVersion": {
-      "policy": "sdkVersion"
     }
   },
   "name": "vilangspeak"
