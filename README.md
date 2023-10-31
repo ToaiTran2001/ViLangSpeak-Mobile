@@ -2,7 +2,7 @@
 
 ## Description
 
-Ứng dụng di động hỗ trợ người nước ngoài học tiếng Việt
+A mobile application supports foreigners to learn Vietnamese
 
 ## Installation
 
@@ -15,3 +15,5 @@ yarn install
 ```bash
 expo start
 ```
+
+## UI
