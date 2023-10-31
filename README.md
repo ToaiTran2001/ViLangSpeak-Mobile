@@ -2,7 +2,7 @@
 
 ## Description
 
-A mobile application supports foreigners to learn Vietnamese
+A mobile application supports foreigners to learn Vietnamese.
 
 ## Installation
 
